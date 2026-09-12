@@ -4,22 +4,31 @@
   <meta charset="UTF-8">
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    content="width=device-width, initial-scale=1.0"
   >
-  <meta name="robots" content="noindex,nofollow">
+  <meta
+    name="robots"
+    content="noindex,nofollow"
+  >
+
   <title>峯松証券 保護者画面</title>
 
   <style>
     :root {
       --bg: #0f172a;
       --card: #1e293b;
-      --line: rgba(255,255,255,0.12);
+      --card-dark: #020617;
+      --line: #475569;
       --text: #f8fafc;
       --sub: #cbd5e1;
-      --blue: #3b82f6;
-      --green: #10b981;
-      --red: #f43f5e;
+      --blue: #2563eb;
+      --cyan: #38bdf8;
+      --green: #059669;
+      --green-light: #34d399;
+      --red: #e11d48;
       --gold: #f59e0b;
+      --purple: #8b5cf6;
+      --purple-light: #c4b5fd;
     }
 
     * {
@@ -46,28 +55,118 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .app {
       width: 100%;
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto;
-      padding: 18px 14px 80px;
+      padding: 18px 14px 70px;
+    }
+
+    .panel {
+      margin-bottom: 16px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+    }
+
+    .login-panel {
+      max-width: 440px;
+      margin: 50px auto 0;
+      text-align: center;
+    }
+
+    h1,
+    h2 {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 23px;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+
+    .description {
+      color: var(--sub);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .password-input {
+      width: 100%;
+      margin: 12px 0;
+      padding: 15px;
+      border: 2px solid var(--line);
+      border-radius: 13px;
+      outline: none;
+      background: var(--card-dark);
+      color: white;
+      font-size: 20px;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+
+    .password-input:focus {
+      border-color: #60a5fa;
+    }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 12px 0 18px;
+      color: var(--sub);
+      font-size: 14px;
+    }
+
+    .remember-row input {
+      width: 20px;
+      height: 20px;
+    }
+
+    .primary-button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--blue);
+      color: white;
+      font-weight: bold;
+    }
+
+    .error {
+      display: none;
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid var(--red);
+      border-radius: 12px;
+      color: #fecdd3;
+      line-height: 1.6;
     }
 
     .header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
-    .title {
+    .header h1 {
       margin: 0;
-      font-size: 23px;
-      font-weight: 900;
     }
 
-    .subtitle {
+    .header-sub {
       margin-top: 4px;
       color: var(--sub);
       font-size: 12px;
@@ -75,116 +174,38 @@
 
     .small-button {
       flex-shrink: 0;
-      padding: 9px 12px;
+      padding: 9px 11px;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 10px;
       background: #334155;
-      color: #fff;
+      color: white;
       font-weight: bold;
-    }
-
-    .panel {
-      margin-bottom: 16px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: var(--card);
-    }
-
-    .panel-title {
-      margin: 0 0 12px;
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .login-panel {
-      max-width: 440px;
-      margin: 60px auto 0;
-      text-align: center;
-    }
-
-    .password-input {
-      display: block;
-      width: 100%;
-      margin: 18px 0 12px;
-      padding: 14px;
-      border: 2px solid #475569;
-      border-radius: 14px;
-      outline: none;
-      background: #0f172a;
-      color: #fff;
-      font-size: 18px;
-      user-select: text;
-    }
-
-    .password-input:focus {
-      border-color: #60a5fa;
-    }
-
-    .primary-button {
-      width: 100%;
-      padding: 14px;
-      border: 0;
-      border-radius: 14px;
-      background: var(--blue);
-      color: #fff;
-      font-size: 17px;
-      font-weight: 900;
-    }
-
-    .primary-button:disabled,
-    .action-button:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-
-    .error {
-      display: none;
-      margin-top: 12px;
-      padding: 12px;
-      border: 1px solid var(--red);
-      border-radius: 12px;
-      background: rgba(244,63,94,0.12);
-      color: #fecdd3;
-      font-size: 14px;
-      line-height: 1.6;
     }
 
     .status-bar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
-      margin-bottom: 16px;
-      padding: 12px 14px;
+      margin-bottom: 15px;
+      padding: 12px;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.05);
+      border-radius: 13px;
       color: var(--sub);
       font-size: 13px;
     }
 
-    .reload-button {
-      flex-shrink: 0;
-      padding: 8px 12px;
-      border: 0;
-      border-radius: 10px;
-      background: rgba(59,130,246,0.2);
-      color: #93c5fd;
-      font-weight: bold;
-    }
-
-    .summary-grid {
+    .summary {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
       margin-bottom: 16px;
     }
 
     .summary-card {
-      padding: 15px 8px;
+      padding: 13px 5px;
       border: 1px solid var(--line);
-      border-radius: 16px;
+      border-radius: 14px;
       background: var(--card);
       text-align: center;
     }
@@ -195,80 +216,96 @@
     }
 
     .summary-value {
-      margin-top: 6px;
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    .pending-value {
-      color: var(--gold);
-    }
-
-    .user-card {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      padding: 15px;
-      border-top: 1px solid var(--line);
-    }
-
-    .user-card:first-of-type {
-      border-top: 0;
-    }
-
-    .user-name {
-      font-size: 17px;
-      font-weight: 900;
-    }
-
-    .user-sub {
       margin-top: 5px;
-      color: var(--sub);
-      font-size: 12px;
-      line-height: 1.6;
+      font-size: 19px;
+      font-weight: bold;
     }
 
-    .user-cash {
-      align-self: center;
-      color: #7dd3fc;
-      font-size: 20px;
-      font-weight: 900;
-      text-align: right;
+    .withdraw-color {
+      color: var(--green-light);
+    }
+
+    .deposit-color {
+      color: var(--purple-light);
     }
 
     .request-card {
       margin-bottom: 12px;
-      padding: 16px;
-      border: 2px solid var(--gold);
-      border-radius: 18px;
-      background: rgba(245,158,11,0.08);
+      padding: 15px;
+      border: 2px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .withdraw-request {
+      border-color: var(--green);
+      background: rgba(16,185,129,0.09);
+    }
+
+    .deposit-request {
+      border-color: var(--purple);
+      background: rgba(139,92,246,0.1);
+    }
+
+    .request-type {
+      display: inline-block;
+      margin-bottom: 9px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .withdraw-type {
+      background: var(--green);
+    }
+
+    .deposit-type {
+      background: var(--purple);
     }
 
     .request-head {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 8px;
     }
 
-    .request-user {
+    .request-name {
       font-size: 18px;
-      font-weight: 900;
-    }
-
-    .request-amount {
-      color: #fbbf24;
-      font-size: 22px;
-      font-weight: 900;
-      text-align: right;
+      font-weight: bold;
     }
 
     .request-date {
+      margin-top: 5px;
       color: var(--sub);
       font-size: 12px;
     }
 
-    .request-actions {
+    .request-amount {
+      font-size: 21px;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .withdraw-amount {
+      color: var(--green-light);
+    }
+
+    .deposit-amount {
+      color: var(--purple-light);
+    }
+
+    .request-explanation {
+      margin-top: 12px;
+      padding: 9px;
+      border-radius: 10px;
+      background: rgba(2,6,23,0.5);
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
@@ -278,76 +315,97 @@
     .action-button {
       padding: 13px;
       border: 0;
-      border-radius: 13px;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
     }
 
-    .reject-button {
-      background: var(--red);
-    }
-
-    .approve-button {
+    .approve-withdraw {
       background: var(--green);
     }
 
+    .approve-deposit {
+      background: var(--purple);
+    }
+
+    .reject {
+      background: var(--red);
+    }
+
+    .user-row,
     .history-row {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 10px;
-      padding: 12px 4px;
+      padding: 13px 2px;
       border-top: 1px solid var(--line);
     }
 
-    .history-row:first-of-type {
+    .user-row:first-child,
+    .history-row:first-child {
       border-top: 0;
     }
 
-    .history-main {
-      font-size: 14px;
+    .user-name {
       font-weight: bold;
     }
 
-    .history-sub {
+    .sub-text {
       margin-top: 4px;
       color: var(--sub);
-      font-size: 11px;
+      font-size: 12px;
+      line-height: 1.7;
     }
 
-    .history-right {
+    .money {
+      align-self: center;
+      color: #7dd3fc;
+      font-size: 18px;
+      font-weight: bold;
       text-align: right;
     }
 
-    .history-amount {
-      font-weight: 900;
+    .history-side {
+      text-align: right;
     }
 
-    .status-chip {
+    .history-type {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .chip {
       display: inline-block;
       margin-top: 5px;
       padding: 3px 8px;
       border-radius: 20px;
       background: #475569;
-      color: #fff;
       font-size: 11px;
-      font-weight: bold;
     }
 
-    .status-approved {
+    .approved-chip {
       background: #047857;
     }
 
-    .status-rejected {
+    .rejected-chip {
       background: #be123c;
     }
 
-    .status-pending {
+    .pending-chip {
       background: #b45309;
     }
 
+    .cancelled-chip {
+      background: #475569;
+    }
+
     .empty {
-      padding: 24px 12px;
+      padding: 20px 8px;
       color: var(--sub);
       text-align: center;
       line-height: 1.7;
@@ -355,44 +413,50 @@
 
     .footer-link {
       display: block;
-      margin-top: 22px;
+      margin-top: 20px;
       color: #93c5fd;
-      font-size: 13px;
       text-align: center;
     }
 
-    .loading-overlay {
+    .overlay {
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 9999;
+      z-index: 999;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(2,6,23,0.82);
+      background: rgba(2,6,23,0.85);
     }
 
-    .loading-box {
-      padding: 22px 28px;
+    .loading {
+      padding: 22px;
       border: 2px solid #60a5fa;
-      border-radius: 18px;
+      border-radius: 16px;
       background: var(--card);
-      font-weight: 900;
+      font-weight: bold;
       text-align: center;
     }
 
-    @media (max-width: 480px) {
-      .summary-value {
-        font-size: 18px;
+    @media (max-width: 560px) {
+      .summary {
+        grid-template-columns: 1fr 1fr;
       }
 
-      .summary-card {
-        padding-right: 4px;
-        padding-left: 4px;
+      .summary-value {
+        font-size: 17px;
       }
 
       .request-head {
         align-items: flex-start;
+      }
+
+      .request-amount {
+        font-size: 19px;
+      }
+
+      .header h1 {
+        font-size: 19px;
       }
     }
   </style>
@@ -400,25 +464,37 @@
 
 <body>
   <main class="app">
-    <section id="loginView" class="panel login-panel">
-      <div style="font-size:48px;">🔐</div>
+    <section
+      id="loginView"
+      class="panel login-panel"
+    >
+      <div style="font-size:48px;">
+        🔐
+      </div>
 
-      <h1 class="title" style="margin-top:8px;">
-        保護者画面
-      </h1>
+      <h1>保護者画面</h1>
 
-      <p style="color:var(--sub);font-size:14px;line-height:1.7;">
-        GASの実行ログで控えた<br>
-        保護者用パスワードを入力してください。
+      <p class="description">
+        設定した8桁の暗証番号を入力してください。
       </p>
 
       <input
         id="passwordInput"
         class="password-input"
         type="password"
-        placeholder="保護者用パスワード"
+        inputmode="numeric"
+        maxlength="8"
+        placeholder="8桁の暗証番号"
         autocomplete="current-password"
       >
+
+      <label class="remember-row">
+        <input
+          id="rememberCheck"
+          type="checkbox"
+        >
+        この端末に暗証番号を記憶する
+      </label>
 
       <button
         id="loginButton"
@@ -429,20 +505,31 @@
         ログイン
       </button>
 
-      <div id="loginError" class="error"></div>
+      <div
+        id="loginError"
+        class="error"
+      ></div>
 
-      <a class="footer-link" href="./index.html">
+      <a
+        class="footer-link"
+        href="./index.html"
+      >
         子ども画面へ戻る
       </a>
     </section>
 
-    <section id="parentView" style="display:none;">
+    <section
+      id="parentView"
+      style="display:none;"
+    >
       <header class="header">
         <div>
-          <h1 class="title">👨‍👩‍👧 峯松証券 保護者画面</h1>
+          <h1>
+            👨‍👩‍👧 峯松証券 保護者画面
+          </h1>
 
-          <div class="subtitle">
-            出金申請の確認・承認・却下
+          <div class="header-sub">
+            入金・出金申請の確認、承認、却下
           </div>
         </div>
 
@@ -456,11 +543,12 @@
       </header>
 
       <div class="status-bar">
-        <span id="updateStatus">データを読み込みました</span>
+        <span id="updateStatus">
+          読み込み中
+        </span>
 
         <button
-          id="reloadButton"
-          class="reload-button"
+          class="small-button"
           type="button"
           onclick="loadParentData()"
         >
@@ -468,22 +556,54 @@
         </button>
       </div>
 
-      <div class="summary-grid">
+      <div class="summary">
         <div class="summary-card">
-          <div class="summary-label">登録人数</div>
-          <div id="userCount" class="summary-value">0人</div>
-        </div>
+          <div class="summary-label">
+            登録人数
+          </div>
 
-        <div class="summary-card">
-          <div class="summary-label">銀行残高合計</div>
-          <div id="totalCash" class="summary-value">0円</div>
-        </div>
-
-        <div class="summary-card">
-          <div class="summary-label">申請中</div>
           <div
-            id="pendingCount"
-            class="summary-value pending-value"
+            id="userCount"
+            class="summary-value"
+          >
+            0人
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">
+            残高合計
+          </div>
+
+          <div
+            id="totalCash"
+            class="summary-value"
+          >
+            0円
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">
+            出金申請中
+          </div>
+
+          <div
+            id="pendingWithdrawalCount"
+            class="summary-value withdraw-color"
+          >
+            0件
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">
+            入金申請中
+          </div>
+
+          <div
+            id="pendingDepositCount"
+            class="summary-value deposit-color"
           >
             0件
           </div>
@@ -491,86 +611,122 @@
       </div>
 
       <section class="panel">
-        <h2 class="panel-title">🏧 承認待ちの出金申請</h2>
+        <h2>
+          📬 承認待ちの入出金申請
+        </h2>
 
-        <div id="pendingContainer">
-          <div class="empty">読み込み中...</div>
-        </div>
+        <div id="pendingContainer"></div>
       </section>
 
       <section class="panel">
-        <h2 class="panel-title">🏦 ユーザー残高</h2>
+        <h2>
+          🏦 ユーザー残高
+        </h2>
 
-        <div id="usersContainer">
-          <div class="empty">読み込み中...</div>
-        </div>
+        <div id="usersContainer"></div>
       </section>
 
       <section class="panel">
-        <h2 class="panel-title">📋 最近の出金申請</h2>
+        <h2>
+          📋 最近の入出金申請
+        </h2>
 
-        <div id="historyContainer">
-          <div class="empty">読み込み中...</div>
-        </div>
+        <div id="historyContainer"></div>
       </section>
 
-      <a class="footer-link" href="./index.html">
+      <a
+        class="footer-link"
+        href="./index.html"
+      >
         子ども画面へ戻る
       </a>
     </section>
   </main>
 
-  <div id="loadingOverlay" class="loading-overlay">
-    <div class="loading-box" id="loadingMessage">
+  <div
+    id="overlay"
+    class="overlay"
+  >
+    <div
+      id="loadingText"
+      class="loading"
+    >
       処理中...
     </div>
   </div>
 
   <script>
-    const API_URL =
+    var API_URL =
       "https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec";
 
-    let parentPassword = "";
-    let processing = false;
+    var STORAGE_KEY =
+      "minematsu_parent_password";
 
-    window.addEventListener(
+    var parentPassword = "";
+    var processing = false;
+
+    document.addEventListener(
       "DOMContentLoaded",
       function() {
-        document
-          .getElementById("passwordInput")
-          .addEventListener(
-            "keydown",
-            function(event) {
-              if (event.key === "Enter") {
-                login();
-              }
-            }
+        var passwordInput =
+          document.getElementById(
+            "passwordInput"
           );
+
+        passwordInput.addEventListener(
+          "keydown",
+          function(event) {
+            if (event.key === "Enter") {
+              login();
+            }
+          }
+        );
+
+        var savedPassword =
+          localStorage.getItem(
+            STORAGE_KEY
+          );
+
+        if (savedPassword) {
+          parentPassword =
+            savedPassword;
+
+          document.getElementById(
+            "rememberCheck"
+          ).checked = true;
+
+          autoLogin();
+        }
       }
     );
 
-    async function callApi(action, data = {}) {
-      const requestData = Object.assign(
+    async function callApi(
+      action,
+      data
+    ) {
+      var body = Object.assign(
         {},
-        data,
+        data || {},
         {
           action: action,
-          parentPassword: parentPassword
+          parentPassword:
+            parentPassword
         }
       );
 
-      const response = await fetch(
-        API_URL,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(requestData),
-          redirect: "follow"
-        }
-      );
+      var response =
+        await fetch(
+          API_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(body),
+            redirect: "follow"
+          }
+        );
 
       if (!response.ok) {
         throw new Error(
@@ -580,14 +736,17 @@
         );
       }
 
-      const text = await response.text();
-      let result;
+      var text =
+        await response.text();
+
+      var result;
 
       try {
         result = JSON.parse(text);
+
       } catch (error) {
         throw new Error(
-          "サーバーから正しいデータが返りませんでした。"
+          "サーバーの返答を読み取れませんでした。"
         );
       }
 
@@ -605,49 +764,103 @@
       return result;
     }
 
+    async function autoLogin() {
+      setProcessing(
+        true,
+        "自動ログイン中..."
+      );
+
+      try {
+        var data =
+          await callApi(
+            "getParentData"
+          );
+
+        openParentView();
+        render(data);
+
+      } catch (error) {
+        localStorage.removeItem(
+          STORAGE_KEY
+        );
+
+        parentPassword = "";
+
+        document.getElementById(
+          "rememberCheck"
+        ).checked = false;
+
+        showError(
+          "保存された暗証番号が使えません。" +
+          "もう一度入力してください。"
+        );
+
+      } finally {
+        setProcessing(false);
+      }
+    }
+
     async function login() {
       if (processing) {
         return;
       }
 
-      const input =
+      var input =
         document.getElementById(
           "passwordInput"
         );
 
-      const password = input.value.trim();
+      var password =
+        input.value.trim();
 
-      if (!password) {
-        showLoginError(
-          "パスワードを入力してください。"
+      if (!/^\d{8}$/.test(password)) {
+        showError(
+          "8桁の数字を入力してください。"
         );
+
         return;
       }
 
-      parentPassword = password;
-      hideLoginError();
-      setProcessing(true, "確認中...");
+      parentPassword =
+        password;
+
+      hideError();
+
+      setProcessing(
+        true,
+        "暗証番号を確認中..."
+      );
 
       try {
-        const data = await callApi(
-          "getParentData"
-        );
+        var data =
+          await callApi(
+            "getParentData"
+          );
 
-        document.getElementById(
-          "loginView"
-        ).style.display = "none";
+        if (
+          document.getElementById(
+            "rememberCheck"
+          ).checked
+        ) {
+          localStorage.setItem(
+            STORAGE_KEY,
+            parentPassword
+          );
 
-        document.getElementById(
-          "parentView"
-        ).style.display = "block";
+        } else {
+          localStorage.removeItem(
+            STORAGE_KEY
+          );
+        }
 
         input.value = "";
-        renderParentData(data);
+
+        openParentView();
+        render(data);
 
       } catch (error) {
         parentPassword = "";
-
-        showLoginError(
+        showError(
           getErrorMessage(error)
         );
 
@@ -656,8 +869,18 @@
       }
     }
 
+    function openParentView() {
+      document.getElementById(
+        "loginView"
+      ).style.display = "none";
+
+      document.getElementById(
+        "parentView"
+      ).style.display = "block";
+    }
+
     async function loadParentData() {
-      if (!parentPassword || processing) {
+      if (processing) {
         return;
       }
 
@@ -667,15 +890,15 @@
       );
 
       try {
-        const data = await callApi(
-          "getParentData"
-        );
+        var data =
+          await callApi(
+            "getParentData"
+          );
 
-        renderParentData(data);
+        render(data);
 
       } catch (error) {
         alert(
-          "読み込みエラー\n\n" +
           getErrorMessage(error)
         );
 
@@ -684,47 +907,78 @@
       }
     }
 
-    function renderParentData(data) {
-      const users =
+    function render(data) {
+      var users =
         Array.isArray(data.users)
           ? data.users
           : [];
 
-      const pendingRequests =
-        Array.isArray(data.pendingRequests)
+      var pending =
+        Array.isArray(
+          data.pendingRequests
+        )
           ? data.pendingRequests
           : [];
 
-      const requests =
+      var history =
         Array.isArray(data.requests)
           ? data.requests
           : [];
 
-      const totalCash = users.reduce(
-        function(total, user) {
-          return total +
-            (Number(user.cash) || 0);
-        },
-        0
-      );
+      var pendingWithdrawals =
+        pending.filter(
+          function(request) {
+            return (
+              getRequestType(request) ===
+              "出金申請"
+            );
+          }
+        );
+
+      var pendingDeposits =
+        pending.filter(
+          function(request) {
+            return (
+              getRequestType(request) ===
+              "入金申請"
+            );
+          }
+        );
+
+      var totalCash =
+        users.reduce(
+          function(sum, user) {
+            return (
+              sum +
+              (
+                Number(user.cash) ||
+                0
+              )
+            );
+          },
+          0
+        );
 
       document.getElementById(
         "userCount"
       ).textContent =
-        users.length.toLocaleString("ja-JP") +
-        "人";
+        users.length + "人";
 
       document.getElementById(
         "totalCash"
       ).textContent =
-        totalCash.toLocaleString("ja-JP") +
-        "円";
+        yen(totalCash);
 
       document.getElementById(
-        "pendingCount"
+        "pendingWithdrawalCount"
       ).textContent =
-        pendingRequests.length
-          .toLocaleString("ja-JP") +
+        pendingWithdrawals.length +
+        "件";
+
+      document.getElementById(
+        "pendingDepositCount"
+      ).textContent =
+        pendingDeposits.length +
         "件";
 
       document.getElementById(
@@ -732,24 +986,27 @@
       ).textContent =
         "最終更新：" +
         new Date().toLocaleTimeString(
-          "ja-JP",
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
-          }
+          "ja-JP"
         );
 
-      renderPendingRequests(
-        pendingRequests
-      );
-
+      renderPending(pending);
       renderUsers(users);
-      renderHistory(requests);
+      renderHistory(history);
     }
 
-    function renderPendingRequests(requests) {
-      const container =
+    function getRequestType(request) {
+      if (
+        request &&
+        request.type === "入金申請"
+      ) {
+        return "入金申請";
+      }
+
+      return "出金申請";
+    }
+
+    function renderPending(requests) {
+      var container =
         document.getElementById(
           "pendingContainer"
         );
@@ -757,46 +1014,119 @@
       if (requests.length === 0) {
         container.innerHTML =
           '<div class="empty">' +
-          "現在、承認待ちの申請はありません。" +
+          "承認待ちの申請はありません。" +
           "</div>";
+
         return;
       }
 
       container.innerHTML =
         requests.map(
           function(request) {
-            const requestId =
-              escapeHtml(
-                request.requestId
-              );
+            var type =
+              getRequestType(request);
+
+            var isDeposit =
+              type === "入金申請";
+
+            var cardClass =
+              isDeposit
+                ? "deposit-request"
+                : "withdraw-request";
+
+            var typeClass =
+              isDeposit
+                ? "deposit-type"
+                : "withdraw-type";
+
+            var amountClass =
+              isDeposit
+                ? "deposit-amount"
+                : "withdraw-amount";
+
+            var approveClass =
+              isDeposit
+                ? "approve-deposit"
+                : "approve-withdraw";
+
+            var approveAction =
+              isDeposit
+                ? "approveDepositRequest"
+                : "approveWithdrawalRequest";
+
+            var rejectAction =
+              isDeposit
+                ? "rejectDepositRequest"
+                : "rejectWithdrawalRequest";
+
+            var typeIcon =
+              isDeposit
+                ? "💴"
+                : "🏧";
+
+            var explanation =
+              isDeposit
+                ? "承認すると、パパ銀行残高へこの金額を追加します。"
+                : "承認すると、パパ銀行残高からこの金額を差し引きます。";
 
             return (
-              '<article class="request-card">' +
+              '<article class="request-card ' +
+                cardClass +
+              '">' +
+
+                '<div class="request-type ' +
+                  typeClass +
+                '">' +
+                  typeIcon +
+                  " " +
+                  escapeHtml(type) +
+                "</div>" +
+
                 '<div class="request-head">' +
                   "<div>" +
-                    '<div class="request-user">' +
+                    '<div class="request-name">' +
                       escapeHtml(
                         request.userName
                       ) +
                       "さん" +
                     "</div>" +
+
                     '<div class="request-date">' +
                       escapeHtml(
                         request.date
                       ) +
                     "</div>" +
                   "</div>" +
-                  '<div class="request-amount">' +
-                    formatYen(
-                      request.amount
+
+                  '<div class="request-amount ' +
+                    amountClass +
+                  '">' +
+                    (
+                      isDeposit
+                        ? "＋"
+                        : "－"
                     ) +
+                    yen(request.amount) +
                   "</div>" +
                 "</div>" +
-                '<div class="request-actions">' +
-                  '<button class="action-button reject-button"' +
-                    ' type="button"' +
+
+                '<div class="request-explanation">' +
+                  escapeHtml(
+                    explanation
+                  ) +
+                "</div>" +
+
+                '<div class="actions">' +
+                  '<button class="action-button reject"' +
+                    ' data-action="' +
+                      escapeHtml(
+                        rejectAction
+                      ) +
+                    '"' +
                     ' data-request-id="' +
-                      requestId +
+                      escapeHtml(
+                        request.requestId
+                      ) +
                     '"' +
                     ' data-user-name="' +
                       escapeHtml(
@@ -808,13 +1138,25 @@
                         request.amount
                       ) +
                     '"' +
-                    ' onclick="rejectFromButton(this)">' +
+                    ' data-type="' +
+                      escapeHtml(type) +
+                    '"' +
+                    ' onclick="confirmRequestFromButton(this)">' +
                     "却下する" +
                   "</button>" +
-                  '<button class="action-button approve-button"' +
-                    ' type="button"' +
+
+                  '<button class="action-button ' +
+                    approveClass +
+                  '"' +
+                    ' data-action="' +
+                      escapeHtml(
+                        approveAction
+                      ) +
+                    '"' +
                     ' data-request-id="' +
-                      requestId +
+                      escapeHtml(
+                        request.requestId
+                      ) +
                     '"' +
                     ' data-user-name="' +
                       escapeHtml(
@@ -826,7 +1168,10 @@
                         request.amount
                       ) +
                     '"' +
-                    ' onclick="approveFromButton(this)">' +
+                    ' data-type="' +
+                      escapeHtml(type) +
+                    '"' +
+                    ' onclick="confirmRequestFromButton(this)">' +
                     "承認する" +
                   "</button>" +
                 "</div>" +
@@ -837,7 +1182,7 @@
     }
 
     function renderUsers(users) {
-      const container =
+      var container =
         document.getElementById(
           "usersContainer"
         );
@@ -845,34 +1190,79 @@
       if (users.length === 0) {
         container.innerHTML =
           '<div class="empty">' +
-          "ユーザーが見つかりません。" +
+          "ユーザーがいません。" +
           "</div>";
+
         return;
       }
 
       container.innerHTML =
         users.map(
           function(user) {
+            var pendingWithdrawal =
+              Number(
+                user.pendingWithdrawal
+              ) || 0;
+
+            var pendingDeposit =
+              Number(
+                user.pendingDeposit
+              ) || 0;
+
+            var availableCash =
+              Number(
+                user.availableCash
+              );
+
+            if (
+              !Number.isFinite(
+                availableCash
+              )
+            ) {
+              availableCash =
+                Math.max(
+                  0,
+                  (
+                    Number(user.cash) ||
+                    0
+                  ) -
+                  pendingWithdrawal
+                );
+            }
+
             return (
-              '<div class="user-card">' +
+              '<div class="user-row">' +
                 "<div>" +
                   '<div class="user-name">' +
-                    escapeHtml(user.name) +
+                    escapeHtml(
+                      user.name
+                    ) +
                   "</div>" +
-                  '<div class="user-sub">' +
+
+                  '<div class="sub-text">' +
                     "利用可能：" +
-                    formatYen(
-                      user.availableCash
-                    ) +
+                    yen(availableCash) +
                     "<br>" +
-                    "申請中：" +
-                    formatYen(
-                      user.pendingWithdrawal
-                    ) +
+
+                    '<span class="withdraw-color">' +
+                      "出金申請中：" +
+                      yen(
+                        pendingWithdrawal
+                      ) +
+                    "</span>" +
+                    "<br>" +
+
+                    '<span class="deposit-color">' +
+                      "入金申請中：" +
+                      yen(
+                        pendingDeposit
+                      ) +
+                    "</span>" +
                   "</div>" +
                 "</div>" +
-                '<div class="user-cash">' +
-                  formatYen(user.cash) +
+
+                '<div class="money">' +
+                  yen(user.cash) +
                 "</div>" +
               "</div>"
             );
@@ -881,7 +1271,7 @@
     }
 
     function renderHistory(requests) {
-      const container =
+      var container =
         document.getElementById(
           "historyContainer"
         );
@@ -889,104 +1279,188 @@
       if (requests.length === 0) {
         container.innerHTML =
           '<div class="empty">' +
-          "出金申請の履歴はありません。" +
+          "申請履歴はありません。" +
           "</div>";
+
         return;
       }
 
       container.innerHTML =
-        requests.slice(0, 30).map(
-          function(request) {
-            const statusClass =
-              getStatusClass(
-                request.status
+        requests
+          .slice(0, 30)
+          .map(
+            function(request) {
+              var type =
+                getRequestType(request);
+
+              var isDeposit =
+                type === "入金申請";
+
+              var typeClass =
+                isDeposit
+                  ? "deposit-type"
+                  : "withdraw-type";
+
+              var amountColor =
+                isDeposit
+                  ? "#c4b5fd"
+                  : "#34d399";
+
+              return (
+                '<div class="history-row">' +
+                  "<div>" +
+                    '<div class="user-name">' +
+                      escapeHtml(
+                        request.userName
+                      ) +
+                      "さん" +
+                    "</div>" +
+
+                    '<div class="sub-text">' +
+                      escapeHtml(
+                        request.date
+                      ) +
+                    "</div>" +
+
+                    '<span class="history-type ' +
+                      typeClass +
+                    '">' +
+                      escapeHtml(type) +
+                    "</span>" +
+                  "</div>" +
+
+                  '<div class="history-side">' +
+                    '<div class="money" style="color:' +
+                      amountColor +
+                    ';">' +
+                      (
+                        isDeposit
+                          ? "＋"
+                          : "－"
+                      ) +
+                      yen(
+                        request.amount
+                      ) +
+                    "</div>" +
+
+                    '<span class="chip ' +
+                      statusClass(
+                        request.status
+                      ) +
+                    '">' +
+                      escapeHtml(
+                        request.status
+                      ) +
+                    "</span>" +
+                  "</div>" +
+                "</div>"
               );
-
-            return (
-              '<div class="history-row">' +
-                "<div>" +
-                  '<div class="history-main">' +
-                    escapeHtml(
-                      request.userName
-                    ) +
-                    "さん" +
-                  "</div>" +
-                  '<div class="history-sub">' +
-                    escapeHtml(
-                      request.date
-                    ) +
-                  "</div>" +
-                "</div>" +
-                '<div class="history-right">' +
-                  '<div class="history-amount">' +
-                    formatYen(
-                      request.amount
-                    ) +
-                  "</div>" +
-                  '<span class="status-chip ' +
-                    statusClass +
-                  '">' +
-                    escapeHtml(
-                      request.status
-                    ) +
-                  "</span>" +
-                "</div>" +
-              "</div>"
-            );
-          }
-        ).join("");
+            }
+          ).join("");
     }
 
-    function approveFromButton(button) {
-      const requestId =
-        button.dataset.requestId;
+    function confirmRequestFromButton(
+      button
+    ) {
+      var action =
+        button.getAttribute(
+          "data-action"
+        ) || "";
 
-      const userName =
-        button.dataset.userName;
+      var requestId =
+        button.getAttribute(
+          "data-request-id"
+        ) || "";
 
-      const amount =
-        Number(button.dataset.amount) || 0;
+      var userName =
+        button.getAttribute(
+          "data-user-name"
+        ) || "";
 
-      const confirmed = confirm(
-        userName +
-        "さんの出金申請 " +
-        formatYen(amount) +
-        " を承認しますか？\n\n" +
-        "承認すると、パパ銀行残高から実際に差し引かれます。"
+      var amount =
+        Number(
+          button.getAttribute(
+            "data-amount"
+          )
+        ) || 0;
+
+      var type =
+        button.getAttribute(
+          "data-type"
+        ) || "出金申請";
+
+      confirmRequest(
+        action,
+        requestId,
+        userName,
+        amount,
+        type
       );
+    }
 
-      if (confirmed) {
-        processRequest(
-          "approveWithdrawalRequest",
-          requestId,
-          "承認"
-        );
+    function confirmRequest(
+      action,
+      requestId,
+      userName,
+      amount,
+      type
+    ) {
+      if (processing) {
+        return;
       }
-    }
 
-    function rejectFromButton(button) {
-      const requestId =
-        button.dataset.requestId;
+      var isApprove =
+        action ===
+          "approveWithdrawalRequest" ||
+        action ===
+          "approveDepositRequest";
 
-      const userName =
-        button.dataset.userName;
+      var isDeposit =
+        type === "入金申請";
 
-      const amount =
-        Number(button.dataset.amount) || 0;
+      var message;
 
-      const confirmed = confirm(
-        userName +
-        "さんの出金申請 " +
-        formatYen(amount) +
-        " を却下しますか？\n\n" +
-        "残高は減らず、拘束されていた金額が利用可能額に戻ります。"
-      );
+      if (isApprove && isDeposit) {
+        message =
+          userName +
+          "さんの入金申請 " +
+          yen(amount) +
+          "を承認しますか？\n\n" +
+          "承認すると、パパ銀行残高へ" +
+          yen(amount) +
+          "追加されます。";
 
-      if (confirmed) {
+      } else if (
+        isApprove &&
+        !isDeposit
+      ) {
+        message =
+          userName +
+          "さんの出金申請 " +
+          yen(amount) +
+          "を承認しますか？\n\n" +
+          "承認すると、パパ銀行残高から" +
+          yen(amount) +
+          "差し引かれます。";
+
+      } else {
+        message =
+          userName +
+          "さんの" +
+          type +
+          " " +
+          yen(amount) +
+          "を却下しますか？\n\n" +
+          "残高は変更されません。";
+      }
+
+      if (confirm(message)) {
         processRequest(
-          "rejectWithdrawalRequest",
+          action,
           requestId,
-          "却下"
+          isApprove
+            ? "承認"
+            : "却下"
         );
       }
     }
@@ -994,7 +1468,7 @@
     async function processRequest(
       action,
       requestId,
-      actionLabel
+      label
     ) {
       if (processing) {
         return;
@@ -1002,29 +1476,31 @@
 
       setProcessing(
         true,
-        actionLabel + "処理中..."
+        label + "処理中..."
       );
 
       try {
-        const result = await callApi(
-          action,
-          {
-            requestId: requestId
-          }
-        );
+        var result =
+          await callApi(
+            action,
+            {
+              requestId: requestId
+            }
+          );
 
         alert(result.message);
 
-        const newData = await callApi(
-          "getParentData"
-        );
+        var data =
+          await callApi(
+            "getParentData"
+          );
 
-        renderParentData(newData);
+        render(data);
 
       } catch (error) {
         alert(
-          actionLabel +
-          "エラー\n\n" +
+          label +
+          "できませんでした。\n\n" +
           getErrorMessage(error)
         );
 
@@ -1034,6 +1510,14 @@
     }
 
     function logout() {
+      if (processing) {
+        return;
+      }
+
+      localStorage.removeItem(
+        STORAGE_KEY
+      );
+
       parentPassword = "";
 
       document.getElementById(
@@ -1044,88 +1528,96 @@
         "loginView"
       ).style.display = "block";
 
-      hideLoginError();
+      document.getElementById(
+        "rememberCheck"
+      ).checked = false;
 
       document.getElementById(
         "passwordInput"
-      ).focus();
+      ).value = "";
+
+      hideError();
     }
 
-    function setProcessing(active, message) {
+    function setProcessing(
+      active,
+      text
+    ) {
       processing = active;
 
-      const overlay =
+      var overlay =
         document.getElementById(
-          "loadingOverlay"
+          "overlay"
         );
 
-      if (active) {
-        document.getElementById(
-          "loadingMessage"
-        ).textContent =
-          message || "処理中...";
-
-        overlay.style.display = "flex";
-      } else {
-        overlay.style.display = "none";
-      }
-
       document.getElementById(
-        "loginButton"
-      ).disabled = active;
+        "loadingText"
+      ).textContent =
+        text || "処理中...";
 
-      document.getElementById(
-        "reloadButton"
-      ).disabled = active;
+      overlay.style.display =
+        active
+          ? "flex"
+          : "none";
     }
 
-    function showLoginError(message) {
-      const element =
+    function showError(message) {
+      var errorBox =
         document.getElementById(
           "loginError"
         );
 
-      element.textContent = message;
-      element.style.display = "block";
+      errorBox.textContent =
+        message;
+
+      errorBox.style.display =
+        "block";
     }
 
-    function hideLoginError() {
+    function hideError() {
       document.getElementById(
         "loginError"
-      ).style.display = "none";
+      ).style.display =
+        "none";
     }
 
-    function getStatusClass(status) {
+    function statusClass(status) {
       if (status === "承認済み") {
-        return "status-approved";
+        return "approved-chip";
       }
 
-      if (
-        status === "却下" ||
-        status === "取消済み"
-      ) {
-        return "status-rejected";
+      if (status === "却下") {
+        return "rejected-chip";
+      }
+
+      if (status === "取消済み") {
+        return "cancelled-chip";
       }
 
       if (status === "申請中") {
-        return "status-pending";
+        return "pending-chip";
       }
 
       return "";
     }
 
-    function formatYen(value) {
+    function yen(value) {
       return (
-        (Number(value) || 0)
-          .toLocaleString("ja-JP") +
+        (
+          Number(value) || 0
+        ).toLocaleString(
+          "ja-JP"
+        ) +
         "円"
       );
     }
 
     function getErrorMessage(error) {
-      return error && error.message
-        ? error.message
-        : String(error);
+      return (
+        error && error.message
+          ? error.message
+          : String(error)
+      );
     }
 
     function escapeHtml(value) {
