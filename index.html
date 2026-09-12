@@ -2,46 +2,1898 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>パパ銀行</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+  <title>峯松証券 キッズ</title>
 
   <style>
-    body {
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card-border: rgba(255,255,255,0.1);
+      --red: #f43f5e;
+      --gold: #f59e0b;
+      --green: #10b981;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --text: #ffffff;
+      --text-sub: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 40px 20px;
-      background: #fff8e8;
-      color: #333;
-      font-family: sans-serif;
+      padding: 0;
+      font-family:
+        "Hiragino Kaku Gothic ProN",
+        "Meiryo",
+        sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      padding: 16px 14px 100px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #user-select-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 24px;
+    }
+
+    .big-avatar {
+      font-size: 56px;
+      margin-bottom: 8px;
+    }
+
+    .select-btn {
+      width: 100%;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-radius: 20px;
+      font-size: 20px;
+      font-weight: 900;
+      border: 3px solid rgba(255,255,255,0.2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .select-btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-test {
+      background: linear-gradient(135deg, #334155, #1e293b);
+      border-color: #64748b;
+      font-size: 16px;
+      padding: 14px;
+    }
+
+    .btn-saori {
+      background: linear-gradient(135deg, #ec4899, #be185d);
+    }
+
+    .btn-yuka {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .kid-badge {
+      font-size: 18px;
+      font-weight: 900;
+      background: var(--card);
+      padding: 8px 18px;
+      border-radius: 30px;
+      border: 2px solid var(--card-border);
+    }
+
+    .btn-switch-user {
+      font-size: 13px;
+      color: var(--text-sub);
+      text-decoration: underline;
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 3px solid #38bdf8;
+      border-radius: 28px;
+      padding: 20px 16px;
+      text-align: center;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(56,189,248,0.2);
+    }
+
+    .hero-label {
+      font-size: 16px;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    .hero-money {
+      font-size: 46px;
+      font-weight: 900;
+      color: #fff;
+      margin: 8px 0;
+      letter-spacing: -1px;
+    }
+
+    .hero-sub {
+      display: flex;
+      justify-content: space-around;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-sub);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 10px;
+    }
+
+    .big-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .nav-btn {
+      padding: 14px 4px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+      background: var(--card);
+      border: 2px solid var(--card-border);
+      color: var(--text-sub);
+      cursor: pointer;
+      line-height: 1.3;
+    }
+
+    .nav-btn.active {
+      background: var(--blue);
+      border-color: #60a5fa;
+      color: #fff;
+    }
+
+    .ticket-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--text-sub);
+      background: rgba(255,255,255,0.05);
+      padding: 10px 14px;
+      border-radius: 12px;
+    }
+
+    .btn-reload {
+      color: #38bdf8;
+      cursor: pointer;
+      padding: 4px 8px;
+      background: rgba(56,189,248,0.15);
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .stock-card {
+      background: var(--card);
+      border: 2px solid var(--card-border);
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .stock-tag {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 4px;
+      background: #334155;
+    }
+
+    .stock-name {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 4px;
+      padding-right: 90px;
+    }
+
+    .stock-price {
+      font-size: 26px;
+      font-weight: 900;
+      color: #38bdf8;
+    }
+
+    .btn-what {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #475569;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .trade-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn-buy,
+    .btn-sell {
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 17px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn-buy {
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+    }
+
+    .btn-sell {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    }
+
+    .btn-buy:active,
+    .btn-sell:active {
+      transform: scale(0.96);
+    }
+
+    .btn-disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .used-label {
+      margin-top: 8px;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .portfolio-summary {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 14px;
+      border: 2px solid var(--purple);
+    }
+
+    .port-item {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 2px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .port-name {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .port-count {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    .port-val {
+      font-size: 20px;
+      font-weight: 900;
+      color: #38bdf8;
+      text-align: right;
+    }
+
+    .port-pl {
+      font-size: 12px;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .bonus-notify {
+      background: rgba(245,158,11,0.15);
+      border: 2px solid var(--gold);
+      border-radius: 18px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .bank-box {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 2px solid var(--card-border);
+    }
+
+    .cash-status {
+      background: #0f172a;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .onedari-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .onedari-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 18px 10px;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .onedari-btn:active {
+      transform: scale(0.95);
+    }
+
+    .custom-cash-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .custom-cash-input {
+      min-width: 0;
+      flex: 1;
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px;
+      text-align: center;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .custom-cash-btn {
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 0 18px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .dialog-box {
+      background: #1e293b;
+      border: 3px solid #38bdf8;
+      border-radius: 26px;
+      padding: 22px;
+      width: 100%;
+      max-width: 380px;
       text-align: center;
     }
 
-    h1 {
-      color: #ff6b35;
-      font-size: 48px;
+    .d-title {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 10px;
     }
 
-    p {
-      font-size: 28px;
-      line-height: 1.7;
+    .d-body {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.5;
+      margin-bottom: 16px;
+      white-space: pre-line;
     }
 
-    .success {
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 30px;
-      background: white;
-      border: 5px solid #ffcc4d;
-      border-radius: 30px;
+    .counter-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .counter-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      border: none;
+      background: #334155;
+      color: #fff;
+      font-size: 26px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .counter-val {
+      font-size: 32px;
+      font-weight: 900;
+      color: #38bdf8;
+      min-width: 60px;
+    }
+
+    .calc-sum-box {
+      background: #0f172a;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 17px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 18px;
+    }
+
+    .d-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .d-btn {
+      flex: 1;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+    }
+
+    .d-cancel {
+      background: #475569;
+      color: #fff;
+    }
+
+    .d-ok {
+      background: #10b981;
+      color: #fff;
+    }
+
+    .d-btn:disabled,
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .loading-box,
+    .error-box,
+    .empty-box {
+      text-align: center;
+      padding: 30px 18px;
+      border-radius: 20px;
+      background: var(--card);
+      color: var(--text-sub);
+    }
+
+    .error-box {
+      color: #fda4af;
+      border: 2px solid var(--red);
     }
   </style>
 </head>
 
 <body>
-  <h1>パパ銀行</h1>
+  <div class="app">
 
-  <div class="success">
-    <p>GitHubの画面が開きました！</p>
-    <p>ここに子供用アプリを移していきます。</p>
+    <div id="user-select-view">
+      <div class="big-avatar">🐷</div>
+
+      <h1 style="font-size:24px;font-weight:900;margin-bottom:6px;">
+        だれのスマホ？
+      </h1>
+
+      <p style="color:var(--text-sub);margin-bottom:20px;font-size:14px;">
+        使う人のボタンを押してね
+      </p>
+
+      <div class="select-btn btn-saori" onclick="registerKid('咲織')">
+        <span>👧</span> 咲織（さおり）
+      </div>
+
+      <div class="select-btn btn-yuka" onclick="registerKid('優花')">
+        <span>👧</span> 優花（ゆうか）
+      </div>
+
+      <div style="width:100%;border-top:1px solid rgba(255,255,255,0.1);margin:16px 0 12px;padding-top:12px;text-align:center;font-size:12px;color:var(--text-sub);">
+        🛠️ 動作チェック用（パパ・ママ）
+      </div>
+
+      <div class="select-btn btn-test" onclick="registerKid('あきひろ')">
+        <span>👨‍💻</span> あきひろ（検証）
+      </div>
+
+      <div class="select-btn btn-test" onclick="registerKid('けいこ')">
+        <span>👩‍💻</span> けいこ（検証）
+      </div>
+    </div>
+
+    <div id="main-view" style="display:none;">
+      <div class="header-bar">
+        <div class="kid-badge" id="disp-kid-name">👤 ユーザー</div>
+
+        <div class="btn-switch-user" onclick="resetUser()">
+          べつの人にする
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-label">👑 ぜんぶのお金</div>
+        <div class="hero-money" id="disp-total-all">0円</div>
+
+        <div class="hero-sub">
+          <div>
+            🏦 パパ銀行:
+            <span id="disp-cash-val" style="color:#fff;">0円</span>
+          </div>
+
+          <div>
+            📈 投資中:
+            <span id="disp-invest-val" style="color:#fff;">0円</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="big-nav">
+        <div
+          class="nav-btn active"
+          id="tab-btn-stocks"
+          onclick="switchKidTab('stocks')"
+        >
+          おうえん<br>（株をかう）
+        </div>
+
+        <div
+          class="nav-btn"
+          id="tab-btn-portfolio"
+          onclick="switchKidTab('portfolio')"
+        >
+          もっている株<br>（資産）
+        </div>
+
+        <div
+          class="nav-btn"
+          id="tab-btn-bank"
+          onclick="switchKidTab('bank')"
+        >
+          パパ銀行<br>（出金申請）
+        </div>
+      </div>
+
+      <div class="ticket-bar">
+        <span id="ticket-status-label">
+          🎫 売買状況を確認中...
+        </span>
+
+        <span class="btn-reload" onclick="loadData()">
+          🔄 更新
+        </span>
+      </div>
+
+      <div id="tab-stocks">
+        <div id="stocks-container">
+          <div class="loading-box">読み込み中...</div>
+        </div>
+      </div>
+
+      <div id="tab-portfolio" style="display:none;">
+        <div class="portfolio-summary">
+          <div style="font-size:13px;color:var(--text-sub);">
+            いま持っている株のぜんぶの価値
+          </div>
+
+          <div
+            id="disp-port-total"
+            style="font-size:32px;font-weight:900;color:#fff;margin-top:4px;"
+          >
+            0 円
+          </div>
+        </div>
+
+        <div id="portfolio-container"></div>
+      </div>
+
+      <div id="tab-bank" style="display:none;">
+        <div class="bonus-notify">
+          <div style="font-size:15px;font-weight:bold;color:var(--gold);">
+            🎁 パパ銀行のおまけ（利息）
+          </div>
+
+          <div
+            id="disp-interest-msg"
+            style="font-size:20px;font-weight:900;margin-top:4px;"
+          >
+            毎月 +0円 もらえるよ！
+          </div>
+        </div>
+
+        <div class="bank-box">
+          <h2 style="font-size:20px;font-weight:900;margin-bottom:6px;text-align:center;">
+            🏧 現金ちょうだい申請
+          </h2>
+
+          <p style="font-size:13px;color:var(--text-sub);text-align:center;margin-bottom:16px;">
+            パパ銀行のお金を本物の現金でもらう申請です<br>
+            （パパ・ママに通知されます）
+          </p>
+
+          <div class="cash-status">
+            利用できる金額：
+            <strong id="disp-available-cash">0円</strong>
+            <br>
+            申請中：
+            <strong id="disp-pending-cash">0円</strong>
+          </div>
+
+          <div class="onedari-grid">
+            <button class="onedari-btn" onclick="askCash(100)">
+              100円
+            </button>
+
+            <button class="onedari-btn" onclick="askCash(300)">
+              300円
+            </button>
+
+            <button class="onedari-btn" onclick="askCash(500)">
+              500円
+            </button>
+
+            <button class="onedari-btn" onclick="askCash(1000)">
+              1000円
+            </button>
+          </div>
+
+          <div class="custom-cash-row">
+            <input
+              type="number"
+              id="customCashAmount"
+              class="custom-cash-input"
+              placeholder="金額を入力（円）"
+              min="1"
+              step="1"
+              inputmode="numeric"
+            >
+
+            <button class="custom-cash-btn" onclick="askCustomCash()">
+              申請する
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div id="kidDialog" class="overlay">
+    <div class="dialog-box">
+      <div class="d-title" id="diagTitle">確認</div>
+      <div class="d-body" id="diagBody"></div>
+
+      <div class="d-btns">
+        <button class="d-btn d-cancel" onclick="closeKidDialog()">
+          やめる
+        </button>
+
+        <button class="d-btn d-ok" id="diagOkBtn">
+          はい！
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tradeModal" class="overlay">
+    <div class="dialog-box">
+      <div class="d-title" id="tModalTitle">注文確認</div>
+
+      <div
+        id="tModalPrice"
+        style="font-size:14px;color:var(--text-sub);"
+      >
+        単価: 0 円
+      </div>
+
+      <div class="counter-row">
+        <button class="counter-btn" onclick="changeUnits(-1)">
+          −
+        </button>
+
+        <span class="counter-val" id="tUnitsVal">1</span>
+
+        <button class="counter-btn" onclick="changeUnits(1)">
+          ＋
+        </button>
+      </div>
+
+      <div class="calc-sum-box" id="tSumVal">
+        合計: 0 円
+      </div>
+
+      <div class="d-btns">
+        <button class="d-btn d-cancel" onclick="closeTradeModal()">
+          やめる
+        </button>
+
+        <button
+          class="d-btn d-ok"
+          id="tOrderBtn"
+          onclick="sendTradeOrder()"
+        >
+          注文する！
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var API_URL =
+      "https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec";
+
+    var myName = "";
+    var appState = null;
+    var loadingData = false;
+    var sendingOrder = false;
+    var sendingCashRequest = false;
+
+    var activeTrade = {
+      code: "",
+      name: "",
+      price: 0,
+      type: "buy",
+      units: 1,
+      maxUnits: 99
+    };
+
+    var EXPLAIN_MAP = {
+      "^N225":
+        "日本の代表的な225社の平均点！日本全体の景気がいいと上がるよ。",
+
+      "8136.T":
+        "ハローキティやシナモロールを作っているかわいい会社だよ。",
+
+      "7974.T":
+        "Switchやマリオ、ポケモンなどの楽しいゲームを作っている会社だよ。",
+
+      "2782.T":
+        "かわいい雑貨や便利なグッズがたくさんある100円ショップだよ。",
+
+      "2702.T":
+        "みんな大好きなハンバーガーやハッピーセットのお店だよ。",
+
+      "2695.T":
+        "お皿を5枚入れるとガチャ（びっくらポン）が回る楽しいお寿司屋さん！",
+
+      "7203.T":
+        "世界中でたくさん車を作って売っている日本の会社だよ。",
+
+      "9983.T":
+        "ユニクロやGUなどの洋服を作っている会社だよ。",
+
+      "2269.T":
+        "板チョコやアポロ、牛乳やお菓子を作っている会社だよ。",
+
+      "GOLD":
+        "大昔から世界中で大切にされているピカピカの金（ゴールド）だよ。",
+
+      "OIL":
+        "車のガソリンやプラスチックを作るために使う黒い油だよ。",
+
+      "WHEAT":
+        "パンやうどん、ラーメン、ケーキの粉になる大切な麦だよ。"
+    };
+
+    window.onload = function() {
+      var saved = localStorage.getItem(
+        "minematsu_kid_user"
+      );
+
+      if (saved) {
+        bootKidApp(saved);
+      }
+    };
+
+    async function callApi(action, data) {
+      var requestData = Object.assign(
+        {},
+        data || {},
+        { action: action }
+      );
+
+      var response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(requestData),
+        redirect: "follow"
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          "通信に失敗しました（HTTP " +
+          response.status +
+          "）"
+        );
+      }
+
+      var responseText = await response.text();
+      var result;
+
+      try {
+        result = JSON.parse(responseText);
+      } catch (error) {
+        throw new Error(
+          "サーバーから正しいデータが返りませんでした。GASの公開設定を確認してください。"
+        );
+      }
+
+      if (!result || result.status !== "success") {
+        throw new Error(
+          result && result.message
+            ? result.message
+            : "処理に失敗しました。"
+        );
+      }
+
+      return result;
+    }
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function registerKid(name) {
+      localStorage.setItem(
+        "minematsu_kid_user",
+        name
+      );
+
+      bootKidApp(name);
+    }
+
+    function resetUser() {
+      if (confirm("べつの人の画面にしますか？")) {
+        localStorage.removeItem(
+          "minematsu_kid_user"
+        );
+
+        location.reload();
+      }
+    }
+
+    function bootKidApp(name) {
+      myName = name;
+
+      document.getElementById(
+        "user-select-view"
+      ).style.display = "none";
+
+      document.getElementById(
+        "main-view"
+      ).style.display = "block";
+
+      var icon = "👧";
+      var suffix = "ちゃん";
+
+      if (name === "あきひろ") {
+        icon = "👨‍💻";
+        suffix = "（検証）";
+      }
+
+      if (name === "けいこ") {
+        icon = "👩‍💻";
+        suffix = "（検証）";
+      }
+
+      document.getElementById(
+        "disp-kid-name"
+      ).textContent =
+        icon + " " + name + suffix;
+
+      loadData();
+    }
+
+    function switchKidTab(tab) {
+      document.getElementById(
+        "tab-stocks"
+      ).style.display =
+        tab === "stocks" ? "block" : "none";
+
+      document.getElementById(
+        "tab-portfolio"
+      ).style.display =
+        tab === "portfolio" ? "block" : "none";
+
+      document.getElementById(
+        "tab-bank"
+      ).style.display =
+        tab === "bank" ? "block" : "none";
+
+      document.getElementById(
+        "tab-btn-stocks"
+      ).className =
+        "nav-btn " +
+        (tab === "stocks" ? "active" : "");
+
+      document.getElementById(
+        "tab-btn-portfolio"
+      ).className =
+        "nav-btn " +
+        (tab === "portfolio" ? "active" : "");
+
+      document.getElementById(
+        "tab-btn-bank"
+      ).className =
+        "nav-btn " +
+        (tab === "bank" ? "active" : "");
+    }
+
+    async function loadData() {
+      if (!myName || loadingData) {
+        return;
+      }
+
+      loadingData = true;
+
+      document.getElementById(
+        "ticket-status-label"
+      ).textContent =
+        "🔄 最新データを読み込み中...";
+
+      try {
+        appState = await callApi(
+          "getKidData",
+          {
+            userName: myName
+          }
+        );
+
+        renderAll();
+
+      } catch (error) {
+        var message =
+          error && error.message
+            ? error.message
+            : String(error);
+
+        alert(
+          "読み込みエラー:\n" +
+          message
+        );
+
+        document.getElementById(
+          "stocks-container"
+        ).innerHTML =
+          '<div class="error-box">' +
+          escapeHtml(message) +
+          "<br><br>「更新」を押して、もう一度お試しください。</div>";
+
+        document.getElementById(
+          "ticket-status-label"
+        ).textContent =
+          "⚠️ 読み込みに失敗しました";
+
+      } finally {
+        loadingData = false;
+      }
+    }
+
+    function renderAll() {
+      if (
+        !appState ||
+        !appState.user
+      ) {
+        return;
+      }
+
+      var cash =
+        Number(appState.user.cash) || 0;
+
+      var pendingCash =
+        Number(
+          appState.user.pendingWithdrawal
+        ) || 0;
+
+      var availableCash =
+        Number(
+          appState.user.availableCash
+        );
+
+      if (!Number.isFinite(availableCash)) {
+        availableCash = Math.max(
+          0,
+          cash - pendingCash
+        );
+      }
+
+      var invest =
+        Number(appState.totalInvest) || 0;
+
+      var total =
+        cash + invest;
+
+      document.getElementById(
+        "disp-total-all"
+      ).innerHTML =
+        total.toLocaleString("ja-JP") +
+        '<span style="font-size:24px;">円</span>';
+
+      document.getElementById(
+        "disp-cash-val"
+      ).textContent =
+        cash.toLocaleString("ja-JP") +
+        "円";
+
+      document.getElementById(
+        "disp-invest-val"
+      ).textContent =
+        invest.toLocaleString("ja-JP") +
+        "円";
+
+      document.getElementById(
+        "disp-port-total"
+      ).textContent =
+        invest.toLocaleString("ja-JP") +
+        " 円";
+
+      document.getElementById(
+        "disp-available-cash"
+      ).textContent =
+        availableCash.toLocaleString("ja-JP") +
+        "円";
+
+      document.getElementById(
+        "disp-pending-cash"
+      ).textContent =
+        pendingCash.toLocaleString("ja-JP") +
+        "円";
+
+      var rate =
+        Number(appState.interestRate);
+
+      if (!Number.isFinite(rate)) {
+        rate = 2;
+      }
+
+      var monthlyBonus =
+        Math.round(cash * rate / 100);
+
+      document.getElementById(
+        "disp-interest-msg"
+      ).textContent =
+        "来月は +" +
+        monthlyBonus.toLocaleString("ja-JP") +
+        "円 もらえるよ！";
+
+      document.getElementById(
+        "ticket-status-label"
+      ).textContent =
+        "🎫 同じ銘柄は、買い・売りそれぞれ1日1回まで";
+
+      renderMarkets(
+        cash,
+        availableCash
+      );
+
+      renderPortfolio();
+    }
+
+    function renderMarkets(
+      cash,
+      availableCash
+    ) {
+      var container =
+        document.getElementById(
+          "stocks-container"
+        );
+
+      var markets =
+        appState.markets || [];
+
+      var holdings =
+        appState.holdings || [];
+
+      var todayTrades =
+        appState.todayTrades || {};
+
+      if (markets.length === 0) {
+        container.innerHTML =
+          '<div class="empty-box">銘柄が登録されていません。</div>';
+
+        return;
+      }
+
+      var htmlStocks = "";
+
+      for (
+        var i = 0;
+        i < markets.length;
+        i++
+      ) {
+        var market = markets[i];
+
+        var code =
+          String(market.code || "");
+
+        var name =
+          String(market.name || code);
+
+        var price =
+          Number(market.price) || 0;
+
+        var holdCount = 0;
+        var holdValue = 0;
+
+        for (
+          var h = 0;
+          h < holdings.length;
+          h++
+        ) {
+          if (
+            String(holdings[h].code) ===
+            code
+          ) {
+            holdCount =
+              Number(
+                holdings[h].count
+              ) || 0;
+
+            holdValue =
+              Number(
+                holdings[h].evalValue
+              ) || 0;
+
+            break;
+          }
+        }
+
+        var tradeStatus =
+          todayTrades[code] || {
+            buyUsed: false,
+            sellUsed: false
+          };
+
+        var buyUsed =
+          tradeStatus.buyUsed === true;
+
+        var sellUsed =
+          tradeStatus.sellUsed === true;
+
+        var canBuy =
+          !buyUsed &&
+          price > 0 &&
+          availableCash >= price;
+
+        var canSell =
+          !sellUsed &&
+          holdCount >= 1;
+
+        var buyClass =
+          canBuy
+            ? ""
+            : "btn-disabled";
+
+        var sellClass =
+          canSell
+            ? ""
+            : "btn-disabled";
+
+        var usedMessages = [];
+
+        if (buyUsed) {
+          usedMessages.push(
+            "本日の買いは使用済み"
+          );
+        }
+
+        if (sellUsed) {
+          usedMessages.push(
+            "本日の売りは使用済み"
+          );
+        }
+
+        htmlStocks +=
+          '<div class="stock-card">';
+
+        htmlStocks +=
+          '<button class="btn-what"' +
+          ' data-code="' +
+          escapeHtml(code) +
+          '"' +
+          ' data-name="' +
+          escapeHtml(name) +
+          '"' +
+          ' onclick="showWhatFromButton(this)">' +
+          "これなぁに？" +
+          "</button>";
+
+        htmlStocks +=
+          '<div class="stock-tag">' +
+          escapeHtml(
+            market.category || "株式"
+          ) +
+          "</div>";
+
+        htmlStocks +=
+          '<div class="stock-name">' +
+          escapeHtml(name) +
+          "</div>";
+
+        htmlStocks +=
+          '<div class="stock-price">' +
+          price.toLocaleString("ja-JP") +
+          ' 円 <span style="font-size:13px;color:var(--text-sub);">/ 1口</span>' +
+          "</div>";
+
+        htmlStocks +=
+          '<div style="font-size:13px;color:var(--text-sub);margin-top:6px;">' +
+          'もっている分: <b style="color:#fff;">' +
+          holdCount.toLocaleString("ja-JP") +
+          " 口</b> (" +
+          holdValue.toLocaleString("ja-JP") +
+          "円)</div>";
+
+        if (usedMessages.length > 0) {
+          htmlStocks +=
+            '<div class="used-label">🎫 ' +
+            escapeHtml(
+              usedMessages.join("・")
+            ) +
+            "</div>";
+        }
+
+        htmlStocks +=
+          '<div class="trade-actions">';
+
+        htmlStocks +=
+          '<button class="btn-sell ' +
+          sellClass +
+          '"' +
+          ' data-code="' +
+          escapeHtml(code) +
+          '"' +
+          ' data-name="' +
+          escapeHtml(name) +
+          '"' +
+          ' data-price="' +
+          price +
+          '"' +
+          ' data-type="sell"' +
+          ' data-max-units="' +
+          holdCount +
+          '"' +
+          ' onclick="openTradeFromButton(this)">' +
+          (sellUsed ? "売却済み" : "うる") +
+          "</button>";
+
+        htmlStocks +=
+          '<button class="btn-buy ' +
+          buyClass +
+          '"' +
+          ' data-code="' +
+          escapeHtml(code) +
+          '"' +
+          ' data-name="' +
+          escapeHtml(name) +
+          '"' +
+          ' data-price="' +
+          price +
+          '"' +
+          ' data-type="buy"' +
+          ' data-max-units="99"' +
+          ' onclick="openTradeFromButton(this)">' +
+          (buyUsed ? "購入済み" : "かう！") +
+          "</button>";
+
+        htmlStocks +=
+          "</div></div>";
+      }
+
+      container.innerHTML =
+        htmlStocks;
+    }
+
+    function renderPortfolio() {
+      var portContainer =
+        document.getElementById(
+          "portfolio-container"
+        );
+
+      var holdings =
+        appState.holdings || [];
+
+      var activeHoldings =
+        holdings.filter(function(item) {
+          return Number(item.count) > 0;
+        });
+
+      if (activeHoldings.length === 0) {
+        portContainer.innerHTML =
+          '<div class="empty-box">' +
+          "まだ持っている株がありません！<br>" +
+          "「おうえん」タブから好きな会社を応援してみよう！" +
+          "</div>";
+
+        return;
+      }
+
+      var htmlPort = "";
+
+      for (
+        var i = 0;
+        i < activeHoldings.length;
+        i++
+      ) {
+        var item =
+          activeHoldings[i];
+
+        var count =
+          Number(item.count) || 0;
+
+        var evalValue =
+          Number(item.evalValue) || 0;
+
+        var cost =
+          Number(item.cost);
+
+        if (!Number.isFinite(cost)) {
+          cost =
+            (Number(item.avgPrice) || 0) *
+            count;
+        }
+
+        var diff =
+          Number(item.profitLoss);
+
+        if (!Number.isFinite(diff)) {
+          diff =
+            evalValue - cost;
+        }
+
+        var plColor =
+          "#cbd5e1";
+
+        var plText =
+          "±0円";
+
+        if (diff > 0) {
+          plColor =
+            "#f43f5e";
+
+          plText =
+            "▲ +" +
+            diff.toLocaleString("ja-JP") +
+            "円";
+
+        } else if (diff < 0) {
+          plColor =
+            "#38bdf8";
+
+          plText =
+            "▼ " +
+            diff.toLocaleString("ja-JP") +
+            "円";
+        }
+
+        htmlPort +=
+          '<div class="port-item">';
+
+        htmlPort +=
+          "<div>" +
+          '<div class="port-name">' +
+          escapeHtml(item.name || item.code) +
+          "</div>" +
+          '<div class="port-count">' +
+          "もっている数: <b>" +
+          count.toLocaleString("ja-JP") +
+          " 口</b></div>" +
+          "</div>";
+
+        htmlPort +=
+          "<div>" +
+          '<div class="port-val">' +
+          evalValue.toLocaleString("ja-JP") +
+          " 円</div>" +
+          '<div class="port-pl" style="color:' +
+          plColor +
+          ';">' +
+          plText +
+          "</div>" +
+          "</div>";
+
+        htmlPort +=
+          "</div>";
+      }
+
+      portContainer.innerHTML =
+        htmlPort;
+    }
+
+    function showWhatFromButton(button) {
+      var code =
+        button.getAttribute("data-code") || "";
+
+      var name =
+        button.getAttribute("data-name") || code;
+
+      var text =
+        EXPLAIN_MAP[code] ||
+        "パパ・ママにお話を聞いてみよう！";
+
+      showPopup(
+        "💡 " + name + "って？",
+        text,
+        false,
+        function() {}
+      );
+    }
+
+    function openTradeFromButton(button) {
+      openTradeModal(
+        button.getAttribute("data-code") || "",
+        button.getAttribute("data-name") || "",
+        Number(
+          button.getAttribute("data-price")
+        ) || 0,
+        button.getAttribute("data-type") || "buy",
+        Number(
+          button.getAttribute("data-max-units")
+        ) || 0
+      );
+    }
+
+    function openTradeModal(
+      code,
+      name,
+      price,
+      type,
+      maxUnits
+    ) {
+      if (sendingOrder) {
+        return;
+      }
+
+      activeTrade = {
+        code: code,
+        name: name,
+        price: price,
+        type: type,
+        units: 1,
+        maxUnits: maxUnits
+      };
+
+      var title =
+        type === "buy"
+          ? "🛒 かう"
+          : "💰 うる";
+
+      document.getElementById(
+        "tModalTitle"
+      ).innerText =
+        title;
+
+      document.getElementById(
+        "tModalPrice"
+      ).innerText =
+        name +
+        "（1口 " +
+        price.toLocaleString("ja-JP") +
+        "円）";
+
+      document.getElementById(
+        "tOrderBtn"
+      ).disabled = false;
+
+      document.getElementById(
+        "tOrderBtn"
+      ).textContent =
+        "注文する！";
+
+      updateCounterUI();
+
+      document.getElementById(
+        "tradeModal"
+      ).style.display =
+        "flex";
+    }
+
+    function changeUnits(delta) {
+      var next =
+        activeTrade.units + delta;
+
+      if (next < 1) {
+        return;
+      }
+
+      if (
+        activeTrade.type === "sell" &&
+        next > activeTrade.maxUnits
+      ) {
+        alert(
+          "持っている口数（" +
+          activeTrade.maxUnits +
+          "口）より多くは売れません！"
+        );
+
+        return;
+      }
+
+      if (
+        activeTrade.type === "buy" &&
+        next > 9999
+      ) {
+        return;
+      }
+
+      activeTrade.units =
+        next;
+
+      updateCounterUI();
+    }
+
+    function updateCounterUI() {
+      document.getElementById(
+        "tUnitsVal"
+      ).innerText =
+        activeTrade.units;
+
+      var sum =
+        activeTrade.units *
+        activeTrade.price;
+
+      var label =
+        activeTrade.type === "buy"
+          ? "はらうお金: "
+          : "もらうお金: ";
+
+      document.getElementById(
+        "tSumVal"
+      ).innerText =
+        label +
+        sum.toLocaleString("ja-JP") +
+        " 円";
+    }
+
+    function closeTradeModal() {
+      if (sendingOrder) {
+        return;
+      }
+
+      document.getElementById(
+        "tradeModal"
+      ).style.display =
+        "none";
+    }
+
+    async function sendTradeOrder() {
+      if (sendingOrder) {
+        return;
+      }
+
+      var sum =
+        activeTrade.units *
+        activeTrade.price;
+
+      var availableCash =
+        appState &&
+        appState.user
+          ? Number(
+              appState.user.availableCash
+            )
+          : 0;
+
+      if (!Number.isFinite(availableCash)) {
+        availableCash =
+          appState &&
+          appState.user
+            ? Number(appState.user.cash) || 0
+            : 0;
+      }
+
+      if (
+        activeTrade.type === "buy" &&
+        sum > availableCash
+      ) {
+        alert(
+          "利用できるお金がたりません！\n" +
+          "利用可能額: " +
+          availableCash.toLocaleString("ja-JP") +
+          "円"
+        );
+
+        return;
+      }
+
+      var order = {
+        userName: myName,
+        code: activeTrade.code,
+        tradeType: activeTrade.type,
+        units: activeTrade.units
+      };
+
+      sendingOrder = true;
+
+      var orderButton =
+        document.getElementById(
+          "tOrderBtn"
+        );
+
+      orderButton.disabled = true;
+      orderButton.textContent =
+        "注文中...";
+
+      try {
+        var result =
+          await callApi(
+            "tradeStockByUnits",
+            order
+          );
+
+        document.getElementById(
+          "tradeModal"
+        ).style.display =
+          "none";
+
+        alert(result.message);
+
+        await loadData();
+
+      } catch (error) {
+        alert(
+          "注文エラー:\n" +
+          (
+            error && error.message
+              ? error.message
+              : String(error)
+          )
+        );
+
+      } finally {
+        sendingOrder = false;
+        orderButton.disabled = false;
+        orderButton.textContent =
+          "注文する！";
+      }
+    }
+
+    function askCash(amount) {
+      if (sendingCashRequest) {
+        return;
+      }
+
+      var availableCash =
+        appState &&
+        appState.user
+          ? Number(
+              appState.user.availableCash
+            )
+          : 0;
+
+      if (!Number.isFinite(availableCash)) {
+        availableCash =
+          appState &&
+          appState.user
+            ? Number(appState.user.cash) || 0
+            : 0;
+      }
+
+      if (amount > availableCash) {
+        alert(
+          "利用できる金額（" +
+          availableCash.toLocaleString("ja-JP") +
+          "円）を超えて申請することはできません！"
+        );
+
+        return;
+      }
+
+      showPopup(
+        "🏧 現金ちょうだい",
+        amount.toLocaleString("ja-JP") +
+        "円をパパとママにお願いしますか？",
+        true,
+        function() {
+          sendCashRequest(amount);
+        }
+      );
+    }
+
+    async function sendCashRequest(amount) {
+      if (sendingCashRequest) {
+        return;
+      }
+
+      sendingCashRequest = true;
+
+      try {
+        var result =
+          await callApi(
+            "requestCash",
+            {
+              userName: myName,
+              amount: amount
+            }
+          );
+
+        alert(result.message);
+
+        await loadData();
+
+      } catch (error) {
+        alert(
+          "申請エラー:\n" +
+          (
+            error && error.message
+              ? error.message
+              : String(error)
+          )
+        );
+
+      } finally {
+        sendingCashRequest = false;
+      }
+    }
+
+    function askCustomCash() {
+      var input =
+        document.getElementById(
+          "customCashAmount"
+        );
+
+      var value =
+        Math.floor(
+          Number(input.value)
+        );
+
+      if (
+        !Number.isFinite(value) ||
+        value <= 0
+      ) {
+        alert(
+          "金額を正しく入力してください"
+        );
+
+        return;
+      }
+
+      askCash(value);
+      input.value = "";
+    }
+
+    function showPopup(
+      title,
+      body,
+      showCancel,
+      onOk
+    ) {
+      var dialog =
+        document.getElementById(
+          "kidDialog"
+        );
+
+      document.getElementById(
+        "diagTitle"
+      ).innerText =
+        title;
+
+      document.getElementById(
+        "diagBody"
+      ).innerText =
+        body;
+
+      var cancelButton =
+        dialog.querySelector(
+          ".d-cancel"
+        );
+
+      cancelButton.style.display =
+        showCancel
+          ? "block"
+          : "none";
+
+      dialog.style.display =
+        "flex";
+
+      var okButton =
+        document.getElementById(
+          "diagOkBtn"
+        );
+
+      okButton.onclick =
+        function() {
+          closeKidDialog();
+
+          if (
+            typeof onOk === "function"
+          ) {
+            onOk();
+          }
+        };
+    }
+
+    function closeKidDialog() {
+      document.getElementById(
+        "kidDialog"
+      ).style.display =
+        "none";
+    }
+  </script>
 </body>
 </html>
