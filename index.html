@@ -18,6 +18,7 @@
       --green: #10b981;
       --blue: #3b82f6;
       --purple: #8b5cf6;
+      --cyan: #38bdf8;
       --text: #ffffff;
       --text-sub: #cbd5e1;
     }
@@ -35,17 +36,26 @@
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text);
       min-height: 100vh;
       display: flex;
       justify-content: center;
+      background: var(--bg);
+      color: var(--text);
       touch-action: manipulation;
     }
 
     button,
     input {
       font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .app {
@@ -72,11 +82,11 @@
       width: 100%;
       padding: 18px;
       margin-bottom: 12px;
+      border: 3px solid rgba(255,255,255,0.2);
       border-radius: 20px;
+      color: #fff;
       font-size: 20px;
       font-weight: 900;
-      border: 3px solid rgba(255,255,255,0.2);
-      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -89,10 +99,10 @@
     }
 
     .btn-test {
-      background: linear-gradient(135deg, #334155, #1e293b);
-      border-color: #64748b;
-      font-size: 16px;
       padding: 14px;
+      border-color: #64748b;
+      background: linear-gradient(135deg, #334155, #1e293b);
+      font-size: 16px;
     }
 
     .btn-saori {
@@ -103,6 +113,16 @@
       background: linear-gradient(135deg, #f59e0b, #d97706);
     }
 
+    .test-heading {
+      width: 100%;
+      margin: 16px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-sub);
+      font-size: 12px;
+      text-align: center;
+    }
+
     .header-bar {
       display: flex;
       justify-content: space-between;
@@ -111,43 +131,43 @@
     }
 
     .kid-badge {
+      padding: 8px 18px;
+      border: 2px solid var(--card-border);
+      border-radius: 30px;
+      background: var(--card);
       font-size: 18px;
       font-weight: 900;
-      background: var(--card);
-      padding: 8px 18px;
-      border-radius: 30px;
-      border: 2px solid var(--card-border);
     }
 
     .btn-switch-user {
-      font-size: 13px;
-      color: var(--text-sub);
-      text-decoration: underline;
       padding: 6px;
+      color: var(--text-sub);
+      font-size: 13px;
+      text-decoration: underline;
       cursor: pointer;
     }
 
     .hero-card {
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      border: 3px solid #38bdf8;
-      border-radius: 28px;
-      padding: 20px 16px;
-      text-align: center;
       margin-bottom: 16px;
+      padding: 20px 16px;
+      border: 3px solid var(--cyan);
+      border-radius: 28px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
       box-shadow: 0 10px 30px rgba(56,189,248,0.2);
+      text-align: center;
     }
 
     .hero-label {
+      color: var(--cyan);
       font-size: 16px;
       font-weight: bold;
-      color: #38bdf8;
     }
 
     .hero-money {
+      margin: 8px 0;
+      color: #fff;
       font-size: 46px;
       font-weight: 900;
-      color: #fff;
-      margin: 8px 0;
       letter-spacing: -1px;
     }
 
@@ -155,11 +175,11 @@
       display: flex;
       justify-content: space-around;
       gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-sub);
       font-size: 14px;
       font-weight: bold;
-      color: var(--text-sub);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 10px;
     }
 
     .big-nav {
@@ -171,20 +191,20 @@
 
     .nav-btn {
       padding: 14px 4px;
+      border: 2px solid var(--card-border);
       border-radius: 16px;
+      background: var(--card);
+      color: var(--text-sub);
       font-size: 13px;
       font-weight: 900;
-      text-align: center;
-      background: var(--card);
-      border: 2px solid var(--card-border);
-      color: var(--text-sub);
-      cursor: pointer;
       line-height: 1.3;
+      text-align: center;
+      cursor: pointer;
     }
 
     .nav-btn.active {
-      background: var(--blue);
       border-color: #60a5fa;
+      background: var(--blue);
       color: #fff;
     }
 
@@ -194,68 +214,67 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 14px;
-      font-size: 12px;
-      font-weight: bold;
-      color: var(--text-sub);
-      background: rgba(255,255,255,0.05);
       padding: 10px 14px;
       border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text-sub);
+      font-size: 12px;
+      font-weight: bold;
     }
 
     .btn-reload {
-      color: #38bdf8;
-      cursor: pointer;
       padding: 4px 8px;
-      background: rgba(56,189,248,0.15);
       border-radius: 6px;
+      background: rgba(56,189,248,0.15);
+      color: var(--cyan);
       font-size: 12px;
       white-space: nowrap;
+      cursor: pointer;
     }
 
     .stock-card {
-      background: var(--card);
+      position: relative;
+      margin-bottom: 14px;
+      padding: 18px;
       border: 2px solid var(--card-border);
       border-radius: 22px;
-      padding: 18px;
-      margin-bottom: 14px;
-      position: relative;
+      background: var(--card);
     }
 
     .stock-tag {
-      font-size: 12px;
-      font-weight: bold;
-      padding: 3px 8px;
-      border-radius: 6px;
       display: inline-block;
       margin-bottom: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
       background: #334155;
+      font-size: 12px;
+      font-weight: bold;
     }
 
     .stock-name {
-      font-size: 20px;
-      font-weight: 900;
       margin-bottom: 4px;
       padding-right: 90px;
+      font-size: 20px;
+      font-weight: 900;
     }
 
     .stock-price {
+      color: var(--cyan);
       font-size: 26px;
       font-weight: 900;
-      color: #38bdf8;
     }
 
     .btn-what {
       position: absolute;
       top: 16px;
       right: 16px;
+      padding: 6px 12px;
+      border: 0;
+      border-radius: 20px;
       background: #475569;
       color: #fff;
-      border: none;
-      border-radius: 20px;
-      padding: 6px 12px;
       font-size: 12px;
       font-weight: bold;
-      cursor: pointer;
     }
 
     .trade-actions {
@@ -267,13 +286,12 @@
 
     .btn-buy,
     .btn-sell {
-      color: #fff;
-      border: none;
-      border-radius: 14px;
       padding: 14px;
+      border: 0;
+      border-radius: 14px;
+      color: #fff;
       font-size: 17px;
       font-weight: 900;
-      cursor: pointer;
     }
 
     .btn-buy {
@@ -302,23 +320,23 @@
     }
 
     .portfolio-summary {
-      background: linear-gradient(135deg, #1e293b, #334155);
-      border-radius: 20px;
-      padding: 18px;
       margin-bottom: 14px;
+      padding: 18px;
       border: 2px solid var(--purple);
+      border-radius: 20px;
+      background: linear-gradient(135deg, #1e293b, #334155);
     }
 
     .port-item {
-      background: var(--card);
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 12px;
-      border: 2px solid var(--card-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
+      margin-bottom: 12px;
+      padding: 16px;
+      border: 2px solid var(--card-border);
+      border-radius: 18px;
+      background: var(--card);
     }
 
     .port-name {
@@ -327,49 +345,112 @@
     }
 
     .port-count {
-      font-size: 13px;
-      color: var(--text-sub);
       margin-top: 4px;
+      color: var(--text-sub);
+      font-size: 13px;
     }
 
     .port-val {
+      color: var(--cyan);
       font-size: 20px;
       font-weight: 900;
-      color: #38bdf8;
       text-align: right;
     }
 
     .port-pl {
-      font-size: 12px;
       margin-top: 4px;
+      font-size: 12px;
       text-align: right;
     }
 
     .bonus-notify {
-      background: rgba(245,158,11,0.15);
+      margin-bottom: 16px;
+      padding: 16px;
       border: 2px solid var(--gold);
       border-radius: 18px;
-      padding: 16px;
+      background: rgba(245,158,11,0.15);
       text-align: center;
+    }
+
+    .bank-summary {
       margin-bottom: 16px;
+      padding: 15px;
+      border: 2px solid var(--cyan);
+      border-radius: 20px;
+      background: rgba(56,189,248,0.09);
+    }
+
+    .bank-summary-title {
+      margin-bottom: 10px;
+      color: var(--cyan);
+      font-size: 16px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .bank-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .bank-summary-item {
+      padding: 10px 5px;
+      border-radius: 12px;
+      background: #0f172a;
+      text-align: center;
+    }
+
+    .bank-summary-label {
+      color: var(--text-sub);
+      font-size: 11px;
+    }
+
+    .bank-summary-value {
+      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 900;
     }
 
     .bank-box {
-      background: var(--card);
-      border-radius: 24px;
-      padding: 20px;
       margin-bottom: 16px;
+      padding: 20px;
       border: 2px solid var(--card-border);
+      border-radius: 24px;
+      background: var(--card);
+    }
+
+    .withdraw-box {
+      border-color: rgba(16,185,129,0.7);
+    }
+
+    .deposit-box {
+      border-color: rgba(139,92,246,0.85);
+    }
+
+    .bank-box-title {
+      margin-bottom: 6px;
+      font-size: 20px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .bank-description {
+      margin-bottom: 16px;
+      color: var(--text-sub);
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
     }
 
     .cash-status {
-      background: #0f172a;
-      border-radius: 14px;
-      padding: 12px;
       margin-bottom: 16px;
-      text-align: center;
-      line-height: 1.7;
+      padding: 12px;
+      border-radius: 14px;
+      background: #0f172a;
       font-size: 14px;
+      line-height: 1.7;
+      text-align: center;
     }
 
     .onedari-grid {
@@ -380,14 +461,17 @@
     }
 
     .onedari-btn {
+      padding: 18px 10px;
+      border: 0;
+      border-radius: 18px;
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff;
-      border: none;
-      border-radius: 18px;
-      padding: 18px 10px;
       font-size: 20px;
       font-weight: 900;
-      cursor: pointer;
+    }
+
+    .deposit-btn {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
     }
 
     .onedari-btn:active {
@@ -402,63 +486,77 @@
     .custom-cash-input {
       min-width: 0;
       flex: 1;
-      background: #0f172a;
+      padding: 12px;
       border: 2px solid #334155;
       border-radius: 14px;
+      background: #0f172a;
       color: #fff;
       font-size: 18px;
       font-weight: bold;
-      padding: 12px;
       text-align: center;
       user-select: text;
       -webkit-user-select: text;
     }
 
     .custom-cash-btn {
-      background: #3b82f6;
-      color: #fff;
-      border: none;
-      border-radius: 14px;
       padding: 0 18px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--blue);
+      color: #fff;
       font-size: 16px;
       font-weight: 900;
-      cursor: pointer;
+    }
+
+    .custom-deposit-btn {
+      background: var(--purple);
+    }
+
+    .important-note {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text-sub);
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: center;
     }
 
     .overlay {
       display: none;
       position: fixed;
       inset: 0;
+      z-index: 9999;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.85);
-      z-index: 9999;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      background: rgba(0,0,0,0.85);
     }
 
     .dialog-box {
-      background: #1e293b;
-      border: 3px solid #38bdf8;
-      border-radius: 26px;
-      padding: 22px;
       width: 100%;
       max-width: 380px;
+      padding: 22px;
+      border: 3px solid var(--cyan);
+      border-radius: 26px;
+      background: #1e293b;
       text-align: center;
     }
 
     .d-title {
+      margin-bottom: 10px;
       font-size: 20px;
       font-weight: 900;
-      margin-bottom: 10px;
     }
 
     .d-body {
-      font-size: 15px;
-      color: var(--text-sub);
-      line-height: 1.5;
       margin-bottom: 16px;
+      color: var(--text-sub);
+      font-size: 15px;
+      line-height: 1.5;
       white-space: pre-line;
     }
 
@@ -473,30 +571,29 @@
     .counter-btn {
       width: 50px;
       height: 50px;
+      border: 0;
       border-radius: 14px;
-      border: none;
       background: #334155;
       color: #fff;
       font-size: 26px;
       font-weight: 900;
-      cursor: pointer;
     }
 
     .counter-val {
+      min-width: 60px;
+      color: var(--cyan);
       font-size: 32px;
       font-weight: 900;
-      color: #38bdf8;
-      min-width: 60px;
     }
 
     .calc-sum-box {
-      background: #0f172a;
-      border-radius: 14px;
+      margin-bottom: 18px;
       padding: 12px;
+      border-radius: 14px;
+      background: #0f172a;
+      color: #fff;
       font-size: 17px;
       font-weight: 900;
-      color: #fff;
-      margin-bottom: 18px;
     }
 
     .d-btns {
@@ -507,11 +604,10 @@
     .d-btn {
       flex: 1;
       padding: 16px;
+      border: 0;
       border-radius: 14px;
       font-size: 17px;
       font-weight: 900;
-      border: none;
-      cursor: pointer;
     }
 
     .d-cancel {
@@ -520,36 +616,29 @@
     }
 
     .d-ok {
-      background: #10b981;
+      background: var(--green);
       color: #fff;
-    }
-
-    .d-btn:disabled,
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
     }
 
     .loading-box,
     .error-box,
     .empty-box {
-      text-align: center;
       padding: 30px 18px;
       border-radius: 20px;
       background: var(--card);
       color: var(--text-sub);
+      text-align: center;
     }
 
     .error-box {
-      color: #fda4af;
       border: 2px solid var(--red);
+      color: #fda4af;
     }
   </style>
 </head>
 
 <body>
   <div class="app">
-
     <div id="user-select-view">
       <div class="big-avatar">🐷</div>
 
@@ -569,7 +658,7 @@
         <span>👧</span> 優花（ゆうか）
       </div>
 
-      <div style="width:100%;border-top:1px solid rgba(255,255,255,0.1);margin:16px 0 12px;padding-top:12px;text-align:center;font-size:12px;color:var(--text-sub);">
+      <div class="test-heading">
         🛠️ 動作チェック用（パパ・ママ）
       </div>
 
@@ -584,7 +673,9 @@
 
     <div id="main-view" style="display:none;">
       <div class="header-bar">
-        <div class="kid-badge" id="disp-kid-name">👤 ユーザー</div>
+        <div class="kid-badge" id="disp-kid-name">
+          👤 ユーザー
+        </div>
 
         <div class="btn-switch-user" onclick="resetUser()">
           べつの人にする
@@ -630,7 +721,7 @@
           id="tab-btn-bank"
           onclick="switchKidTab('bank')"
         >
-          パパ銀行<br>（出金申請）
+          パパ銀行<br>（入出金）
         </div>
       </div>
 
@@ -681,22 +772,74 @@
           </div>
         </div>
 
-        <div class="bank-box">
-          <h2 style="font-size:20px;font-weight:900;margin-bottom:6px;text-align:center;">
+        <div class="bank-summary">
+          <div class="bank-summary-title">
+            🏦 パパ銀行の状態
+          </div>
+
+          <div class="bank-summary-grid">
+            <div class="bank-summary-item">
+              <div class="bank-summary-label">
+                現在の残高
+              </div>
+              <div class="bank-summary-value" id="disp-bank-cash">
+                0円
+              </div>
+            </div>
+
+            <div class="bank-summary-item">
+              <div class="bank-summary-label">
+                利用できる金額
+              </div>
+              <div class="bank-summary-value" id="disp-available-cash">
+                0円
+              </div>
+            </div>
+
+            <div class="bank-summary-item">
+              <div class="bank-summary-label">
+                出金申請中
+              </div>
+              <div
+                class="bank-summary-value"
+                id="disp-pending-cash"
+                style="color:#34d399;"
+              >
+                0円
+              </div>
+            </div>
+
+            <div class="bank-summary-item">
+              <div class="bank-summary-label">
+                入金申請中
+              </div>
+              <div
+                class="bank-summary-value"
+                id="disp-pending-deposit"
+                style="color:#c4b5fd;"
+              >
+                0円
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-box withdraw-box">
+          <h2 class="bank-box-title">
             🏧 現金ちょうだい申請
           </h2>
 
-          <p style="font-size:13px;color:var(--text-sub);text-align:center;margin-bottom:16px;">
-            パパ銀行のお金を本物の現金でもらう申請です<br>
-            （パパ・ママに通知されます）
+          <p class="bank-description">
+            パパ銀行のお金を、本物の現金でもらう申請です。<br>
+            承認されるとパパ銀行の残高が減ります。
           </p>
 
           <div class="cash-status">
-            利用できる金額：
-            <strong id="disp-available-cash">0円</strong>
+            いま申請できる金額：
+            <strong id="disp-withdraw-limit">0円</strong>
             <br>
-            申請中：
-            <strong id="disp-pending-cash">0円</strong>
+            出金申請中：
+            <strong id="disp-withdraw-pending">0円</strong>
           </div>
 
           <div class="onedari-grid">
@@ -722,15 +865,97 @@
               type="number"
               id="customCashAmount"
               class="custom-cash-input"
-              placeholder="金額を入力（円）"
+              placeholder="金額を入力"
               min="1"
               step="1"
               inputmode="numeric"
             >
 
-            <button class="custom-cash-btn" onclick="askCustomCash()">
-              申請する
+            <button
+              class="custom-cash-btn"
+              onclick="askCustomCash()"
+            >
+              出金申請
             </button>
+          </div>
+        </div>
+
+        <div class="bank-box deposit-box">
+          <h2 class="bank-box-title">
+            💴 パパ銀行へ入金申請
+          </h2>
+
+          <p class="bank-description">
+            おこづかいや、お年玉などの現金を<br>
+            パパ銀行へ預けるための申請です。<br>
+            承認されるとパパ銀行の残高が増えます。
+          </p>
+
+          <div class="cash-status">
+            入金申請中：
+            <strong
+              id="disp-deposit-pending"
+              style="color:#c4b5fd;"
+            >
+              0円
+            </strong>
+            <br>
+            承認されるまでは残高に追加されません
+          </div>
+
+          <div class="onedari-grid">
+            <button
+              class="onedari-btn deposit-btn"
+              onclick="askDeposit(100)"
+            >
+              100円
+            </button>
+
+            <button
+              class="onedari-btn deposit-btn"
+              onclick="askDeposit(500)"
+            >
+              500円
+            </button>
+
+            <button
+              class="onedari-btn deposit-btn"
+              onclick="askDeposit(1000)"
+            >
+              1000円
+            </button>
+
+            <button
+              class="onedari-btn deposit-btn"
+              onclick="askDeposit(5000)"
+            >
+              5000円
+            </button>
+          </div>
+
+          <div class="custom-cash-row">
+            <input
+              type="number"
+              id="customDepositAmount"
+              class="custom-cash-input"
+              placeholder="金額を入力"
+              min="1"
+              max="1000000"
+              step="1"
+              inputmode="numeric"
+            >
+
+            <button
+              class="custom-cash-btn custom-deposit-btn"
+              onclick="askCustomDeposit()"
+            >
+              入金申請
+            </button>
+          </div>
+
+          <div class="important-note">
+            本物の現金をパパ・ママへ渡してから申請してください。<br>
+            パパ・ママが確認して承認します。
           </div>
         </div>
       </div>
@@ -756,7 +981,9 @@
 
   <div id="tradeModal" class="overlay">
     <div class="dialog-box">
-      <div class="d-title" id="tModalTitle">注文確認</div>
+      <div class="d-title" id="tModalTitle">
+        注文確認
+      </div>
 
       <div
         id="tModalPrice"
@@ -806,6 +1033,7 @@
     var loadingData = false;
     var sendingOrder = false;
     var sendingCashRequest = false;
+    var sendingDepositRequest = false;
 
     var activeTrade = {
       code: "",
@@ -868,17 +1096,25 @@
       var requestData = Object.assign(
         {},
         data || {},
-        { action: action }
+        {
+          action: action
+        }
       );
 
-      var response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(requestData),
-        redirect: "follow"
-      });
+      var response = await fetch(
+        API_URL,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(
+            requestData
+          ),
+          redirect: "follow"
+        }
+      );
 
       if (!response.ok) {
         throw new Error(
@@ -888,18 +1124,25 @@
         );
       }
 
-      var responseText = await response.text();
+      var responseText =
+        await response.text();
+
       var result;
 
       try {
-        result = JSON.parse(responseText);
+        result =
+          JSON.parse(responseText);
+
       } catch (error) {
         throw new Error(
           "サーバーから正しいデータが返りませんでした。GASの公開設定を確認してください。"
         );
       }
 
-      if (!result || result.status !== "success") {
+      if (
+        !result ||
+        result.status !== "success"
+      ) {
         throw new Error(
           result && result.message
             ? result.message
@@ -911,7 +1154,9 @@
     }
 
     function escapeHtml(value) {
-      return String(value == null ? "" : value)
+      return String(
+        value == null ? "" : value
+      )
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -929,7 +1174,11 @@
     }
 
     function resetUser() {
-      if (confirm("べつの人の画面にしますか？")) {
+      if (
+        confirm(
+          "べつの人の画面にしますか？"
+        )
+      ) {
         localStorage.removeItem(
           "minematsu_kid_user"
         );
@@ -974,35 +1223,53 @@
       document.getElementById(
         "tab-stocks"
       ).style.display =
-        tab === "stocks" ? "block" : "none";
+        tab === "stocks"
+          ? "block"
+          : "none";
 
       document.getElementById(
         "tab-portfolio"
       ).style.display =
-        tab === "portfolio" ? "block" : "none";
+        tab === "portfolio"
+          ? "block"
+          : "none";
 
       document.getElementById(
         "tab-bank"
       ).style.display =
-        tab === "bank" ? "block" : "none";
+        tab === "bank"
+          ? "block"
+          : "none";
 
       document.getElementById(
         "tab-btn-stocks"
       ).className =
         "nav-btn " +
-        (tab === "stocks" ? "active" : "");
+        (
+          tab === "stocks"
+            ? "active"
+            : ""
+        );
 
       document.getElementById(
         "tab-btn-portfolio"
       ).className =
         "nav-btn " +
-        (tab === "portfolio" ? "active" : "");
+        (
+          tab === "portfolio"
+            ? "active"
+            : ""
+        );
 
       document.getElementById(
         "tab-btn-bank"
       ).className =
         "nav-btn " +
-        (tab === "bank" ? "active" : "");
+        (
+          tab === "bank"
+            ? "active"
+            : ""
+        );
     }
 
     async function loadData() {
@@ -1018,12 +1285,13 @@
         "🔄 最新データを読み込み中...";
 
       try {
-        appState = await callApi(
-          "getKidData",
-          {
-            userName: myName
-          }
-        );
+        appState =
+          await callApi(
+            "getKidData",
+            {
+              userName: myName
+            }
+          );
 
         renderAll();
 
@@ -1071,6 +1339,11 @@
           appState.user.pendingWithdrawal
         ) || 0;
 
+      var pendingDeposit =
+        Number(
+          appState.user.pendingDeposit
+        ) || 0;
+
       var availableCash =
         Number(
           appState.user.availableCash
@@ -1098,32 +1371,52 @@
       document.getElementById(
         "disp-cash-val"
       ).textContent =
-        cash.toLocaleString("ja-JP") +
-        "円";
+        yen(cash);
 
       document.getElementById(
         "disp-invest-val"
       ).textContent =
-        invest.toLocaleString("ja-JP") +
-        "円";
+        yen(invest);
 
       document.getElementById(
         "disp-port-total"
       ).textContent =
-        invest.toLocaleString("ja-JP") +
-        " 円";
+        yen(invest);
+
+      document.getElementById(
+        "disp-bank-cash"
+      ).textContent =
+        yen(cash);
 
       document.getElementById(
         "disp-available-cash"
       ).textContent =
-        availableCash.toLocaleString("ja-JP") +
-        "円";
+        yen(availableCash);
 
       document.getElementById(
         "disp-pending-cash"
       ).textContent =
-        pendingCash.toLocaleString("ja-JP") +
-        "円";
+        yen(pendingCash);
+
+      document.getElementById(
+        "disp-pending-deposit"
+      ).textContent =
+        yen(pendingDeposit);
+
+      document.getElementById(
+        "disp-withdraw-limit"
+      ).textContent =
+        yen(availableCash);
+
+      document.getElementById(
+        "disp-withdraw-pending"
+      ).textContent =
+        yen(pendingCash);
+
+      document.getElementById(
+        "disp-deposit-pending"
+      ).textContent =
+        yen(pendingDeposit);
 
       var rate =
         Number(appState.interestRate);
@@ -1139,7 +1432,9 @@
         "disp-interest-msg"
       ).textContent =
         "来月は +" +
-        monthlyBonus.toLocaleString("ja-JP") +
+        monthlyBonus.toLocaleString(
+          "ja-JP"
+        ) +
         "円 もらえるよ！";
 
       document.getElementById(
@@ -1305,9 +1600,13 @@
         htmlStocks +=
           '<div style="font-size:13px;color:var(--text-sub);margin-top:6px;">' +
           'もっている分: <b style="color:#fff;">' +
-          holdCount.toLocaleString("ja-JP") +
+          holdCount.toLocaleString(
+            "ja-JP"
+          ) +
           " 口</b> (" +
-          holdValue.toLocaleString("ja-JP") +
+          holdValue.toLocaleString(
+            "ja-JP"
+          ) +
           "円)</div>";
 
         if (usedMessages.length > 0) {
@@ -1340,7 +1639,11 @@
           holdCount +
           '"' +
           ' onclick="openTradeFromButton(this)">' +
-          (sellUsed ? "売却済み" : "うる") +
+          (
+            sellUsed
+              ? "売却済み"
+              : "うる"
+          ) +
           "</button>";
 
         htmlStocks +=
@@ -1359,7 +1662,11 @@
           ' data-type="buy"' +
           ' data-max-units="99"' +
           ' onclick="openTradeFromButton(this)">' +
-          (buyUsed ? "購入済み" : "かう！") +
+          (
+            buyUsed
+              ? "購入済み"
+              : "かう！"
+          ) +
           "</button>";
 
         htmlStocks +=
@@ -1380,11 +1687,15 @@
         appState.holdings || [];
 
       var activeHoldings =
-        holdings.filter(function(item) {
-          return Number(item.count) > 0;
-        });
+        holdings.filter(
+          function(item) {
+            return Number(item.count) > 0;
+          }
+        );
 
-      if (activeHoldings.length === 0) {
+      if (
+        activeHoldings.length === 0
+      ) {
         portContainer.innerHTML =
           '<div class="empty-box">' +
           "まだ持っている株がありません！<br>" +
@@ -1415,7 +1726,10 @@
 
         if (!Number.isFinite(cost)) {
           cost =
-            (Number(item.avgPrice) || 0) *
+            (
+              Number(item.avgPrice) ||
+              0
+            ) *
             count;
         }
 
@@ -1439,7 +1753,9 @@
 
           plText =
             "▲ +" +
-            diff.toLocaleString("ja-JP") +
+            diff.toLocaleString(
+              "ja-JP"
+            ) +
             "円";
 
         } else if (diff < 0) {
@@ -1448,7 +1764,9 @@
 
           plText =
             "▼ " +
-            diff.toLocaleString("ja-JP") +
+            diff.toLocaleString(
+              "ja-JP"
+            ) +
             "円";
         }
 
@@ -1458,18 +1776,24 @@
         htmlPort +=
           "<div>" +
           '<div class="port-name">' +
-          escapeHtml(item.name || item.code) +
+          escapeHtml(
+            item.name || item.code
+          ) +
           "</div>" +
           '<div class="port-count">' +
           "もっている数: <b>" +
-          count.toLocaleString("ja-JP") +
+          count.toLocaleString(
+            "ja-JP"
+          ) +
           " 口</b></div>" +
           "</div>";
 
         htmlPort +=
           "<div>" +
           '<div class="port-val">' +
-          evalValue.toLocaleString("ja-JP") +
+          evalValue.toLocaleString(
+            "ja-JP"
+          ) +
           " 円</div>" +
           '<div class="port-pl" style="color:' +
           plColor +
@@ -1488,10 +1812,14 @@
 
     function showWhatFromButton(button) {
       var code =
-        button.getAttribute("data-code") || "";
+        button.getAttribute(
+          "data-code"
+        ) || "";
 
       var name =
-        button.getAttribute("data-name") || code;
+        button.getAttribute(
+          "data-name"
+        ) || code;
 
       var text =
         EXPLAIN_MAP[code] ||
@@ -1507,14 +1835,28 @@
 
     function openTradeFromButton(button) {
       openTradeModal(
-        button.getAttribute("data-code") || "",
-        button.getAttribute("data-name") || "",
+        button.getAttribute(
+          "data-code"
+        ) || "",
+
+        button.getAttribute(
+          "data-name"
+        ) || "",
+
         Number(
-          button.getAttribute("data-price")
+          button.getAttribute(
+            "data-price"
+          )
         ) || 0,
-        button.getAttribute("data-type") || "buy",
+
+        button.getAttribute(
+          "data-type"
+        ) || "buy",
+
         Number(
-          button.getAttribute("data-max-units")
+          button.getAttribute(
+            "data-max-units"
+          )
         ) || 0
       );
     }
@@ -1554,7 +1896,9 @@
       ).innerText =
         name +
         "（1口 " +
-        price.toLocaleString("ja-JP") +
+        price.toLocaleString(
+          "ja-JP"
+        ) +
         "円）";
 
       document.getElementById(
@@ -1627,7 +1971,9 @@
         "tSumVal"
       ).innerText =
         label +
-        sum.toLocaleString("ja-JP") +
+        sum.toLocaleString(
+          "ja-JP"
+        ) +
         " 円";
     }
 
@@ -1652,20 +1998,7 @@
         activeTrade.price;
 
       var availableCash =
-        appState &&
-        appState.user
-          ? Number(
-              appState.user.availableCash
-            )
-          : 0;
-
-      if (!Number.isFinite(availableCash)) {
-        availableCash =
-          appState &&
-          appState.user
-            ? Number(appState.user.cash) || 0
-            : 0;
-      }
+        getAvailableCash();
 
       if (
         activeTrade.type === "buy" &&
@@ -1674,7 +2007,9 @@
         alert(
           "利用できるお金がたりません！\n" +
           "利用可能額: " +
-          availableCash.toLocaleString("ja-JP") +
+          availableCash.toLocaleString(
+            "ja-JP"
+          ) +
           "円"
         );
 
@@ -1718,11 +2053,7 @@
       } catch (error) {
         alert(
           "注文エラー:\n" +
-          (
-            error && error.message
-              ? error.message
-              : String(error)
-          )
+          getErrorMessage(error)
         );
 
       } finally {
@@ -1733,11 +2064,7 @@
       }
     }
 
-    function askCash(amount) {
-      if (sendingCashRequest) {
-        return;
-      }
-
+    function getAvailableCash() {
       var availableCash =
         appState &&
         appState.user
@@ -1747,17 +2074,50 @@
           : 0;
 
       if (!Number.isFinite(availableCash)) {
-        availableCash =
+        var cash =
           appState &&
           appState.user
-            ? Number(appState.user.cash) || 0
+            ? Number(
+                appState.user.cash
+              ) || 0
             : 0;
+
+        var pending =
+          appState &&
+          appState.user
+            ? Number(
+                appState.user
+                  .pendingWithdrawal
+              ) || 0
+            : 0;
+
+        availableCash =
+          Math.max(
+            0,
+            cash - pending
+          );
       }
+
+      return availableCash;
+    }
+
+    function askCash(amount) {
+      if (
+        sendingCashRequest ||
+        sendingDepositRequest
+      ) {
+        return;
+      }
+
+      var availableCash =
+        getAvailableCash();
 
       if (amount > availableCash) {
         alert(
           "利用できる金額（" +
-          availableCash.toLocaleString("ja-JP") +
+          availableCash.toLocaleString(
+            "ja-JP"
+          ) +
           "円）を超えて申請することはできません！"
         );
 
@@ -1766,8 +2126,11 @@
 
       showPopup(
         "🏧 現金ちょうだい",
-        amount.toLocaleString("ja-JP") +
-        "円をパパとママにお願いしますか？",
+        amount.toLocaleString(
+          "ja-JP"
+        ) +
+        "円をパパとママにお願いしますか？\n\n" +
+        "承認されるとパパ銀行の残高が減ります。",
         true,
         function() {
           sendCashRequest(amount);
@@ -1775,7 +2138,9 @@
       );
     }
 
-    async function sendCashRequest(amount) {
+    async function sendCashRequest(
+      amount
+    ) {
       if (sendingCashRequest) {
         return;
       }
@@ -1798,12 +2163,8 @@
 
       } catch (error) {
         alert(
-          "申請エラー:\n" +
-          (
-            error && error.message
-              ? error.message
-              : String(error)
-          )
+          "出金申請エラー:\n" +
+          getErrorMessage(error)
         );
 
       } finally {
@@ -1834,6 +2195,123 @@
       }
 
       askCash(value);
+      input.value = "";
+    }
+
+    function askDeposit(amount) {
+      if (
+        sendingDepositRequest ||
+        sendingCashRequest
+      ) {
+        return;
+      }
+
+      var depositAmount =
+        Math.floor(Number(amount));
+
+      if (
+        !Number.isFinite(
+          depositAmount
+        ) ||
+        depositAmount <= 0
+      ) {
+        alert(
+          "金額を正しく入力してください"
+        );
+
+        return;
+      }
+
+      if (depositAmount > 1000000) {
+        alert(
+          "1回の入金申請は100万円以下にしてください。"
+        );
+
+        return;
+      }
+
+      showPopup(
+        "💴 パパ銀行へ入金",
+        depositAmount.toLocaleString(
+          "ja-JP"
+        ) +
+        "円をパパ銀行へ入金しますか？\n\n" +
+        "本物の現金をパパ・ママへ渡してください。\n" +
+        "承認されるとパパ銀行の残高が増えます。",
+        true,
+        function() {
+          sendDepositRequest(
+            depositAmount
+          );
+        }
+      );
+    }
+
+    async function sendDepositRequest(
+      amount
+    ) {
+      if (sendingDepositRequest) {
+        return;
+      }
+
+      sendingDepositRequest = true;
+
+      try {
+        var result =
+          await callApi(
+            "requestDeposit",
+            {
+              userName: myName,
+              amount: amount
+            }
+          );
+
+        alert(result.message);
+
+        await loadData();
+
+      } catch (error) {
+        alert(
+          "入金申請エラー:\n" +
+          getErrorMessage(error)
+        );
+
+      } finally {
+        sendingDepositRequest = false;
+      }
+    }
+
+    function askCustomDeposit() {
+      var input =
+        document.getElementById(
+          "customDepositAmount"
+        );
+
+      var value =
+        Math.floor(
+          Number(input.value)
+        );
+
+      if (
+        !Number.isFinite(value) ||
+        value <= 0
+      ) {
+        alert(
+          "金額を正しく入力してください"
+        );
+
+        return;
+      }
+
+      if (value > 1000000) {
+        alert(
+          "1回の入金申請は100万円以下にしてください。"
+        );
+
+        return;
+      }
+
+      askDeposit(value);
       input.value = "";
     }
 
@@ -1881,7 +2359,8 @@
           closeKidDialog();
 
           if (
-            typeof onOk === "function"
+            typeof onOk ===
+            "function"
           ) {
             onOk();
           }
@@ -1889,10 +2368,36 @@
     }
 
     function closeKidDialog() {
+      if (
+        sendingCashRequest ||
+        sendingDepositRequest
+      ) {
+        return;
+      }
+
       document.getElementById(
         "kidDialog"
       ).style.display =
         "none";
+    }
+
+    function getErrorMessage(error) {
+      return (
+        error && error.message
+          ? error.message
+          : String(error)
+      );
+    }
+
+    function yen(value) {
+      return (
+        (
+          Number(value) || 0
+        ).toLocaleString(
+          "ja-JP"
+        ) +
+        "円"
+      );
     }
   </script>
 </body>
