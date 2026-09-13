@@ -29,7 +29,6 @@
     .btn-sub{background:#f1f5f9;color:var(--sub);border:none;border-radius:10px;padding:10px;font-weight:700;width:100%;cursor:pointer;}
     .tag{font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;}
 
-    /* ローディング（全画面暗転＆スピナー） */
     #loadingOverlay{
       display:none;
       position:fixed;
@@ -54,34 +53,29 @@
     }
     @keyframes spin{to{transform:rotate(360deg);}}
 
-    /* モーダル */
     .modal-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px;}
     .modal{background:#fff;border-radius:20px;padding:18px;width:100%;max-width:380px;box-shadow:0 10px 25px rgba(0,0,0,.15);}
 
-    /* ログイン画面 */
     #loginScreen{position:fixed;inset:0;background:#f8fafc;z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;}
     .login-box{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:340px;box-shadow:0 4px 20px rgba(0,0,0,.08);text-align:center;}
   </style>
 </head>
 <body>
-  <!-- 全画面暗転スピナー -->
   <div id="loadingOverlay">
     <div class="spinner"></div>
     <div id="loadingMsg" style="font-weight:700;font-size:14px;letter-spacing:0.5px;">通信中...</div>
   </div>
 
-  <!-- PIN入力画面（未ログイン時） -->
   <div id="loginScreen">
     <div class="login-box">
       <div style="font-size:32px;margin-bottom:8px;">🔒</div>
       <h3 style="margin-bottom:6px;">保護者認証</h3>
-      <p style="font-size:12px;color:var(--sub);margin-bottom:16px;">設定した暗証番号を入力してください</p>
-      <input type="password" id="pinInput" class="ipt" placeholder="暗証番号" inputmode="numeric" style="text-align:center;font-size:20px;letter-spacing:4px;">
+      <p style="font-size:12px;color:var(--sub);margin-bottom:16px;">設定したパスワードを入力してください</p>
+      <input type="password" id="pwInput" class="ipt" placeholder="パスワード" inputmode="numeric" style="text-align:center;font-size:20px;letter-spacing:4px;">
       <button class="btn-main" onclick="handleLogin()">ログイン</button>
     </div>
   </div>
 
-  <!-- メイン管理画面 -->
   <header>
     <div style="font-weight:900;font-size:16px;">峯松証券 <span style="font-size:11px;background:#334155;color:#94a3b8;padding:2px 6px;border-radius:6px;">保護者管理</span></div>
     <div style="display:flex;gap:6px;">
@@ -91,7 +85,6 @@
   </header>
 
   <div class="container">
-    <!-- 承認待ち申請 -->
     <div class="card">
       <div class="sec-title">
         <span>📬 承認待ちの申請</span>
@@ -100,13 +93,11 @@
       <div id="listRequests"></div>
     </div>
 
-    <!-- 子ども口座一覧 -->
     <div class="card">
       <div class="sec-title"><span>👥 子ども口座一覧 ＆ 資産状況</span></div>
       <div id="listUsers"></div>
     </div>
 
-    <!-- 管理者ツール -->
     <div class="card">
       <div class="sec-title"><span>⚙️ システム管理</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
@@ -116,7 +107,6 @@
     </div>
   </div>
 
-  <!-- 残高調整モーダル -->
   <div class="modal-bd" id="modalAdjust">
     <div class="modal">
       <h3 id="mdlAdjustTitle">残高調整</h3>
@@ -134,7 +124,7 @@
 
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
-    let pData = null, selectedUser = null, currentPin = '';
+    let pData = null, selectedUser = null, currentPassword = '';
 
     function showLoading(msg='通信中...'){
       const el = document.getElementById('loadingOverlay');
@@ -145,7 +135,6 @@
       document.getElementById('loadingOverlay').style.display = 'none';
     }
 
-    // 自動粘り強いリトライ付き通信関数（最大3回まで再試行・暗証番号を必ず送信）
     async function callGas(action, data={}, maxRetries=3){
       let attempt = 0;
       while(attempt < maxRetries){
@@ -154,10 +143,17 @@
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 20000);
 
+          // GAS側との整合性維持のため password と pin の両方を送信
+          const payload = Object.assign({
+            action,
+            password: currentPassword,
+            pin: currentPassword
+          }, data);
+
           const res = await fetch(GAS_URL, {
             method:'POST',
             headers:{'Content-Type':'text/plain'},
-            body:JSON.stringify(Object.assign({action, pin: currentPin}, data)),
+            body:JSON.stringify(payload),
             signal: controller.signal
           });
           clearTimeout(timeoutId);
@@ -167,8 +163,7 @@
           return d;
         }catch(e){
           console.warn(`通信試行 ${attempt}/${maxRetries} 失敗:`, e);
-          if(e.message && e.message.includes('暗証番号')){
-            // PIN違いはリトライせず即エラー
+          if(e.message && (e.message.includes('パスワード') || e.message.includes('暗証番号'))){
             throw e;
           }
           if(attempt >= maxRetries){
@@ -180,9 +175,9 @@
     }
 
     function init(){
-      const savedPin = localStorage.getItem('parent_pin');
-      if(savedPin){
-        currentPin = savedPin;
+      const savedPw = localStorage.getItem('parent_password');
+      if(savedPw){
+        currentPassword = savedPw;
         loadParentData();
       } else {
         document.getElementById('loginScreen').style.display = 'flex';
@@ -190,27 +185,27 @@
     }
 
     async function handleLogin(){
-      const p = document.getElementById('pinInput').value.trim();
-      if(!p){ alert('暗証番号を入力してください'); return; }
-      currentPin = p;
+      const p = document.getElementById('pwInput').value.trim();
+      if(!p){ alert('パスワードを入力してください'); return; }
+      currentPassword = p;
       showLoading('認証中...');
       try{
         pData = await callGas('getParentData');
-        localStorage.setItem('parent_pin', currentPin);
+        localStorage.setItem('parent_password', currentPassword);
         document.getElementById('loginScreen').style.display = 'none';
         render();
       }catch(e){
         alert('認証エラー: ' + e.message);
-        currentPin = '';
+        currentPassword = '';
       }finally{
         hideLoading();
       }
     }
 
     function logout(){
-      localStorage.removeItem('parent_pin');
-      currentPin = '';
-      document.getElementById('pinInput').value = '';
+      localStorage.removeItem('parent_password');
+      currentPassword = '';
+      document.getElementById('pwInput').value = '';
       document.getElementById('loginScreen').style.display = 'flex';
     }
 
@@ -221,8 +216,8 @@
         document.getElementById('loginScreen').style.display = 'none';
         render();
       }catch(e){
-        if(e.message && e.message.includes('暗証番号')){
-          alert('暗証番号が間違っています。再入力してください。');
+        if(e.message && (e.message.includes('パスワード') || e.message.includes('暗証番号'))){
+          alert('パスワードが間違っています。再入力してください。');
           logout();
         } else {
           alert('読み込みエラー: ' + e.message);
@@ -237,7 +232,6 @@
     function render(){
       if(!pData) return;
 
-      // 1. 申請一覧
       const reqs = pData.pendingRequests || [];
       document.getElementById('badgePendingCount').innerText = reqs.length + '件';
       document.getElementById('badgePendingCount').className = reqs.length ? 'badge badge-wait' : 'badge badge-up';
@@ -264,7 +258,6 @@
         }).join('');
       }
 
-      // 2. 子ども口座一覧
       const users = pData.users || [];
       document.getElementById('listUsers').innerHTML = users.map(u=>{
         const h = (pData.holdingsMap && pData.holdingsMap[u.name]) ? pData.holdingsMap[u.name] : [];
