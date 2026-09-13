@@ -1,1402 +1,572 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
-  <title>峯松証券 キッズ</title>
-
-  <style>
-    :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --card-border: rgba(255,255,255,0.1);
-      --red: #f43f5e;
-      --gold: #f59e0b;
-      --green: #10b981;
-      --blue: #3b82f6;
-      --purple: #8b5cf6;
-      --cyan: #38bdf8;
-      --text: #ffffff;
-      --text-sub: #cbd5e1;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family:
-        "Hiragino Kaku Gothic ProN",
-        "Meiryo",
-        sans-serif;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      background: var(--bg);
-      color: var(--text);
-      touch-action: manipulation;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 480px;
-      padding: 16px 14px 100px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #user-select-view {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 24px;
-    }
-
-    .big-avatar {
-      font-size: 56px;
-      margin-bottom: 8px;
-    }
-
-    .select-btn {
-      width: 100%;
-      padding: 18px;
-      margin-bottom: 12px;
-      border: 3px solid rgba(255,255,255,0.2);
-      border-radius: 20px;
-      color: #fff;
-      font-size: 20px;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .select-btn:active {
-      transform: scale(0.96);
-    }
-
-    .btn-test {
-      padding: 14px;
-      border-color: #64748b;
-      background: linear-gradient(135deg, #334155, #1e293b);
-      font-size: 16px;
-    }
-
-    .btn-saori {
-      background: linear-gradient(135deg, #ec4899, #be185d);
-    }
-
-    .btn-yuka {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-    }
-
-    .test-heading {
-      width: 100%;
-      margin: 16px 0 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      color: var(--text-sub);
-      font-size: 12px;
-      text-align: center;
-    }
-
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .kid-badge {
-      padding: 8px 18px;
-      border: 2px solid var(--card-border);
-      border-radius: 30px;
-      background: var(--card);
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .btn-switch-user {
-      padding: 6px;
-      color: var(--text-sub);
-      font-size: 13px;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .hero-card {
-      margin-bottom: 16px;
-      padding: 20px 16px;
-      border: 3px solid var(--cyan);
-      border-radius: 28px;
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      box-shadow: 0 10px 30px rgba(56,189,248,0.2);
-      text-align: center;
-    }
-
-    .hero-label {
-      color: var(--cyan);
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .hero-money {
-      margin: 8px 0;
-      color: #fff;
-      font-size: 46px;
-      font-weight: 900;
-      letter-spacing: -1px;
-    }
-
-    .hero-sub {
-      display: flex;
-      justify-content: space-around;
-      gap: 8px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      color: var(--text-sub);
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .big-nav {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
-
-    .nav-btn {
-      padding: 14px 4px;
-      border: 2px solid var(--card-border);
-      border-radius: 16px;
-      background: var(--card);
-      color: var(--text-sub);
-      font-size: 13px;
-      font-weight: 900;
-      line-height: 1.3;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .nav-btn.active {
-      border-color: #60a5fa;
-      background: var(--blue);
-      color: #fff;
-    }
-
-    .ticket-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.05);
-      color: var(--text-sub);
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .btn-reload {
-      padding: 4px 8px;
-      border-radius: 6px;
-      background: rgba(56,189,248,0.15);
-      color: var(--cyan);
-      font-size: 12px;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .stock-card {
-      position: relative;
-      margin-bottom: 14px;
-      padding: 18px;
-      border: 2px solid var(--card-border);
-      border-radius: 22px;
-      background: var(--card);
-    }
-
-    .stock-tag {
-      display: inline-block;
-      margin-bottom: 4px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: #334155;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .stock-name {
-      margin-bottom: 4px;
-      padding-right: 90px;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .stock-price {
-      color: var(--cyan);
-      font-size: 26px;
-      font-weight: 900;
-    }
-
-    .btn-what {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      padding: 6px 12px;
-      border: 0;
-      border-radius: 20px;
-      background: #475569;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .trade-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .btn-buy,
-    .btn-sell {
-      padding: 14px;
-      border: 0;
-      border-radius: 14px;
-      color: #fff;
-      font-size: 17px;
-      font-weight: 900;
-    }
-
-    .btn-buy {
-      background: linear-gradient(135deg, #f43f5e, #be123c);
-    }
-
-    .btn-sell {
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    }
-
-    .btn-buy:active,
-    .btn-sell:active {
-      transform: scale(0.96);
-    }
-
-    .btn-disabled {
-      opacity: 0.35;
-      pointer-events: none;
-    }
-
-    .used-label {
-      margin-top: 8px;
-      color: var(--gold);
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .portfolio-summary {
-      margin-bottom: 14px;
-      padding: 18px;
-      border: 2px solid var(--purple);
-      border-radius: 20px;
-      background: linear-gradient(135deg, #1e293b, #334155);
-    }
-
-    .port-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      padding: 16px;
-      border: 2px solid var(--card-border);
-      border-radius: 18px;
-      background: var(--card);
-    }
-
-    .port-name {
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .port-count {
-      margin-top: 4px;
-      color: var(--text-sub);
-      font-size: 13px;
-    }
-
-    .port-val {
-      color: var(--cyan);
-      font-size: 20px;
-      font-weight: 900;
-      text-align: right;
-    }
-
-    .port-pl {
-      margin-top: 4px;
-      font-size: 12px;
-      text-align: right;
-    }
-
-    .bonus-notify {
-      margin-bottom: 16px;
-      padding: 16px;
-      border: 2px solid var(--gold);
-      border-radius: 18px;
-      background: rgba(245,158,11,0.15);
-      text-align: center;
-    }
-
-    .bank-summary {
-      margin-bottom: 16px;
-      padding: 15px;
-      border: 2px solid var(--cyan);
-      border-radius: 20px;
-      background: rgba(56,189,248,0.09);
-    }
-
-    .bank-summary-title {
-      margin-bottom: 10px;
-      color: var(--cyan);
-      font-size: 16px;
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .bank-summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .bank-summary-item {
-      padding: 10px 5px;
-      border-radius: 12px;
-      background: #0f172a;
-      text-align: center;
-    }
-
-    .bank-summary-label {
-      color: var(--text-sub);
-      font-size: 11px;
-    }
-
-    .bank-summary-value {
-      margin-top: 4px;
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .bank-box {
-      margin-bottom: 16px;
-      padding: 20px;
-      border: 2px solid var(--card-border);
-      border-radius: 24px;
-      background: var(--card);
-    }
-
-    .withdraw-box {
-      border-color: rgba(16,185,129,0.7);
-    }
-
-    .deposit-box {
-      border-color: rgba(139,92,246,0.85);
-    }
-
-    .bank-box-title {
-      margin-bottom: 6px;
-      font-size: 20px;
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .bank-description {
-      margin-bottom: 16px;
-      color: var(--text-sub);
-      font-size: 13px;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    .cash-status {
-      margin-bottom: 16px;
-      padding: 12px;
-      border-radius: 14px;
-      background: #0f172a;
-      font-size: 14px;
-      line-height: 1.7;
-      text-align: center;
-    }
-
-    .pending-request-area {
-      margin: 16px 0;
-    }
-
-    .pending-request-heading {
-      margin-bottom: 10px;
-      color: #34d399;
-      font-size: 15px;
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .pending-request-card {
-      margin-bottom: 10px;
-      padding: 14px;
-      border: 2px solid rgba(16,185,129,0.45);
-      border-radius: 16px;
-      background: #0f172a;
-    }
-
-    .pending-request-main {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pending-request-amount {
-      color: #fff;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .pending-request-date {
-      margin-top: 5px;
-      color: var(--text-sub);
-      font-size: 11px;
-    }
-
-    .btn-cancel-withdrawal {
-      min-width: 96px;
-      padding: 11px 12px;
-      border: 0;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #f43f5e, #be123c);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .btn-cancel-withdrawal:active {
-      transform: scale(0.96);
-    }
-
-    .btn-cancel-deposit {
-      min-width: 96px;
-      padding: 11px 12px;
-      border: 0;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .btn-cancel-deposit:active {
-      transform: scale(0.96);
-    }
-
-    .onedari-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .onedari-btn {
-      padding: 18px 10px;
-      border: 0;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #fff;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .deposit-btn {
-      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-    }
-
-    .onedari-btn:active {
-      transform: scale(0.95);
-    }
-
-    .custom-cash-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .custom-cash-input {
-      min-width: 0;
-      flex: 1;
-      padding: 12px;
-      border: 2px solid #334155;
-      border-radius: 14px;
-      background: #0f172a;
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-      user-select: text;
-      -webkit-user-select: text;
-    }
-
-    .custom-cash-btn {
-      padding: 0 18px;
-      border: 0;
-      border-radius: 14px;
-      background: var(--blue);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
-    }
-
-    .custom-deposit-btn {
-      background: var(--purple);
-    }
-
-    .important-note {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.05);
-      color: var(--text-sub);
-      font-size: 11px;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      width: 100%;
-      height: 100%;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(0,0,0,0.85);
-    }
-
-    .dialog-box {
-      width: 100%;
-      max-width: 380px;
-      padding: 22px;
-      border: 3px solid var(--cyan);
-      border-radius: 26px;
-      background: #1e293b;
-      text-align: center;
-    }
-
-    .d-title {
-      margin-bottom: 10px;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .d-body {
-      margin-bottom: 16px;
-      color: var(--text-sub);
-      font-size: 15px;
-      line-height: 1.5;
-      white-space: pre-line;
-    }
-
-    .counter-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin: 16px 0;
-    }
-
-    .counter-btn {
-      width: 50px;
-      height: 50px;
-      border: 0;
-      border-radius: 14px;
-      background: #334155;
-      color: #fff;
-      font-size: 26px;
-      font-weight: 900;
-    }
-
-    .counter-val {
-      min-width: 60px;
-      color: var(--cyan);
-      font-size: 32px;
-      font-weight: 900;
-    }
-
-    .calc-sum-box {
-      margin-bottom: 18px;
-      padding: 12px;
-      border-radius: 14px;
-      background: #0f172a;
-      color: #fff;
-      font-size: 17px;
-      font-weight: 900;
-    }
-
-    .d-btns {
-      display: flex;
-      gap: 10px;
-    }
-
-    .d-btn {
-      flex: 1;
-      padding: 16px;
-      border: 0;
-      border-radius: 14px;
-      font-size: 17px;
-      font-weight: 900;
-    }
-
-    .d-cancel {
-      background: #475569;
-      color: #fff;
-    }
-
-    .d-ok {
-      background: var(--green);
-      color: #fff;
-    }
-
-    .loading-box,
-    .error-box,
-    .empty-box {
-      padding: 30px 18px;
-      border-radius: 20px;
-      background: var(--card);
-      color: var(--text-sub);
-      text-align: center;
-    }
-
-    .error-box {
-      border: 2px solid var(--red);
-      color: #fda4af;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>峯松証券 キッズ</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+    background: #fef9f0;
+    color: #333;
+    padding-bottom: 40px;
+  }
+  header {
+    background: linear-gradient(135deg, #ff9a56, #ffd56b);
+    color: #fff;
+    padding: 16px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .container { max-width: 480px; margin: 0 auto; padding: 12px; }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .cash-title { font-size: 14px; color: #888; }
+  .cash-amount { font-size: 28px; font-weight: bold; color: #ff7a30; margin: 4px 0; }
+  .sub-cash { font-size: 13px; color: #999; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #f0f0f0;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .tab-btn.active { background: #ff9a56; color: #fff; }
+  .stock-list { display: flex; flex-direction: column; gap: 10px; }
+  .stock-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .stock-name { font-weight: bold; font-size: 15px; }
+  .stock-price { font-size: 14px; color: #555; }
+  .stock-change.up { color: #e74c3c; }
+  .stock-change.down { color: #3498db; }
+  .btn-small {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+  .btn-buy { background: #ff7a30; color: #fff; }
+  .btn-sell { background: #4a90d9; color: #fff; }
+  .btn-buy:disabled, .btn-sell:disabled { background: #ccc; cursor: not-allowed; }
+  .holding-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  .action-row { display: flex; gap: 10px; margin-top: 10px; }
+  .action-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+  }
+  .btn-withdraw { background: #4a90d9; }
+  .btn-deposit { background: #27ae60; }
+  .pending-request-card {
+    background: #fff8ee;
+    border: 1px solid #ffe0b0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .pending-request-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+  }
+  .pending-request-date { font-size: 11px; color: #999; font-weight: normal; margin-top: 2px; }
+  .btn-cancel-withdraw, .btn-cancel-deposit {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #login-screen {
+    max-width: 480px;
+    margin: 60px auto;
+    padding: 24px;
+    text-align: center;
+  }
+  #login-screen input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+  }
+  #login-screen button {
+    width: 100%;
+    padding: 12px;
+    background: #ff9a56;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    width: 88%;
+    max-width: 360px;
+  }
+  .modal-box h3 { margin-top: 0; }
+  .modal-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin: 10px 0;
+  }
+  .modal-actions { display: flex; gap: 10px; margin-top: 10px; }
+  .modal-actions button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .modal-btn-cancel { background: #eee; color: #555; }
+  .modal-btn-confirm { background: #ff7a30; color: #fff; }
+  #loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.7);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  #loading-overlay.show { display: flex; }
+</style>
 </head>
-
 <body>
-  <div class="app">
-    <div id="user-select-view">
-      <div class="big-avatar">🐷</div>
 
-      <h1 style="font-size:24px;font-weight:900;margin-bottom:6px;">
-        だれのスマホ？
-      </h1>
+<div id="loading-overlay">読み込み中...</div>
 
-      <p style="color:var(--text-sub);margin-bottom:20px;font-size:14px;">
-        使う人のボタンを押してね
-      </p>
+<div id="login-screen">
+  <h2>峯松証券 キッズ</h2>
+  <p>お名前を入力してください</p>
+  <input type="text" id="login-name-input" placeholder="なまえ">
+  <button onclick="doLogin()">はじめる</button>
+</div>
 
-      <div class="select-btn btn-saori" onclick="registerKid('咲織')">
-        <span>👧</span> 咲織（さおり）
-      </div>
+<div id="main-screen" style="display:none;">
+  <header>峯松証券 キッズ 🏦</header>
+  <div class="container">
 
-      <div class="select-btn btn-yuka" onclick="registerKid('優花')">
-        <span>👧</span> 優花（ゆうか）
-      </div>
-
-      <div class="test-heading">
-        🛠️ 動作チェック用（パパ・ママ）
-      </div>
-
-      <div class="select-btn btn-test" onclick="registerKid('あきひろ')">
-        <span>👨‍💻</span> あきひろ（検証）
-      </div>
-
-      <div class="select-btn btn-test" onclick="registerKid('けいこ')">
-        <span>👩‍💻</span> けいこ（検証）
+    <div class="card">
+      <div class="cash-title">つかえるお金</div>
+      <div class="cash-amount" id="cash-amount">0円</div>
+      <div class="sub-cash" id="sub-cash-info"></div>
+      <div class="action-row">
+        <button class="action-btn btn-withdraw" onclick="openWithdrawModal()">出金申請</button>
+        <button class="action-btn btn-deposit" onclick="openDepositModal()">入金申請</button>
       </div>
     </div>
 
-    <div id="main-view" style="display:none;">
-      <div class="header-bar">
-        <div class="kid-badge" id="disp-kid-name">
-          👤 ユーザー
-        </div>
+    <div class="card" id="pending-withdraw-area" style="display:none;">
+      <div style="font-weight:bold; margin-bottom:8px;">出金申請中</div>
+      <div id="pending-withdraw-list"></div>
+    </div>
 
-        <div class="btn-switch-user" onclick="resetUser()">
-          べつの人にする
-        </div>
+    <div class="card" id="pending-deposit-area" style="display:none;">
+      <div style="font-weight:bold; margin-bottom:8px;">入金申請中</div>
+      <div id="pending-deposit-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-market" onclick="switchTab('market')">マーケット</button>
+        <button class="tab-btn" id="tab-holding" onclick="switchTab('holding')">保有銘柄</button>
       </div>
+      <div id="market-view" class="stock-list"></div>
+      <div id="holding-view" class="stock-list" style="display:none;"></div>
+    </div>
 
-      <div class="hero-card">
-        <div class="hero-label">👑 ぜんぶのお金</div>
-        <div class="hero-money" id="disp-total-all">0円</div>
+  </div>
+</div>
 
-        <div class="hero-sub">
-          <div>
-            🏦 パパ銀行:
-            <span id="disp-cash-val" style="color:#fff;">0円</span>
-          </div>
-
-          <div>
-            📈 投資中:
-            <span id="disp-invest-val" style="color:#fff;">0円</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="big-nav">
-        <div
-          class="nav-btn active"
-          id="tab-btn-stocks"
-          onclick="switchKidTab('stocks')"
-        >
-          おうえん<br>（株をかう）
-        </div>
-
-        <div
-          class="nav-btn"
-          id="tab-btn-portfolio"
-          onclick="switchKidTab('portfolio')"
-        >
-          もっている株<br>（資産）
-        </div>
-
-        <div
-          class="nav-btn"
-          id="tab-btn-bank"
-          onclick="switchKidTab('bank')"
-        >
-          パパ銀行<br>（入出金）
-        </div>
-      </div>
-
-      <div class="ticket-bar">
-        <span id="ticket-status-label">
-          🎫 売買状況を確認中...
-        </span>
-
-        <span class="btn-reload" onclick="loadData()">
-          🔄 更新
-        </span>
-      </div>
-
-      <div id="tab-stocks">
-        <div id="stocks-container">
-          <div class="loading-box">読み込み中...</div>
-        </div>
-      </div>
-
-      <div id="tab-portfolio" style="display:none;">
-        <div class="portfolio-summary">
-          <div style="font-size:13px;color:var(--text-sub);">
-            いま持っている株のぜんぶの価値
-          </div>
-
-          <div
-            id="disp-port-total"
-            style="font-size:32px;font-weight:900;color:#fff;margin-top:4px;"
-          >
-            0 円
-          </div>
-        </div>
-
-        <div id="portfolio-container"></div>
-      </div>
-
-      <div id="tab-bank" style="display:none;">
-        <div class="bonus-notify">
-          <div style="font-size:15px;font-weight:bold;color:var(--gold);">
-            🎁 パパ銀行のおまけ（利息）
-          </div>
-
-          <div
-            id="disp-interest-msg"
-            style="font-size:20px;font-weight:900;margin-top:4px;"
-          >
-            毎月 +0円 もらえるよ！
-          </div>
-        </div>
-
-        <div class="bank-summary">
-          <div class="bank-summary-title">
-            🏦 パパ銀行の状態
-          </div>
-
-          <div class="bank-summary-grid">
-            <div class="bank-summary-item">
-              <div class="bank-summary-label">現在の残高</div>
-              <div class="bank-summary-value" id="disp-bank-cash">
-                0円
-              </div>
-            </div>
-
-            <div class="bank-summary-item">
-              <div class="bank-summary-label">利用できる金額</div>
-              <div class="bank-summary-value" id="disp-available-cash">
-                0円
-              </div>
-            </div>
-
-            <div class="bank-summary-item">
-              <div class="bank-summary-label">出金申請中</div>
-              <div
-                class="bank-summary-value"
-                id="disp-pending-cash"
-                style="color:#34d399;"
-              >
-                0円
-              </div>
-            </div>
-
-            <div class="bank-summary-item">
-              <div class="bank-summary-label">入金申請中</div>
-              <div
-                class="bank-summary-value"
-                id="disp-pending-deposit"
-                style="color:#c4b5fd;"
-              >
-                0円
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bank-box withdraw-box">
-          <h2 class="bank-box-title">
-            🏧 現金ちょうだい申請
-          </h2>
-
-          <p class="bank-description">
-            パパ銀行のお金を、本物の現金でもらう申請です。<br>
-            承認されるとパパ銀行の残高が減ります。
-          </p>
-
-          <div class="cash-status">
-            いま申請できる金額：
-            <strong id="disp-withdraw-limit">0円</strong>
-            <br>
-            出金申請中：
-            <strong id="disp-withdraw-pending">0円</strong>
-          </div>
-
-          <div
-            id="pending-withdrawal-area"
-            class="pending-request-area"
-            style="display:none;"
-          >
-            <div class="pending-request-heading">
-              ⏳ 申請中の出金
-            </div>
-
-            <div id="pending-withdrawal-list"></div>
-          </div>
-
-          <div class="onedari-grid">
-            <button class="onedari-btn" onclick="askCash(100)">
-              100円
-            </button>
-
-            <button class="onedari-btn" onclick="askCash(300)">
-              300円
-            </button>
-
-            <button class="onedari-btn" onclick="askCash(500)">
-              500円
-            </button>
-
-            <button class="onedari-btn" onclick="askCash(1000)">
-              1000円
-            </button>
-          </div>
-
-          <div class="custom-cash-row">
-            <input
-              type="number"
-              id="customCashAmount"
-              class="custom-cash-input"
-              placeholder="金額を入力"
-              min="1"
-              step="1"
-              inputmode="numeric"
-            >
-
-            <button
-              class="custom-cash-btn"
-              onclick="askCustomCash()"
-            >
-              出金申請
-            </button>
-          </div>
-        </div>
-
-        <div class="bank-box deposit-box">
-          <h2 class="bank-box-title">
-            💴 パパ銀行へ入金申請
-          </h2>
-
-          <p class="bank-description">
-            おこづかいや、お年玉などの現金を<br>
-            パパ銀行へ預けるための申請です。<br>
-            承認されるとパパ銀行の残高が増えます。
-          </p>
-
-          <div class="cash-status">
-            入金申請中：
-            <strong
-              id="disp-deposit-pending"
-              style="color:#c4b5fd;"
-            >
-              0円
-            </strong>
-            <br>
-            承認されるまでは残高に追加されません
-          </div>
-
-          <div
-            id="pending-deposit-area"
-            class="pending-request-area"
-            style="display:none;"
-          >
-            <div class="pending-request-heading" style="color:#c4b5fd;">
-              ⏳ 申請中の入金
-            </div>
-
-            <div id="pending-deposit-list"></div>
-          </div>
-
-          <div class="onedari-grid">
-            <button
-              class="onedari-btn deposit-btn"
-              onclick="askDeposit(100)"
-            >
-              100円
-            </button>
-
-            <button
-              class="onedari-btn deposit-btn"
-              onclick="askDeposit(500)"
-            >
-              500円
-            </button>
-
-            <button
-              class="onedari-btn deposit-btn"
-              onclick="askDeposit(1000)"
-            >
-              1000円
-            </button>
-
-            <button
-              class="onedari-btn deposit-btn"
-              onclick="askDeposit(5000)"
-            >
-              5000円
-            </button>
-          </div>
-
-          <div class="custom-cash-row">
-            <input
-              type="number"
-              id="customDepositAmount"
-              class="custom-cash-input"
-              placeholder="金額を入力"
-              min="1"
-              max="1000000"
-              step="1"
-              inputmode="numeric"
-            >
-
-            <button
-              class="custom-cash-btn custom-deposit-btn"
-              onclick="askCustomDeposit()"
-            >
-              入金申請
-            </button>
-          </div>
-
-          <div class="important-note">
-            本物の現金をパパ・ママへ渡してから申請してください。<br>
-            パパ・ママが確認して承認します。
-          </div>
-        </div>
-      </div>
+<div class="modal-overlay" id="withdraw-modal">
+  <div class="modal-box">
+    <h3>出金申請</h3>
+    <p>いくら出金しますか？</p>
+    <input type="number" id="withdraw-amount-input" placeholder="金額（円）">
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeModal('withdraw-modal')">やめる</button>
+      <button class="modal-btn-confirm" onclick="submitWithdraw()">申請する</button>
     </div>
   </div>
+</div>
 
-  <div id="kidDialog" class="overlay">
-    <div class="dialog-box">
-      <div class="d-title" id="diagTitle">確認</div>
-      <div class="d-body" id="diagBody"></div>
-
-      <div class="d-btns">
-        <button class="d-btn d-cancel" onclick="closeKidDialog()">
-          やめる
-        </button>
-
-        <button class="d-btn d-ok" id="diagOkBtn">
-          はい！
-        </button>
-      </div>
+<div class="modal-overlay" id="deposit-modal">
+  <div class="modal-box">
+    <h3>入金申請</h3>
+    <p>いくら入金しますか？</p>
+    <input type="number" id="deposit-amount-input" placeholder="金額（円）">
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeModal('deposit-modal')">やめる</button>
+      <button class="modal-btn-confirm" onclick="submitDeposit()">申請する</button>
     </div>
   </div>
+</div>
 
-  <div id="tradeModal" class="overlay">
-    <div class="dialog-box">
-      <div class="d-title" id="tModalTitle">
-        注文確認
-      </div>
-
-      <div
-        id="tModalPrice"
-        style="font-size:14px;color:var(--text-sub);"
-      >
-        単価: 0 円
-      </div>
-
-      <div class="counter-row">
-        <button class="counter-btn" onclick="changeUnits(-1)">
-          −
-        </button>
-
-        <span class="counter-val" id="tUnitsVal">1</span>
-
-        <button class="counter-btn" onclick="changeUnits(1)">
-          ＋
-        </button>
-      </div>
-
-      <div class="calc-sum-box" id="tSumVal">
-        合計: 0 円
-      </div>
-
-      <div class="d-btns">
-        <button class="d-btn d-cancel" onclick="closeTradeModal()">
-          やめる
-        </button>
-
-        <button
-          class="d-btn d-ok"
-          id="tOrderBtn"
-          onclick="sendTradeOrder()"
-        >
-          注文する！
-        </button>
-      </div>
+<div class="modal-overlay" id="trade-modal">
+  <div class="modal-box">
+    <h3 id="trade-modal-title">売買</h3>
+    <p id="trade-modal-desc"></p>
+    <input type="number" id="trade-units-input" placeholder="数量">
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeModal('trade-modal')">やめる</button>
+      <button class="modal-btn-confirm" onclick="submitTrade()">決定</button>
     </div>
   </div>
+</div>
 
-  <script>
-    var API_URL =
-      "https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec";
+<script>
+  // ============================================================
+  // グローバル状態
+  // ============================================================
+  var API_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec"; // ← 実際のGASデプロイURLに置き換えてください
+  var myName = "";
+  var appState = null;
+  var currentTradeCode = "";
+  var currentTradeType = "";
+  var currentTradePrice = 0;
 
-    var myName = "";
-    var appState = null;
-    var loadingData = false;
-    var sendingOrder = false;
-    var sendingCashRequest = false;
-    var sendingDepositRequest = false;
-    var cancellingWithdrawal = false;
-    var cancellingDeposit = false;
+  function yen(n) {
+    return Number(n || 0).toLocaleString("ja-JP") + "円";
+  }
 
-    var activeTrade = {
-      code: "",
-      name: "",
-      price: 0,
-      type: "buy",
-      units: 1,
-      maxUnits: 99
-    };
+  function showLoading() {
+    document.getElementById("loading-overlay").classList.add("show");
+  }
+  function hideLoading() {
+    document.getElementById("loading-overlay").classList.remove("show");
+  }
 
-    var EXPLAIN_MAP = {
-      "^N225":
-        "日本の代表的な225社の平均点！日本全体の景気がいいと上がるよ。",
+  function callApi(action, params) {
+    showLoading();
+    var body = Object.assign({ action: action }, params || {});
+    return fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify(body)
+    })
+      .then(function(res) { return res.json(); })
+      .catch(function(err) {
+        console.error(err);
+        return { status: "error", message: "通信エラーが発生しました。" };
+      })
+      .finally(function() {
+        hideLoading();
+      });
+  }
 
-      "8136.T":
-        "ハローキティやシナモロールを作っているかわいい会社だよ。",
-
-      "7974.T":
-        "Switchやマリオ、ポケモンなどの楽しいゲームを作っている会社だよ。",
-
-      "2782.T":
-        "かわいい雑貨や便利なグッズがたくさんある100円ショップだよ。",
-
-      "2702.T":
-        "みんな大好きなハンバーガーやハッピーセットのお店だよ。",
-
-      "2695.T":
-        "お皿を5枚入れるとガチャ（びっくらポン）が回る楽しいお寿司屋さん！",
-
-      "7203.T":
-        "世界中でたくさん車を作って売っている日本の会社だよ。",
-
-      "9983.T":
-        "ユニクロやGUなどの洋服を作っている会社だよ。",
-
-      "2269.T":
-        "板チョコやアポロ、牛乳やお菓子を作っている会社だよ。",
-
-      "GOLD":
-        "大昔から世界中で大切にされているピカピカの金（ゴールド）だよ。",
-
-      "OIL":
-        "車のガソリンやプラスチックを作るために使う黒い油だよ。",
-
-      "WHEAT":
-        "パンやうどん、ラーメン、ケーキの粉になる大切な麦だよ。"
-    };
-
-    window.onload = function() {
-      var saved =
-        localStorage.getItem(
-          "minematsu_kid_user"
-        );
-
-      if (saved) {
-        bootKidApp(saved);
-      }
-    };
-
-    async function callApi(action, data) {
-      var requestData =
-        Object.assign(
-          {},
-          data || {},
-          {
-            action: action
-          }
-        );
-
-      var response =
-        await fetch(
-          API_URL,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "text/plain;charset=utf-8"
-            },
-            body:
-              JSON.stringify(
-                requestData
-              ),
-            redirect: "follow"
-          }
-        );
-
-      if (!response.ok) {
-        throw new Error(
-          "通信に失敗しました（HTTP " +
-          response.status +
-          "）"
-        );
-      }
-
-      var responseText =
-        await response.text();
-
-      var result;
-
-      try {
-        result =
-          JSON.parse(responseText);
-
-      } catch (error) {
-        throw new Error(
-          "サーバーから正しいデータが返りませんでした。GASの公開設定を確認してください。"
-        );
-      }
-
-      if (
-        !result ||
-        result.status !== "success"
-      ) {
-        throw new Error(
-          result && result.message
-            ? result.message
-            : "処理に失敗しました。"
-        );
-      }
-
-      return result;
+  // ============================================================
+  // ログイン
+  // ============================================================
+  function doLogin() {
+    var name = document.getElementById("login-name-input").value.trim();
+    if (!name) {
+      alert("なまえを入力してください");
+      return;
     }
+    myName = name;
+    localStorage.setItem("kidsName", name);
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("main-screen").style.display = "block";
+    loadData();
+  }
 
-    function escapeHtml(value) {
-      return String(
-        value == null ? "" : value
-      )
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function registerKid(name) {
-      localStorage.setItem(
-        "minematsu_kid_user",
-        name
-      );
-
-      bootKidApp(name);
-    }
-
-    function resetUser() {
-      if (
-        confirm(
-          "べつの人の画面にしますか？"
-        )
-      ) {
-        localStorage.removeItem(
-          "minematsu_kid_user"
-        );
-
-        location.reload();
-      }
-    }
-
-    function bootKidApp(name) {
-      myName = name;
-
-      document.getElementById(
-        "user-select-view"
-      ).style.display = "none";
-
-      document.getElementById(
-        "main-view"
-      ).style.display = "block";
-
-      var icon = "👧";
-      var suffix = "ちゃん";
-
-      if (name === "あきひろ") {
-        icon = "👨‍💻";
-        suffix = "（検証）";
-      }
-
-      if (name === "けいこ") {
-        icon = "👩‍💻";
-        suffix = "（検証）";
-      }
-
-      document.getElementById(
-        "disp-kid-name"
-      ).textContent =
-        icon + " " + name + suffix;
-
+  window.onload = function() {
+    var savedName = localStorage.getItem("kidsName");
+    if (savedName) {
+      document.getElementById("login-name-input").value = savedName;
+      myName = savedName;
+      document.getElementById("login-screen").style.display = "none";
+      document.getElementById("main-screen").style.display = "block";
       loadData();
     }
+  };
 
-    function switchKidTab(tab) {
-      document.getElementById(
-        "tab-stocks"
-      ).style.display =
-        tab === "stocks"
-          ? "block"
-          : "none";
-
-      document.getElementById(
-        "tab-portfolio"
-      ).style.display =
-        tab === "portfolio"
-          ? "block"
-          : "none";
-
-      document.getElementById(
-        "tab-bank"
-      ).style.display =
-        tab === "bank"
-          ? "block"
-          : "none";
-
-      document.getElementById(
-        "tab-btn-stocks"
-      ).className =
-        "nav-btn " +
-        (
-          tab === "stocks"
-            ? "active"
-            : ""
-        );
-
-      document.getElementById(
-        "tab-btn-portfolio"
-      ).className =
-        "nav-btn " +
-        (
-          tab === "portfolio"
-            ? "active"
-            : ""
-        );
-
-      document.getElementById(
-        "tab-btn-bank"
-      ).className =
-        "nav-btn " +
-        (
-          tab === "bank"
-            ? "active"
-            : ""
-        );
-    }
-
-    async function loadData() {
-      if (!myName || loadingData) {
+  // ============================================================
+  // データ読み込み・レンダリング
+  // ============================================================
+  function loadData() {
+    callApi("getKidData", { userName: myName }).then(function(res) {
+      if (res.status !== "success") {
+        alert(res.message);
         return;
       }
+      appState = res;
+      renderCash();
+      renderPendingWithdrawals();
+      renderPendingDeposits();
+      renderMarket();
+      renderHoldings();
+    });
+  }
 
-      loadingData = true;
+  function renderCash() {
+    document.getElementById("cash-amount").innerText = yen(appState.user.availableCash);
+    var info = "";
+    if (appState.user.pendingWithdrawal > 0) {
+      info += "出金申請中：" + yen(appState.user.pendingWithdrawal) + " ";
+    }
+    if (appState.user.pendingDeposit > 0) {
+      info += "入金申請中：" + yen(appState.user.pendingDeposit);
+    }
+    document.getElementById("sub-cash-info").innerText = info;
+  }
 
-      document.getElementById(
-        "ticket-status-label"
-      ).textContent =
-        "🔄 最新データを読み込み中...";
+  function renderPendingWithdrawals() {
+    var area = document.getElementById("pending-withdraw-area");
+    var list = document.getElementById("pending-withdraw-list");
+    var requests = appState && Array.isArray(appState.pendingWithdrawalRequests)
+      ? appState.pendingWithdrawalRequests : [];
 
-      try {
-        appState =
-          await callApi(
-            "getKidData",
-            {
-              userName: myName
-            }
-          );
+    if (requests.length === 0) {
+      area.style.display = "none";
+      return;
+    }
 
-        renderAll();
+    var html = "";
+    requests.forEach(function(req) {
+      html += '<div class="pending-request-card">' +
+                '<div class="pending-request-main">' +
+                  '<div>' + yen(req.amount) +
+                    '<div class="pending-request-date">' + req.date + '</div>' +
+                  '</div>' +
+                  '<button class="btn-cancel-withdraw" data-id="' + req.requestId + '" data-amount="' + req.amount + '" onclick="askCancelWithdraw(this)">取消</button>' +
+                '</div>' +
+              '</div>';
+    });
+    list.innerHTML = html;
+    area.style.display = "block";
+  }
 
-      } catch (error) {
-        var message =
-          getErrorMessage(error);
+  function renderPendingDeposits() {
+    var area = document.getElementById("pending-deposit-area");
+    var list = document.getElementById("pending-deposit-list");
+    var requests = appState && Array.isArray(appState.pendingDepositRequests)
+      ? appState.pendingDepositRequests : [];
 
-        alert(
-          "読み込みエラー:\n" +
-          message
-        );
+    if (requests.length === 0) {
+      area.style.display = "none";
+      return;
+    }
 
-        document.getElementById(
-          "stocks-container"
-        ).innerHTML =
-          '<div class="error-box">' +
-          escapeHtml(message) +
+    var html = "";
+    requests.forEach(function(req) {
+      html += '<div class="pending-request-card">' +
+                '<div class="pending-request-main">' +
+                  '<div>' + yen(req.amount) +
+                    '<div class="pending-request-date">' + req.date + '</div>' +
+                  '</div>' +
+                  '<button class="btn-cancel-deposit" data-id="' + req.requestId + '" data-amount="' + req.amount + '" onclick="askCancelDeposit(this)">取消</button>' +
+                '</div>' +
+              '</div>';
+    });
+    list.innerHTML = html;
+    area.style.display = "block";
+  }
+
+  function askCancelWithdraw(btn) {
+    var amount = btn.dataset.amount;
+    var requestId = btn.dataset.id;
+    if (confirm(yen(amount) + "の出金申請を取り消しますか？")) {
+      callApi("cancelWithdrawalRequest", { userName: myName, requestId: requestId }).then(function(res) {
+        alert(res.message);
+        if (res.status === "success") {
+          loadData();
+        }
+      });
+    }
+  }
+
+  function askCancelDeposit(btn) {
+    var amount = btn.dataset.amount;
+    var requestId = btn.dataset.id;
+    if (confirm(yen(amount) + "の入金申請を取り消しますか？")) {
+      callApi("cancelDepositRequest", { userName: myName, requestId: requestId }).then(function(res) {
+        alert(res.message);
+        if (res.status === "success") {
+          loadData();
+        }
+      });
+    }
+  }
+
+  // ============================================================
+  // マーケット・保有銘柄
+  // ============================================================
+  function switchTab(tab) {
+    document.getElementById("tab-market").classList.toggle("active", tab === "market");
+    document.getElementById("tab-holding").classList.toggle("active", tab === "holding");
+    document.getElementById("market-view").style.display = tab === "market" ? "flex" : "none";
+    document.getElementById("holding-view").style.display = tab === "holding" ? "flex" : "none";
+  }
+
+  function renderMarket() {
+    var view = document.getElementById("market-view");
+    var list = (appState && Array.isArray(appState.market)) ? appState.market : [];
+    var html = "";
+    list.forEach(function(item) {
+      var changeClass = item.change >= 0 ? "up" : "down";
+      var changeSign = item.change >= 0 ? "+" : "";
+      html += '<div class="stock-item">' +
+                '<div>' +
+                  '<div class="stock-name">' + item.name + '</div>' +
+                  '<div class="stock-price">' + yen(item.price) +
+                    ' <span class="stock-change ' + changeClass + '">' + changeSign + item.change + '%</span>' +
+                  '</div>' +
+                '</div>' +
+                '<div>' +
+                  '<button class="btn-small btn-buy" onclick="openTradeModal(\'' + item.code + '\',\'buy\',' + item.price + ',\'' + item.name + '\')">買う</button>' +
+                  '<button class="btn-small btn-sell" onclick="openTradeModal(\'' + item.code + '\',\'sell\',' + item.price + ',\'' + item.name + '\')">売る</button>' +
+                '</div>' +
+              '</div>';
+    });
+    view.innerHTML = html || '<div style="text-align:center;color:#999;">銘柄情報がありません</div>';
+  }
+
+  function renderHoldings() {
+    var view = document.getElementById("holding-view");
+    var list = (appState && Array.isArray(appState.holdings)) ? appState.holdings : [];
+    var html = "";
+    list.forEach(function(item) {
+      html += '<div class="holding-item">' +
+                '<span>' + item.name + '（' + item.units + '）</span>' +
+                '<span>' + yen(item.units * item.averagePrice) + '</span>' +
+              '</div>';
+    });
+    view.innerHTML = html || '<div style="text-align:center;color:#999;">保有銘柄はありません</div>';
+  }
+
+  // ============================================================
+  // モーダル操作
+  // ============================================================
+  function closeModal(id) {
+    document.getElementById(id).classList.remove("show");
+  }
+
+  function openWithdrawModal() {
+    document.getElementById("withdraw-amount-input").value = "";
+    document.getElementById("withdraw-modal").classList.add("show");
+  }
+
+  function openDepositModal() {
+    document.getElementById("deposit-amount-input").value = "";
+    document.getElementById("deposit-modal").classList.add("show");
+  }
+
+  function submitWithdraw() {
+    var amount = document.getElementById("withdraw-amount-input").value;
+    if (!amount || Number(amount) <= 0) {
+      alert("金額を入力してください");
+      return;
+    }
+    callApi("requestCash", { userName: myName, amount: Number(amount) }).then(function(res) {
+      alert(res.message);
+      closeModal("withdraw-modal");
+      if (res.status === "success") {
+        loadData();
+      }
+    });
+  }
+
+  function submitDeposit() {
+    var amount = document.getElementById("deposit-amount-input").value;
+    if (!amount || Number(amount) <= 0) {
+      alert("金額を入力してください");
+      return;
+    }
+    callApi("requestDeposit", { userName: myName, amount: Number(amount) }).then(function(res) {
+      alert(res.message);
+      closeModal("deposit-modal");
+      if (res.status === "success") {
+        loadData();
+      }
+    });
+  }
+
+  function openTradeModal(code, type, price, name) {
+    currentTradeCode = code;
+    currentTradeType = type;
+    currentTradePrice = price;
+    document.getElementById("trade-modal-title").innerText = (type === "buy" ? "買う" : "売る") + "：" + name;
+    document.getElementById("trade-modal-desc").innerText = "現在価格：" + yen(price);
+    document.getElementById("trade-units-input").value = "";
+    document.getElementById("trade-modal").classList.add("show");
+  }
+
+  function submitTrade() {
+    var units = document.getElementById("trade-units-input").value;
+    if (!units || Number(units) <= 0) {
+      alert("数量を入力してください");
+      return;
+    }
+    callApi("tradeStockByUnits", {
+      userName: myName,
+      code: currentTradeCode,
+      tradeType: currentTradeType,
+      units: Number(units)
+    }).then(function(res) {
+      alert(res.message);
+      closeModal("trade-modal");
+      if (res.status === "success") {
+        loadData();
+      }
+    });
+  }
+</script>
+</body>
+</html>
