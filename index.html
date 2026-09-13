@@ -2,17 +2,21 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-  <title>峯松証券 キッズ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+  <title>峯松証券 Kids</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="峯松証券">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#2563eb">
   <style>
-    :root{--p:#2563eb;--bg:#f8fafc;--card:#fff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;--up:#16a34a;--dn:#dc2626;--gold:#d97706;}
+    :root{--p:#2563eb;--bg:#f8fafc;--card:#fff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;--up:#16a34a;--dn:#dc2626;--gold:#d97706;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);}
     *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;}
-    body{background:var(--bg);color:var(--text);padding-bottom:80px;}
+    body{background:var(--bg);color:var(--text);padding-top:var(--st);padding-bottom:calc(70px + var(--sb));user-select:none;-webkit-user-select:none;}
     header{background:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:10;}
-    .user-pill{display:flex;align-items:center;gap:6px;background:#eff6ff;padding:4px 10px;border-radius:20px;font-weight:700;color:var(--p);font-size:14px;border:none;cursor:pointer;}
+    .user-btn{display:flex;align-items:center;gap:4px;background:#eff6ff;padding:4px 10px;border-radius:20px;font-weight:700;color:var(--p);font-size:14px;border:none;cursor:pointer;}
     .container{padding:14px;max-width:480px;margin:0 auto;}
     .hero{background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:#fff;border-radius:18px;padding:18px;box-shadow:0 4px 14px rgba(37,99,235,.25);margin-bottom:14px;}
-    .hero-sub{font-size:12px;opacity:.85;}
     .hero-val{font-size:30px;font-weight:900;letter-spacing:-.5px;margin:2px 0 8px;}
     .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(255,255,255,.12);padding:10px;border-radius:12px;font-size:12px;}
     .hero-grid strong{display:block;font-size:15px;margin-top:2px;}
@@ -22,38 +26,33 @@
     .sec-title{font-size:14px;font-weight:700;color:var(--sub);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
     .list-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9;}
     .list-item:last-child{border-bottom:none;}
-    .btn-action{background:var(--p);color:#fff;border:none;border-radius:10px;padding:6px 12px;font-weight:700;font-size:13px;cursor:pointer;}
-    .badge-ticket{font-size:10px;padding:2px 6px;border-radius:6px;font-weight:700;}
-    .ticket-ok{background:#dcfce7;color:var(--up);}
-    .ticket-ng{background:#fee2e2;color:var(--dn);}
-    .bank-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin-bottom:8px;}
-    .bank-card.highlight{background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fcd34d;}
-    .interest-tag{font-size:11px;font-weight:700;background:#dbeafe;color:var(--p);padding:2px 6px;border-radius:4px;}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bdr);display:grid;grid-template-columns:repeat(3,1fr);height:60px;z-index:20;}
-    .nav-btn{background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--sub);font-size:11px;font-weight:700;cursor:pointer;}
-    .nav-btn.active{color:var(--p);}
-    .nav-icon{font-size:18px;margin-bottom:2px;}
-    .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px;}
-    .modal{background:#fff;border-radius:20px;padding:18px;width:100%;max-width:380px;box-shadow:0 10px 25px rgba(0,0,0,.15);}
-    .modal h3{font-size:16px;margin-bottom:12px;}
-    .ipt{width:100%;border:1px solid var(--bdr);border-radius:10px;padding:10px;font-size:16px;margin:8px 0 14px;box-sizing:border-box;}
-    .btn-group{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .btn-act{background:var(--p);color:#fff;border:none;border-radius:10px;padding:6px 12px;font-weight:700;font-size:13px;cursor:pointer;}
+    .badge{font-size:10px;padding:2px 6px;border-radius:6px;font-weight:700;}
+    .badge-dn{background:#fee2e2;color:var(--dn);}
+    .badge-wait{background:#fef3c7;color:#b45309;}
+    .bank-box{background:#f8fafc;border:1px solid var(--bdr);border-radius:12px;padding:12px;margin-bottom:8px;}
+    .bank-box.hl{background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fcd34d;}
+    .tag{font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;}
+    .b-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bdr);display:grid;grid-template-columns:repeat(3,1fr);height:calc(55px + var(--sb));padding-bottom:var(--sb);z-index:20;}
+    .n-btn{background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--sub);font-size:11px;font-weight:700;cursor:pointer;}
+    .n-btn.active{color:var(--p);}
+    .modal-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px;}
+    .modal{background:#fff;border-radius:20px;padding:18px;width:100%;max-width:360px;box-shadow:0 10px 25px rgba(0,0,0,.15);}
+    .ipt{width:100%;border:1px solid var(--bdr);border-radius:10px;padding:10px;font-size:16px;margin:8px 0 14px;}
+    .b-grp{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
     .btn-sub{background:#f1f5f9;color:var(--sub);border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer;}
     .btn-main{background:var(--p);color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer;}
-    .btn-sell{background:var(--gold);}
-    .btn-del{background:#fee2e2;color:var(--dn);border:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;}
-    .badge-wait{background:#fef3c7;color:#b45309;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:700;}
   </style>
 </head>
 <body>
   <header>
     <div style="font-weight:900;color:var(--p);font-size:17px;">峯松証券 <span style="font-size:11px;background:#fef08a;color:#854d0e;padding:2px 6px;border-radius:6px;">Kids</span></div>
-    <button class="user-pill" onclick="switchUser()"><span id="lblUser">ユーザー</span> ▾</button>
+    <button class="user-btn" onclick="switchUser()"><span id="lblUser">ユーザー</span> ▾</button>
   </header>
 
   <div class="container">
     <div class="hero">
-      <div class="hero-sub">そうしさん（ぜんぶの合計）</div>
+      <div style="font-size:12px;opacity:.85;">そうしさん（ぜんぶの合計）</div>
       <div class="hero-val" id="lblTotalAssets">¥0</div>
       <div class="hero-grid">
         <div>パパ銀行（円）<strong id="lblCash">¥0</strong></div>
@@ -61,7 +60,7 @@
       </div>
     </div>
 
-    <!-- タブ1: 銘柄一覧 -->
+    <!-- 銘柄一覧 -->
     <div id="tab-markets" class="tab-content active">
       <div class="card">
         <div class="sec-title"><span>📈 かえる銘柄（1日1回）</span><span id="lblMarketTime" style="font-size:10px;"></span></div>
@@ -69,7 +68,7 @@
       </div>
     </div>
 
-    <!-- タブ2: 保有・ポートフォリオ -->
+    <!-- 保有銘柄 -->
     <div id="tab-holdings" class="tab-content">
       <div class="card">
         <div class="sec-title"><span>💼 もっている銘柄</span><span id="lblPlTotal" style="font-size:12px;font-weight:700;"></span></div>
@@ -77,74 +76,27 @@
       </div>
     </div>
 
-    <!-- タブ3: パパ銀行＆利息・配当 -->
+    <!-- パパ銀行 -->
     <div id="tab-bank" class="tab-content">
       <div class="card">
-        <div class="sec-title"><span>🏦 パパ銀行 ＆ 利息・配当</span><span class="badge-wait">毎月25日支給</span></div>
-        
-        <!-- 利息・配当ハイライト合計 -->
-        <div class="bank-card highlight">
-          <div style="font-size:12px;color:#92400e;font-weight:700;">🎉 25日にもらえる利息・配当合計（予定）</div>
+        <div class="sec-title"><span>🏦 パパ銀行 ＆ 利息・配当</span><span class="badge badge-wait">毎月25日支給</span></div>
+        <div class="bank-box hl">
+          <div style="font-size:12px;color:#92400e;font-weight:700;">🎉 25日にもらえる利息・配当（予定合計）</div>
           <div style="font-size:24px;font-weight:900;color:#78350f;margin:2px 0;" id="lblTotalInterestPlanned">+0円</div>
           <div style="font-size:10px;color:#a16207;">あずけた円や外貨、株を持っていると毎月自動でふえます！</div>
         </div>
 
-        <!-- 円利息 -->
-        <div class="bank-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong>🇯🇵 パパ銀行（円）</strong>
-            <span class="interest-tag" id="lblRateJpy">月利 0.2%</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub);">
-            <span>預けているお金: <b style="color:var(--text);" id="lblBankCash">0円</b></span>
-            <span>来月: <b style="color:var(--up);font-size:13px;" id="lblBankInt">+0円</b></span>
-          </div>
-        </div>
+        <div class="bank-box" id="boxJpy"></div>
+        <div class="bank-box" id="boxUsd"></div>
+        <div class="bank-box" id="boxEur"></div>
+        <div class="bank-box" id="boxStock"></div>
 
-        <!-- ドル外貨利息 -->
-        <div class="bank-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong>🇺🇸 アメリカドル（USD）</strong>
-            <span class="interest-tag" id="lblRateUsd" style="background:#fef3c7;color:#b45309;">外貨利息 月 0.4%</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub);">
-            <span>保有: <b style="color:var(--text);" id="lblHoldingUsd">0 ドル</b></span>
-            <span>来月: <b style="color:var(--up);font-size:13px;" id="lblUsdInt">+0円</b></span>
-          </div>
-        </div>
-
-        <!-- ユーロ外貨利息 -->
-        <div class="bank-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong>🇪🇺 ユーロ（EUR）</strong>
-            <span class="interest-tag" id="lblRateEur" style="background:#e0e7ff;color:#3730a3;">外貨利息 月 0.25%</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub);">
-            <span>保有: <b style="color:var(--text);" id="lblHoldingEur">0 ユーロ</b></span>
-            <span>来月: <b style="color:var(--up);font-size:13px;" id="lblEurInt">+0円</b></span>
-          </div>
-        </div>
-
-        <!-- 株の配当金 -->
-        <div class="bank-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong>📈 株式（ぜんぶの株）</strong>
-            <span class="interest-tag" id="lblRateStock" style="background:#dcfce7;color:#15803d;">配当金 月 0.6%</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub);">
-            <span>株の時価合計: <b style="color:var(--text);" id="lblHoldingStockVal">0円</b></span>
-            <span>来月: <b style="color:var(--up);font-size:13px;" id="lblStockInt">+0円</b></span>
-          </div>
-        </div>
-
-        <!-- お金を入れる・出す申請 -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
           <button class="btn-main" onclick="openMoneyModal('deposit')">💰 お金を入れる申請</button>
           <button class="btn-sub" style="color:var(--text);" onclick="openMoneyModal('withdraw')">💸 お金を出す申請</button>
         </div>
       </div>
 
-      <!-- 申請中リスト -->
       <div class="card" id="cardPending" style="display:none;">
         <div class="sec-title"><span>⏳ 承認待ちの申請</span></div>
         <div id="listPending"></div>
@@ -152,37 +104,36 @@
     </div>
   </div>
 
-  <!-- ナビゲーション -->
-  <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('markets',this)"><span class="nav-icon">📈</span>銘柄一覧</button>
-    <button class="nav-btn" onclick="switchTab('holdings',this)"><span class="nav-icon">💼</span>もっている</button>
-    <button class="nav-btn" onclick="switchTab('bank',this)"><span class="nav-icon">🏦</span>パパ銀行</button>
+  <nav class="b-nav">
+    <button class="n-btn active" onclick="switchTab('markets',this)"><span style="font-size:18px;">📈</span>銘柄一覧</button>
+    <button class="n-btn" onclick="switchTab('holdings',this)"><span style="font-size:18px;">💼</span>もっている</button>
+    <button class="n-btn" onclick="switchTab('bank',this)"><span style="font-size:18px;">🏦</span>パパ銀行</button>
   </nav>
 
   <!-- 取引モーダル -->
-  <div class="modal-backdrop" id="modalTrade">
+  <div class="modal-bd" id="modalTrade">
     <div class="modal">
       <h3 id="mdlTitle">売買</h3>
-      <p id="mdlDesc" style="font-size:13px;color:var(--sub);margin-bottom:8px;"></p>
-      <label style="font-size:12px;font-weight:700;">購入・売却数（<span id="mdlUnitLbl">口</span>）</label>
+      <p id="mdlDesc" style="font-size:13px;color:var(--sub);margin:4px 0 8px;"></p>
+      <label style="font-size:12px;font-weight:700;">数量（<span id="mdlUnitLbl">口</span>）</label>
       <input type="number" id="mdlUnits" class="ipt" value="1" min="1" oninput="calcTradeTotal()">
       <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-size:14px;">
         <span>合計金額:</span><strong id="mdlTotal" style="color:var(--p);font-size:16px;">¥0</strong>
       </div>
-      <div class="btn-group">
+      <div class="b-grp">
         <button class="btn-sub" onclick="closeModal('modalTrade')">キャンセル</button>
         <button class="btn-main" id="btnSubmitTrade" onclick="submitTrade()">決定</button>
       </div>
     </div>
   </div>
 
-  <!-- 入出金申請モーダル -->
-  <div class="modal-backdrop" id="modalMoney">
+  <!-- 入出金モーダル -->
+  <div class="modal-bd" id="modalMoney">
     <div class="modal">
       <h3 id="mdlMoneyTitle">申請</h3>
       <label style="font-size:12px;font-weight:700;">金額（円）</label>
       <input type="number" id="mdlMoneyAmt" class="ipt" placeholder="例: 1000" min="1">
-      <div class="btn-group">
+      <div class="b-grp">
         <button class="btn-sub" onclick="closeModal('modalMoney')">キャンセル</button>
         <button class="btn-main" onclick="submitMoney()">申請する</button>
       </div>
@@ -192,10 +143,12 @@
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
     const USERS = ['咲織','優花','あきひろ','けいこ'];
-    let curUser = localStorage.getItem('kid_user') || USERS[0];
-    let curData = null, selectedTrade = null, moneyType = 'deposit';
+    let curUser, curData = null, curTrade = null, moneyType = 'deposit';
 
     function init(){
+      const p = new URLSearchParams(window.location.search).get('user');
+      curUser = (p && USERS.includes(p.trim())) ? p.trim() : (localStorage.getItem('kid_user') || USERS[0]);
+      localStorage.setItem('kid_user', curUser);
       document.getElementById('lblUser').innerText = curUser;
       loadKidData();
     }
@@ -210,10 +163,10 @@
       }
     }
 
-    function switchTab(tid, btn){
+    function switchTab(tId, btn){
       document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
-      document.getElementById('tab-' + tid).classList.add('active');
+      document.querySelectorAll('.n-btn').forEach(el=>el.classList.remove('active'));
+      document.getElementById('tab-' + tId).classList.add('active');
       btn.classList.add('active');
     }
 
@@ -230,179 +183,134 @@
 
     async function loadKidData(){
       try{
-        const r = await callGas('getKidData');
-        curData = r;
+        curData = await callGas('getKidData');
         render();
       }catch(e){
-        alert('データ取得エラー: ' + e.message);
+        alert('通信エラー: ' + e.message);
       }
     }
+
+    function fmt(n){ return (n||0).toLocaleString('ja-JP'); }
 
     function render(){
       if(!curData) return;
-      const u = curData.user;
-      const hList = curData.holdings || [];
-      const rates = curData.interestRates || {JPY:0.2, USDJPY:0.4, EURJPY:0.25, STOCK:0.6};
+      const u = curData.user, hList = curData.holdings || [], rates = curData.interestRates || {JPY:0.2, USDJPY:0.4, EURJPY:0.25, STOCK:0.6};
 
-      // 資産ヘッダー
-      document.getElementById('lblTotalAssets').innerText = '¥' + (curData.totalAssets||0).toLocaleString('ja-JP');
-      document.getElementById('lblCash').innerText = '¥' + (u.cash||0).toLocaleString('ja-JP');
-      document.getElementById('lblTotalInvest').innerText = '¥' + (curData.totalInvest||0).toLocaleString('ja-JP');
+      document.getElementById('lblTotalAssets').innerText = '¥' + fmt(curData.totalAssets);
+      document.getElementById('lblCash').innerText = '¥' + fmt(u.cash);
+      document.getElementById('lblTotalInvest').innerText = '¥' + fmt(curData.totalInvest);
       document.getElementById('lblMarketTime').innerText = curData.marketUpdatedAt ? curData.marketUpdatedAt.slice(5,16) : '';
 
-      // 銘柄一覧レンダリング
-      let mHtml = '';
-      (curData.markets||[]).forEach(m=>{
+      // 銘柄一覧
+      document.getElementById('listMarkets').innerHTML = (curData.markets||[]).map(m=>{
         const uc = m.code.toUpperCase();
-        const isFx = uc === 'USDJPY' || uc === 'EURJPY';
-        let rateTag = '';
-        if(isFx){
-          rateTag = `<span style="font-size:10px;background:#fef3c7;color:#b45309;padding:1px 5px;border-radius:4px;margin-left:4px;">外貨利息 月${rates[uc]||0}%</span>`;
-        }else{
-          rateTag = `<span style="font-size:10px;background:#dcfce7;color:#15803d;padding:1px 5px;border-radius:4px;margin-left:4px;">配当 月${rates.STOCK||0.6}%</span>`;
-        }
-
+        const tag = (uc==='USDJPY'||uc==='EURJPY') 
+          ? `<span class="tag" style="background:#fef3c7;color:#b45309;margin-left:4px;">外貨利息 月${rates[uc]||0}%</span>`
+          : `<span class="tag" style="background:#dcfce7;color:#15803d;margin-left:4px;">配当 月${rates.STOCK||0.6}%</span>`;
         const chgSign = m.change > 0 ? '+' : '';
-        const chgColor = m.change > 0 ? 'var(--up)' : (m.change < 0 ? 'var(--dn)' : 'var(--sub)');
-        const tMap = (curData.todayTrades||{})[m.code] || {buyUsed:false, sellUsed:false};
-
-        mHtml += `
+        const chgClr = m.change > 0 ? 'var(--up)' : (m.change < 0 ? 'var(--dn)' : 'var(--sub)');
+        const t = (curData.todayTrades||{})[m.code] || {};
+        return `
           <div class="list-item">
             <div>
-              <div style="font-weight:700;font-size:14px;">${m.name}${rateTag}</div>
-              <div style="font-size:12px;color:var(--sub);">1${m.unitLabel} = <b>¥${m.price.toLocaleString('ja-JP')}</b> <span style="color:${chgColor};font-weight:700;">(${chgSign}${m.change}%)</span></div>
+              <div style="font-weight:700;font-size:14px;">${m.name}${tag}</div>
+              <div style="font-size:12px;color:var(--sub);">1${m.unitLabel} = <b>¥${fmt(m.price)}</b> <span style="color:${chgClr};font-weight:700;">(${chgSign}${m.change}%)</span></div>
             </div>
-            <div>
-              ${tMap.buyUsed 
-                ? '<span class="badge-ticket ticket-ng">本日購入済</span>' 
-                : `<button class="btn-action" onclick="openTradeModal('${m.code}','buy')">買う</button>`}
-            </div>
-          </div>
-        `;
-      });
-      document.getElementById('listMarkets').innerHTML = mHtml;
+            <div>${t.buyUsed ? '<span class="badge badge-dn">本日購入済</span>' : `<button class="btn-act" onclick="openTrade('${m.code}','buy')">買う</button>`}</div>
+          </div>`;
+      }).join('');
 
-      // 保有銘柄レンダリング
-      let hHtml = '';
-      if(hList.length === 0){
-        hHtml = '<div style="text-align:center;padding:20px;color:var(--sub);font-size:13px;">まだ持っている銘柄はありません</div>';
-      }else{
-        hList.forEach(h=>{
-          const plSign = h.profitLoss > 0 ? '+' : '';
-          const plColor = h.profitLoss > 0 ? 'var(--up)' : (h.profitLoss < 0 ? 'var(--dn)' : 'var(--sub)');
-          const tMap = (curData.todayTrades||{})[h.code] || {buyUsed:false, sellUsed:false};
+      // 保有銘柄
+      document.getElementById('listHoldings').innerHTML = hList.length === 0 
+        ? '<div style="text-align:center;padding:20px;color:var(--sub);font-size:13px;">まだ持っている銘柄はありません</div>'
+        : hList.map(h=>{
+            const s = h.profitLoss >= 0 ? '+' : '';
+            const clr = h.profitLoss >= 0 ? 'var(--up)' : 'var(--dn)';
+            const t = (curData.todayTrades||{})[h.code] || {};
+            return `
+              <div class="list-item">
+                <div>
+                  <div style="font-weight:700;font-size:14px;">${h.name}</div>
+                  <div style="font-size:12px;color:var(--sub);">${h.count}${h.unitLabel}保有 / 時価 ¥${fmt(h.evalValue)}</div>
+                  <div style="font-size:11px;font-weight:700;color:${clr};">${s}¥${fmt(h.profitLoss)} (${s}${h.profitLossRate.toFixed(1)}%)</div>
+                </div>
+                <div>${t.sellUsed ? '<span class="badge badge-dn">本日売却済</span>' : `<button class="btn-act" style="background:var(--gold);" onclick="openTrade('${h.code}','sell')">売る</button>`}</div>
+              </div>`;
+          }).join('');
 
-          hHtml += `
-            <div class="list-item">
-              <div>
-                <div style="font-weight:700;font-size:14px;">${h.name}</div>
-                <div style="font-size:12px;color:var(--sub);">${h.count}${h.unitLabel}保有 / 時価 ¥${h.evalValue.toLocaleString('ja-JP')}</div>
-                <div style="font-size:11px;font-weight:700;color:${plColor};">${plSign}¥${h.profitLoss.toLocaleString('ja-JP')} (${plSign}${h.profitLossRate.toFixed(1)}%)</div>
-              </div>
-              <div>
-                ${tMap.sellUsed 
-                  ? '<span class="badge-ticket ticket-ng">本日売却済</span>' 
-                  : `<button class="btn-action btn-sell" onclick="openTradeModal('${h.code}','sell')">売る</button>`}
-              </div>
-            </div>
-          `;
-        });
-      }
-      document.getElementById('listHoldings').innerHTML = hHtml;
       const tPl = curData.portfolio ? curData.portfolio.totalProfitLoss : 0;
-      document.getElementById('lblPlTotal').innerHTML = `<span style="color:${tPl>=0?'var(--up)':'var(--dn)'}">評価損益: ${tPl>=0?'+':''}¥${tPl.toLocaleString('ja-JP')}</span>`;
+      document.getElementById('lblPlTotal').innerHTML = `<span style="color:${tPl>=0?'var(--up)':'var(--dn)'}">評価損益: ${tPl>=0?'+':''}¥${fmt(tPl)}</span>`;
 
-      // 1. 円利息
-      document.getElementById('lblBankCash').innerText = (u.cash||0).toLocaleString('ja-JP') + '円';
-      document.getElementById('lblRateJpy').innerText = `月利 ${rates.JPY}%`;
+      // 利息・配当計算
+      const renderBox = (id, flag, title, tagText, tagBg, tagClr, holdText, intVal) => {
+        document.getElementById(id).innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>${flag} ${title}</strong>
+            <span class="tag" style="background:${tagBg};color:${tagClr};">${tagText}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub);">
+            <span>${holdText}</span>
+            <span>来月: <b style="color:var(--up);font-size:13px;">+${fmt(intVal)}円</b></span>
+          </div>`;
+      };
+
       const jpyInt = Math.round((u.cash||0) * (rates.JPY / 100));
-      document.getElementById('lblBankInt').innerText = `+${jpyInt.toLocaleString('ja-JP')}円`;
+      renderBox('boxJpy', '🇯🇵', 'パパ銀行（円）', `月利 ${rates.JPY}%`, '#dbeafe', 'var(--p)', `預金: <b style="color:var(--text);">${fmt(u.cash)}円</b>`, jpyInt);
 
-      // 2. ドル外貨利息
-      const usdH = hList.find(x=>x.code.toUpperCase()==='USDJPY');
-      const usdUnits = usdH ? usdH.count : 0;
-      const usdEval = usdH ? usdH.evalValue : 0;
-      const usdRate = rates.USDJPY || 0.4;
-      const usdInt = Math.round(usdEval * (usdRate / 100));
-      document.getElementById('lblHoldingUsd').innerText = `${usdUnits.toLocaleString('ja-JP')} ドル (¥${usdEval.toLocaleString('ja-JP')})`;
-      document.getElementById('lblRateUsd').innerText = `外貨利息 月 ${usdRate}%`;
-      document.getElementById('lblUsdInt').innerText = `+${usdInt.toLocaleString('ja-JP')}円`;
+      const usdH = hList.find(x=>x.code.toUpperCase()==='USDJPY') || {count:0, evalValue:0};
+      const usdInt = Math.round(usdH.evalValue * ((rates.USDJPY||0.4) / 100));
+      renderBox('boxUsd', '🇺🇸', 'アメリカドル（USD）', `外貨利息 月 ${rates.USDJPY||0.4}%`, '#fef3c7', '#b45309', `保有: <b style="color:var(--text);">${fmt(usdH.count)} ドル (¥${fmt(usdH.evalValue)})</b>`, usdInt);
 
-      // 3. ユーロ外貨利息
-      const eurH = hList.find(x=>x.code.toUpperCase()==='EURJPY');
-      const eurUnits = eurH ? eurH.count : 0;
-      const eurEval = eurH ? eurH.evalValue : 0;
-      const eurRate = rates.EURJPY || 0.25;
-      const eurInt = Math.round(eurEval * (eurRate / 100));
-      document.getElementById('lblHoldingEur').innerText = `${eurUnits.toLocaleString('ja-JP')} ユーロ (¥${eurEval.toLocaleString('ja-JP')})`;
-      document.getElementById('lblRateEur').innerText = `外貨利息 月 ${eurRate}%`;
-      document.getElementById('lblEurInt').innerText = `+${eurInt.toLocaleString('ja-JP')}円`;
+      const eurH = hList.find(x=>x.code.toUpperCase()==='EURJPY') || {count:0, evalValue:0};
+      const eurInt = Math.round(eurH.evalValue * ((rates.EURJPY||0.25) / 100));
+      renderBox('boxEur', '🇪🇺', 'ユーロ（EUR）', `外貨利息 月 ${rates.EURJPY||0.25}%`, '#e0e7ff', '#3730a3', `保有: <b style="color:var(--text);">${fmt(eurH.count)} ユーロ (¥${fmt(eurH.evalValue)})</b>`, eurInt);
 
-      // 4. 株の配当金
-      const stockHoldings = hList.filter(x=>{
-        const uc = x.code.toUpperCase();
-        return uc !== 'USDJPY' && uc !== 'EURJPY';
-      });
-      const stockTotalEval = stockHoldings.reduce((sum, item)=>sum + item.evalValue, 0);
-      const stockRate = rates.STOCK || 0.6;
-      const stockInt = Math.round(stockTotalEval * (stockRate / 100));
-      document.getElementById('lblHoldingStockVal').innerText = '¥' + stockTotalEval.toLocaleString('ja-JP');
-      document.getElementById('lblRateStock').innerText = `配当金 月 ${stockRate}%`;
-      document.getElementById('lblStockInt').innerText = `+${stockInt.toLocaleString('ja-JP')}円`;
+      const stockEval = hList.filter(x=>!['USDJPY','EURJPY'].includes(x.code.toUpperCase())).reduce((s,i)=>s+i.evalValue,0);
+      const stockInt = Math.round(stockEval * ((rates.STOCK||0.6) / 100));
+      renderBox('boxStock', '📈', '株式（ぜんぶの株）', `配当金 月 ${rates.STOCK||0.6}%`, '#dcfce7', '#15803d', `時価合計: <b style="color:var(--text);">¥${fmt(stockEval)}</b>`, stockInt);
 
-      // 利息・配当 合計
-      const grandTotalPlanned = jpyInt + usdInt + eurInt + stockInt;
-      document.getElementById('lblTotalInterestPlanned').innerText = `+${grandTotalPlanned.toLocaleString('ja-JP')}円`;
+      document.getElementById('lblTotalInterestPlanned').innerText = `+${fmt(jpyInt + usdInt + eurInt + stockInt)}円`;
 
-      // 承認待ちリストレンダリング
-      const pW = curData.pendingWithdrawalRequests || [];
-      const pD = curData.pendingDepositRequests || [];
-      const pAll = [...pW.map(x=>Object.assign({type:'出金'},x)), ...pD.map(x=>Object.assign({type:'入金'},x))];
+      // 申請中リスト
+      const pAll = [...(curData.pendingWithdrawalRequests||[]).map(x=>({...x,t:'出金'})), ...(curData.pendingDepositRequests||[]).map(x=>({...x,t:'入金'}))];
       const pCard = document.getElementById('cardPending');
-      if(pAll.length > 0){
-        pCard.style.display = 'block';
+      pCard.style.display = pAll.length ? 'block' : 'none';
+      if(pAll.length){
         document.getElementById('listPending').innerHTML = pAll.map(p=>`
           <div class="list-item">
-            <div>
-              <span class="badge-wait">${p.type}申請</span>
-              <strong style="margin-left:6px;">¥${p.amount.toLocaleString('ja-JP')}</strong>
-              <div style="font-size:10px;color:var(--sub);">${p.date}</div>
-            </div>
-            <button class="btn-del" onclick="cancelReq('${p.requestId}','${p.type}')">取消</button>
-          </div>
-        `).join('');
-      }else{
-        pCard.style.display = 'none';
+            <div><span class="badge badge-wait">${p.t}申請</span> <strong>¥${fmt(p.amount)}</strong><div style="font-size:10px;color:var(--sub);">${p.date}</div></div>
+            <button class="badge badge-dn" style="border:none;cursor:pointer;padding:4px 8px;" onclick="cancelReq('${p.requestId}','${p.t}')">取消</button>
+          </div>`).join('');
       }
     }
 
-    function openTradeModal(code, type){
+    function openTrade(code, type){
       const m = curData.markets.find(x=>x.code===code);
       if(!m) return;
-      selectedTrade = {code, type, market:m};
+      curTrade = {code, type, market:m};
       document.getElementById('mdlTitle').innerText = (type==='buy'?'購入: ':'売却: ') + m.name;
-      document.getElementById('mdlDesc').innerText = `1${m.unitLabel}あたり ¥${m.price.toLocaleString('ja-JP')}`;
+      document.getElementById('mdlDesc').innerText = `1${m.unitLabel}あたり ¥${fmt(m.price)}`;
       document.getElementById('mdlUnitLbl').innerText = m.unitLabel;
       document.getElementById('mdlUnits').value = 1;
       const btn = document.getElementById('btnSubmitTrade');
-      btn.className = type==='buy' ? 'btn-main' : 'btn-main btn-sell';
+      btn.style.background = type==='buy' ? 'var(--p)' : 'var(--gold)';
       btn.innerText = type==='buy' ? '購入する' : '売却する';
       calcTradeTotal();
       document.getElementById('modalTrade').style.display = 'flex';
     }
 
     function calcTradeTotal(){
-      if(!selectedTrade) return;
+      if(!curTrade) return;
       const u = parseInt(document.getElementById('mdlUnits').value, 10) || 0;
-      document.getElementById('mdlTotal').innerText = '¥' + (u * selectedTrade.market.price).toLocaleString('ja-JP');
+      document.getElementById('mdlTotal').innerText = '¥' + fmt(u * curTrade.market.price);
     }
 
     async function submitTrade(){
       const u = parseInt(document.getElementById('mdlUnits').value, 10) || 0;
-      if(u <= 0){ alert('1以上の数量を入力してください'); return; }
+      if(u <= 0){ alert('数量を正しく入力してください'); return; }
       closeModal('modalTrade');
       try{
-        const r = await callGas('tradeStockByUnits', {code:selectedTrade.code, tradeType:selectedTrade.type, units:u});
+        const r = await callGas('tradeStockByUnits', {code:curTrade.code, tradeType:curTrade.type, units:u});
         alert(r.message);
         loadKidData();
       }catch(e){
@@ -412,7 +320,7 @@
 
     function openMoneyModal(type){
       moneyType = type;
-      document.getElementById('mdlMoneyTitle').innerText = type==='deposit' ? '💰 パパ銀行へ入金申請' : '💸 パパ銀行から出金申請';
+      document.getElementById('mdlMoneyTitle').innerText = type==='deposit' ? '💰 入金申請' : '💸 出金申請';
       document.getElementById('mdlMoneyAmt').value = '';
       document.getElementById('modalMoney').style.display = 'flex';
     }
@@ -422,8 +330,7 @@
       if(amt <= 0){ alert('金額を入力してください'); return; }
       closeModal('modalMoney');
       try{
-        const act = moneyType==='deposit' ? 'requestDeposit' : 'requestCash';
-        const r = await callGas(act, {amount:amt});
+        const r = await callGas(moneyType==='deposit' ? 'requestDeposit' : 'requestCash', {amount:amt});
         alert(r.message);
         loadKidData();
       }catch(e){
@@ -434,8 +341,7 @@
     async function cancelReq(requestId, type){
       if(!confirm(type + '申請を取り消しますか？')) return;
       try{
-        const act = type==='出金' ? 'cancelWithdrawalRequest' : 'cancelDepositRequest';
-        const r = await callGas(act, {requestId});
+        const r = await callGas(type==='出金' ? 'cancelWithdrawalRequest' : 'cancelDepositRequest', {requestId});
         alert(r.message);
         loadKidData();
       }catch(e){
@@ -443,10 +349,7 @@
       }
     }
 
-    function closeModal(id){
-      document.getElementById(id).style.display = 'none';
-    }
-
+    function closeModal(id){ document.getElementById(id).style.display = 'none'; }
     window.onload = init;
   </script>
 </body>
