@@ -1,101 +1,58 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>峯松証券 キッズ</title>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>峯松証券 キッズ</title>
   <style>
-    :root {
-      --bg: #0f172a; --card: #1e293b; --card-border: rgba(255,255,255,0.1);
-      --red: #f43f5e; --gold: #f59e0b; --green: #10b981; --blue: #3b82f6;
-      --purple: #8b5cf6; --cyan: #38bdf8; --text: #ffffff; --text-sub: #cbd5e1;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; user-select: none; -webkit-user-select: none; }
-    body { min-height: 100vh; display: flex; justify-content: center; background: var(--bg); color: var(--text); touch-action: manipulation; }
-    button, input { font: inherit; }
-    button { cursor: pointer; border: 0; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .app { width: 100%; max-width: 480px; padding: 16px 14px 100px; display: flex; flex-direction: column; }
-    #user-select-view { display: flex; flex-direction: column; align-items: center; padding-top: 24px; }
-    .big-avatar { font-size: 56px; margin-bottom: 8px; }
-    .select-btn { width: 100%; padding: 18px; margin-bottom: 12px; border: 3px solid rgba(255,255,255,0.2); border-radius: 20px; color: #fff; font-size: 20px; font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
-    .select-btn:active { transform: scale(0.96); }
-    .btn-test { padding: 14px; border-color: #64748b; background: linear-gradient(135deg, #334155, #1e293b); font-size: 16px; }
-    .btn-saori { background: linear-gradient(135deg, #ec4899, #be185d); }
-    .btn-yuka { background: linear-gradient(135deg, #f59e0b, #d97706); }
-    .test-heading { width: 100%; margin: 16px 0 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); color: var(--text-sub); font-size: 12px; text-align: center; }
-    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .kid-badge { padding: 8px 18px; border: 2px solid var(--card-border); border-radius: 30px; background: var(--card); font-size: 18px; font-weight: 900; }
-    .btn-switch-user { padding: 6px; color: var(--text-sub); font-size: 13px; text-decoration: underline; cursor: pointer; }
-    .hero-card { margin-bottom: 16px; padding: 20px 16px; border: 3px solid var(--cyan); border-radius: 28px; background: linear-gradient(135deg, #1e293b, #0f172a); box-shadow: 0 10px 30px rgba(56,189,248,0.2); text-align: center; }
-    .hero-label { color: var(--cyan); font-size: 16px; font-weight: bold; }
-    .hero-money { margin: 8px 0; color: #fff; font-size: 46px; font-weight: 900; letter-spacing: -1px; }
-    .hero-sub { display: flex; justify-content: space-around; gap: 8px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); color: var(--text-sub); font-size: 14px; font-weight: bold; }
-    .big-nav { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 16px; }
-    .nav-btn { padding: 14px 4px; border: 2px solid var(--card-border); border-radius: 16px; background: var(--card); color: var(--text-sub); font-size: 13px; font-weight: 900; line-height: 1.3; text-align: center; cursor: pointer; }
-    .nav-btn.active { border-color: #60a5fa; background: var(--blue); color: #fff; }
-    .ticket-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.05); color: var(--text-sub); font-size: 12px; font-weight: bold; }
-    .btn-reload { padding: 4px 8px; border-radius: 6px; background: rgba(56,189,248,0.15); color: var(--cyan); font-size: 12px; white-space: nowrap; cursor: pointer; }
-    .stock-card { position: relative; margin-bottom: 14px; padding: 18px; border: 2px solid var(--card-border); border-radius: 22px; background: var(--card); }
-    .stock-tag { display: inline-block; margin-bottom: 4px; padding: 3px 8px; border-radius: 6px; background: #334155; font-size: 12px; font-weight: bold; }
-    .stock-name { margin-bottom: 4px; padding-right: 90px; font-size: 20px; font-weight: 900; }
-    .stock-price { color: var(--cyan); font-size: 26px; font-weight: 900; }
-    .btn-what { position: absolute; top: 16px; right: 16px; padding: 6px 12px; border-radius: 20px; background: #475569; color: #fff; font-size: 12px; font-weight: bold; }
-    .trade-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-    .btn-buy, .btn-sell { padding: 14px; border-radius: 14px; color: #fff; font-size: 17px; font-weight: 900; }
-    .btn-buy { background: linear-gradient(135deg, #f43f5e, #be123c); }
-    .btn-sell { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-    .btn-buy:active, .btn-sell:active, .onedari-btn:active, .btn-cancel-withdrawal:active { transform: scale(0.96); }
-    .btn-disabled { opacity: 0.35; pointer-events: none; }
-    .used-label { margin-top: 8px; color: var(--gold); font-size: 12px; font-weight: bold; }
-    .portfolio-summary { margin-bottom: 14px; padding: 18px; border: 2px solid var(--purple); border-radius: 20px; background: linear-gradient(135deg, #1e293b, #334155); }
-    .port-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; padding: 16px; border: 2px solid var(--card-border); border-radius: 18px; background: var(--card); }
-    .port-name { font-size: 18px; font-weight: 900; }
-    .port-count { margin-top: 4px; color: var(--text-sub); font-size: 13px; }
-    .port-val { color: var(--cyan); font-size: 20px; font-weight: 900; text-align: right; }
-    .port-pl { margin-top: 4px; font-size: 12px; text-align: right; }
-    .bonus-notify { margin-bottom: 16px; padding: 16px; border: 2px solid var(--gold); border-radius: 18px; background: rgba(245,158,11,0.15); text-align: center; }
-    .bank-summary { margin-bottom: 16px; padding: 15px; border: 2px solid var(--cyan); border-radius: 20px; background: rgba(56,189,248,0.09); }
-    .bank-summary-title { margin-bottom: 10px; color: var(--cyan); font-size: 16px; font-weight: 900; text-align: center; }
-    .bank-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .bank-summary-item { padding: 10px 5px; border-radius: 12px; background: #0f172a; text-align: center; }
-    .bank-summary-label { color: var(--text-sub); font-size: 11px; }
-    .bank-summary-value { margin-top: 4px; font-size: 18px; font-weight: 900; }
-    .bank-box { margin-bottom: 16px; padding: 20px; border: 2px solid var(--card-border); border-radius: 24px; background: var(--card); }
-    .withdraw-box { border-color: rgba(16,185,129,0.7); }
-    .deposit-box { border-color: rgba(139,92,246,0.85); }
-    .bank-box-title { margin-bottom: 6px; font-size: 20px; font-weight: 900; text-align: center; }
-    .bank-description { margin-bottom: 16px; color: var(--text-sub); font-size: 13px; line-height: 1.6; text-align: center; }
-    .cash-status { margin-bottom: 16px; padding: 12px; border-radius: 14px; background: #0f172a; font-size: 14px; line-height: 1.7; text-align: center; }
-    .pending-request-area { margin: 16px 0; }
-    .pending-request-heading { margin-bottom: 10px; color: #34d399; font-size: 15px; font-weight: 900; text-align: center; }
-    .pending-request-card { margin-bottom: 10px; padding: 14px; border: 2px solid rgba(16,185,129,0.45); border-radius: 16px; background: #0f172a; }
-    .pending-request-main { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .pending-request-amount { color: #fff; font-size: 20px; font-weight: 900; }
-    .pending-request-date { margin-top: 5px; color: var(--text-sub); font-size: 11px; }
-    .btn-cancel-withdrawal { min-width: 96px; padding: 11px 12px; border-radius: 12px; background: linear-gradient(135deg, #f43f5e, #be123c); color: #fff; font-size: 14px; font-weight: 900; }
-    .onedari-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .onedari-btn { padding: 18px 10px; border-radius: 18px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 20px; font-weight: 900; }
-    .deposit-btn { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-    .custom-cash-row { display: flex; gap: 8px; }
-    .custom-cash-input { min-width: 0; flex: 1; padding: 12px; border: 2px solid #334155; border-radius: 14px; background: #0f172a; color: #fff; font-size: 18px; font-weight: bold; text-align: center; user-select: text; -webkit-user-select: text; }
-    .custom-cash-btn { padding: 0 18px; border-radius: 14px; background: var(--blue); color: #fff; font-size: 16px; font-weight: 900; }
-    .custom-deposit-btn { background: var(--purple); }
-    .important-note { margin-top: 12px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.05); color: var(--text-sub); font-size: 11px; line-height: 1.6; text-align: center; }
-    .overlay { display: none; position: fixed; inset: 0; z-index: 9999; width: 100%; height: 100%; align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,0.85); }
-    .dialog-box { width: 100%; max-width: 380px; padding: 22px; border: 3px solid var(--cyan); border-radius: 26px; background: #1e293b; text-align: center; }
-    .d-title { margin-bottom: 10px; font-size: 20px; font-weight: 900; }
-    .d-body { margin-bottom: 16px; color: var(--text-sub); font-size: 15px; line-height: 1.5; white-space: pre-line; }
-    .counter-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 16px 0; }
-    .counter-btn { width: 50px; height: 50px; border-radius: 14px; background: #334155; color: #fff; font-size: 26px; font-weight: 900; }
-    .counter-val { min-width: 60px; color: var(--cyan); font-size: 32px; font-weight: 900; }
-    .calc-sum-box { margin-bottom: 18px; padding: 12px; border-radius: 14px; background: #0f172a; color: #fff; font-size: 17px; font-weight: 900; }
-    .d-btns { display: flex; gap: 10px; }
-    .d-btn { flex: 1; padding: 16px; border-radius: 14px; font-size: 17px; font-weight: 900; }
-    .d-cancel { background: #475569; color: #fff; }
-    .d-ok { background: var(--green); color: #fff; }
-    .loading-box, .error-box, .empty-box { padding: 30px 18px; border-radius: 20px; background: var(--card); color: var(--text-sub); text-align: center; }
-    .error-box { border: 2px solid var(--red); color: #fda4af; }
+    :root{--bg:#0f172a;--card:#1e293b;--card-border:rgba(255,255,255,0.1);--red:#f43f5e;--gold:#f59e0b;--green:#10b981;--blue:#3b82f6;--purple:#8b5cf6;--cyan:#38bdf8;--text:#fff;--text-sub:#cbd5e1;}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;user-select:none;-webkit-user-select:none;}
+    body{min-height:100vh;display:flex;justify-content:center;background:var(--bg);color:var(--text);touch-action:manipulation;}
+    button,input{font:inherit;}button{cursor:pointer;border:0;}button:disabled{opacity:0.5;cursor:not-allowed;}
+    .app{width:100%;max-width:480px;padding:16px 14px 100px;display:flex;flex-direction:column;}
+    #user-select-view{display:flex;flex-direction:column;align-items:center;padding-top:24px;}.big-avatar{font-size:56px;margin-bottom:8px;}
+    .select-btn{width:100%;padding:18px;margin-bottom:12px;border:3px solid rgba(255,255,255,0.2);border-radius:20px;color:#fff;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;}
+    .select-btn:active,.btn-buy:active,.btn-sell:active,.onedari-btn:active,.btn-cancel-req:active{transform:scale(0.96);}
+    .btn-test{padding:14px;border-color:#64748b;background:linear-gradient(135deg,#334155,#1e293b);font-size:16px;}.btn-saori{background:linear-gradient(135deg,#ec4899,#be185d);}.btn-yuka{background:linear-gradient(135deg,#f59e0b,#d97706);}
+    .test-heading{width:100%;margin:16px 0 12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);color:var(--text-sub);font-size:12px;text-align:center;}
+    .header-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}.kid-badge{padding:8px 18px;border:2px solid var(--card-border);border-radius:30px;background:var(--card);font-size:18px;font-weight:900;}
+    .btn-switch-user{padding:6px;color:var(--text-sub);font-size:13px;text-decoration:underline;cursor:pointer;}
+    .hero-card{margin-bottom:16px;padding:20px 16px;border:3px solid var(--cyan);border-radius:28px;background:linear-gradient(135deg,#1e293b,#0f172a);box-shadow:0 10px 30px rgba(56,189,248,0.2);text-align:center;}
+    .hero-label{color:var(--cyan);font-size:16px;font-weight:bold;}.hero-money{margin:8px 0;color:#fff;font-size:46px;font-weight:900;letter-spacing:-1px;}
+    .hero-sub{display:flex;justify-content:space-around;gap:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);color:var(--text-sub);font-size:14px;font-weight:bold;}
+    .big-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:16px;}
+    .nav-btn{padding:14px 4px;border:2px solid var(--card-border);border-radius:16px;background:var(--card);color:var(--text-sub);font-size:13px;font-weight:900;line-height:1.3;text-align:center;cursor:pointer;}
+    .nav-btn.active{border-color:#60a5fa;background:var(--blue);color:#fff;}
+    .ticket-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,0.05);color:var(--text-sub);font-size:12px;font-weight:bold;}
+    .btn-reload{padding:4px 8px;border-radius:6px;background:rgba(56,189,248,0.15);color:var(--cyan);font-size:12px;white-space:nowrap;cursor:pointer;}
+    .stock-card{position:relative;margin-bottom:14px;padding:18px;border:2px solid var(--card-border);border-radius:22px;background:var(--card);}
+    .stock-tag{display:inline-block;margin-bottom:4px;padding:3px 8px;border-radius:6px;background:#334155;font-size:12px;font-weight:bold;}.stock-name{margin-bottom:4px;padding-right:90px;font-size:20px;font-weight:900;}
+    .stock-price{color:var(--cyan);font-size:26px;font-weight:900;}.btn-what{position:absolute;top:16px;right:16px;padding:6px 12px;border-radius:20px;background:#475569;color:#fff;font-size:12px;font-weight:bold;}
+    .trade-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}.btn-buy,.btn-sell{padding:14px;border-radius:14px;color:#fff;font-size:17px;font-weight:900;}
+    .btn-buy{background:linear-gradient(135deg,#f43f5e,#be123c);}.btn-sell{background:linear-gradient(135deg,#3b82f6,#1d4ed8);}.btn-disabled{opacity:0.35;pointer-events:none;}
+    .used-label{margin-top:8px;color:var(--gold);font-size:12px;font-weight:bold;}
+    .portfolio-summary{margin-bottom:14px;padding:18px;border:2px solid var(--purple);border-radius:20px;background:linear-gradient(135deg,#1e293b,#334155);}
+    .port-item{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;padding:16px;border:2px solid var(--card-border);border-radius:18px;background:var(--card);}
+    .port-name{font-size:18px;font-weight:900;}.port-count{margin-top:4px;color:var(--text-sub);font-size:13px;}.port-val{color:var(--cyan);font-size:20px;font-weight:900;text-align:right;}.port-pl{margin-top:4px;font-size:12px;text-align:right;}
+    .bonus-notify{margin-bottom:16px;padding:16px;border:2px solid var(--gold);border-radius:18px;background:rgba(245,158,11,0.15);text-align:center;}
+    .bank-summary{margin-bottom:16px;padding:15px;border:2px solid var(--cyan);border-radius:20px;background:rgba(56,189,248,0.09);}.bank-summary-title{margin-bottom:10px;color:var(--cyan);font-size:16px;font-weight:900;text-align:center;}
+    .bank-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}.bank-summary-item{padding:10px 5px;border-radius:12px;background:#0f172a;text-align:center;}.bank-summary-label{color:var(--text-sub);font-size:11px;}.bank-summary-value{margin-top:4px;font-size:18px;font-weight:900;}
+    .bank-box{margin-bottom:16px;padding:20px;border:2px solid var(--card-border);border-radius:24px;background:var(--card);}.withdraw-box{border-color:rgba(16,185,129,0.7);}.deposit-box{border-color:rgba(139,92,246,0.85);}
+    .bank-box-title{margin-bottom:6px;font-size:20px;font-weight:900;text-align:center;}.bank-description{margin-bottom:16px;color:var(--text-sub);font-size:13px;line-height:1.6;text-align:center;}
+    .cash-status{margin-bottom:16px;padding:12px;border-radius:14px;background:#0f172a;font-size:14px;line-height:1.7;text-align:center;}.pending-request-area{margin:16px 0;}
+    .pending-request-heading{margin-bottom:10px;font-size:15px;font-weight:900;text-align:center;}.heading-withdraw{color:#34d399;}.heading-deposit{color:#c4b5fd;}
+    .pending-request-card{margin-bottom:10px;padding:14px;border:2px solid rgba(255,255,255,0.15);border-radius:16px;background:#0f172a;}
+    .card-withdraw{border-color:rgba(16,185,129,0.45);}.card-deposit{border-color:rgba(139,92,246,0.45);}
+    .pending-request-main{display:flex;justify-content:space-between;align-items:center;gap:10px;}.pending-request-amount{color:#fff;font-size:20px;font-weight:900;}.pending-request-date{margin-top:5px;color:var(--text-sub);font-size:11px;}
+    .btn-cancel-req{min-width:96px;padding:11px 12px;border-radius:12px;background:linear-gradient(135deg,#f43f5e,#be123c);color:#fff;font-size:14px;font-weight:900;}
+    .onedari-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}.onedari-btn{padding:18px 10px;border-radius:18px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-size:20px;font-weight:900;}
+    .deposit-btn{background:linear-gradient(135deg,#8b5cf6,#6d28d9);}.custom-cash-row{display:flex;gap:8px;}
+    .custom-cash-input{min-width:0;flex:1;padding:12px;border:2px solid #334155;border-radius:14px;background:#0f172a;color:#fff;font-size:18px;font-weight:bold;text-align:center;user-select:text;-webkit-user-select:text;}
+    .custom-cash-btn{padding:0 18px;border-radius:14px;background:var(--blue);color:#fff;font-size:16px;font-weight:900;}.custom-deposit-btn{background:var(--purple);}
+    .important-note{margin-top:12px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.05);color:var(--text-sub);font-size:11px;line-height:1.6;text-align:center;}
+    .overlay{display:none;position:fixed;inset:0;z-index:9999;width:100%;height:100%;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.85);}
+    .dialog-box{width:100%;max-width:380px;padding:22px;border:3px solid var(--cyan);border-radius:26px;background:#1e293b;text-align:center;}.d-title{margin-bottom:10px;font-size:20px;font-weight:900;}.d-body{margin-bottom:16px;color:var(--text-sub);font-size:15px;line-height:1.5;white-space:pre-line;}
+    .counter-row{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0;}.counter-btn{width:50px;height:50px;border-radius:14px;background:#334155;color:#fff;font-size:26px;font-weight:900;}.counter-val{min-width:60px;color:var(--cyan);font-size:32px;font-weight:900;}.calc-sum-box{margin-bottom:18px;padding:12px;border-radius:14px;background:#0f172a;color:#fff;font-size:17px;font-weight:900;}
+    .d-btns{display:flex;gap:10px;}.d-btn{flex:1;padding:16px;border-radius:14px;font-size:17px;font-weight:900;}.d-cancel{background:#475569;color:#fff;}.d-ok{background:var(--green);color:#fff;}
+    .loading-box,.error-box,.empty-box{padding:30px 18px;border-radius:20px;background:var(--card);color:var(--text-sub);text-align:center;}.error-box{border:2px solid var(--red);color:#fda4af;}
   </style>
 </head>
 <body>
@@ -134,15 +91,10 @@
         <span class="btn-reload" onclick="loadData()">🔄 更新</span>
       </div>
 
-      <div id="tab-stocks">
-        <div id="stocks-container"><div class="loading-box">読み込み中...</div></div>
-      </div>
+      <div id="tab-stocks"><div id="stocks-container"><div class="loading-box">読み込み中...</div></div></div>
 
       <div id="tab-portfolio" style="display:none;">
-        <div class="portfolio-summary">
-          <div style="font-size:13px;color:var(--text-sub);">いま持っている株のぜんぶの価値</div>
-          <div id="disp-port-total" style="font-size:32px;font-weight:900;color:#fff;margin-top:4px;">0 円</div>
-        </div>
+        <div class="portfolio-summary"><div style="font-size:13px;color:var(--text-sub);">いま持っている株のぜんぶの価値</div><div id="disp-port-total" style="font-size:32px;font-weight:900;color:#fff;margin-top:4px;">0 円</div></div>
         <div id="portfolio-container"></div>
       </div>
 
@@ -163,10 +115,10 @@
 
         <div class="bank-box withdraw-box">
           <h2 class="bank-box-title">🏧 現金ちょうだい申請</h2>
-          <p class="bank-description">パパ銀行のお金を、本物の現金でもらう申請です。<br>承認されるとパパ銀行の残高が減ります。</p>
+          <p class="bank-description">パパ銀行のお金を本物の現金でもらう申請です。<br>承認されると残高が減ります。</p>
           <div class="cash-status">いま申請できる金額：<strong id="disp-withdraw-limit">0円</strong><br>出金申請中：<strong id="disp-withdraw-pending">0円</strong></div>
           <div id="pending-withdrawal-area" class="pending-request-area" style="display:none;">
-            <div class="pending-request-heading">⏳ 申請中の出金</div>
+            <div class="pending-request-heading heading-withdraw">⏳ 申請中の出金</div>
             <div id="pending-withdrawal-list"></div>
           </div>
           <div class="onedari-grid">
@@ -183,8 +135,12 @@
 
         <div class="bank-box deposit-box">
           <h2 class="bank-box-title">💴 パパ銀行へ入金申請</h2>
-          <p class="bank-description">おこづかいや、お年玉などの現金を<br>パパ銀行へ預けるための申請です。<br>承認されるとパパ銀行の残高が増えます。</p>
+          <p class="bank-description">おこづかいや現金をパパ銀行へ預ける申請です。<br>承認されると残高が増えます。</p>
           <div class="cash-status">入金申請中：<strong id="disp-deposit-pending" style="color:#c4b5fd;">0円</strong><br>承認されるまでは残高に追加されません</div>
+          <div id="pending-deposit-area" class="pending-request-area" style="display:none;">
+            <div class="pending-request-heading heading-deposit">⏳ 申請中の入金</div>
+            <div id="pending-deposit-list"></div>
+          </div>
           <div class="onedari-grid">
             <button class="onedari-btn deposit-btn" onclick="askDeposit(100)">100円</button>
             <button class="onedari-btn deposit-btn" onclick="askDeposit(500)">500円</button>
@@ -230,363 +186,202 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec";
-    let myName = "", appState = null, loadingData = false, sendingOrder = false, sendingCashRequest = false, sendingDepositRequest = false, cancellingWithdrawal = false;
-    let activeTrade = { code: "", name: "", price: 0, type: "buy", units: 1, maxUnits: 99 };
+    const API_URL="https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec";
+    let myName="",appState=null,loadingData=false,sendingOrder=false,reqBusy=false;
+    let activeTrade={code:"",name:"",price:0,type:"buy",units:1,maxUnits:99};
 
-    const EXPLAIN_MAP = {
-      "^N225": "日本の代表的な225社の平均点！日本全体の景気がいいと上がるよ。",
-      "8136.T": "ハローキティやシナモロールを作っているかわいい会社だよ。",
-      "7974.T": "Switchやマリオ、ポケモンなどの楽しいゲームを作っている会社だよ。",
-      "2782.T": "かわいい雑貨や便利なグッズがたくさんある100円ショップだよ。",
-      "2702.T": "みんな大好きなハンバーガーやハッピーセットのお店だよ。",
-      "2695.T": "お皿を5枚入れるとガチャ（びっくらポン）が回る楽しいお寿司屋さん！",
-      "7203.T": "世界中でたくさん車を作って売っている日本の会社だよ。",
-      "9983.T": "ユニクロやGUなどの洋服を作っている会社だよ。",
-      "2269.T": "板チョコやアポロ、牛乳やお菓子を作っている会社だよ。",
-      "GOLD": "大昔から世界中で大切にされているピカピカの金（ゴールド）だよ。",
-      "OIL": "車のガソリンやプラスチックを作るために使う黒い油だよ。",
-      "WHEAT": "パンやうどん、ラーメン、ケーキの粉になる大切な麦だよ。"
+    const EXPLAIN_MAP={
+      "^N225":"日本の代表的な225社の平均点！日本全体の景気がいいと上がるよ。",
+      "8136.T":"ハローキティやシナモロールを作っている会社だよ。",
+      "7974.T":"Switchやマリオ、ポケモンなどのゲームを作る会社だよ。",
+      "2782.T":"かわいい雑貨や便利グッズがたくさんある100円ショップ！",
+      "2702.T":"みんな大好きなハンバーガーやハッピーセットのお店だよ。",
+      "2695.T":"びっくらポンが楽しいお寿司屋さん！",
+      "7203.T":"世界中で車を作って売っている日本の会社だよ。",
+      "9983.T":"ユニクロやGUなどの洋服を作っている会社だよ。",
+      "2269.T":"チョコやアイス、牛乳などのお菓子を作る会社だよ。",
+      "GOLD":"昔から世界中で大切にされているピカピカの金だよ。",
+      "OIL":"車のガソリンやプラスチックを作るための黒い油だよ。",
+      "WHEAT":"パンやうどん、お菓子の粉になる大切な麦だよ。"
     };
 
-    window.onload = () => {
-      const saved = localStorage.getItem("minematsu_kid_user");
-      if (saved) bootKidApp(saved);
-    };
-
-    async function callApi(action, data) {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(Object.assign({}, data || {}, { action })),
-        redirect: "follow"
-      });
-      if (!res.ok) throw new Error("通信に失敗しました（HTTP " + res.status + "）");
-      const text = await res.text();
-      let result;
-      try { result = JSON.parse(text); } catch (e) { throw new Error("サーバーから正しいデータが返りませんでした。GAS公開設定を確認してください。"); }
-      if (!result || result.status !== "success") throw new Error(result && result.message ? result.message : "処理に失敗しました。");
-      return result;
+    window.onload=()=>{const s=localStorage.getItem("minematsu_kid_user");if(s)bootKidApp(s);};
+    async function callApi(a,d){
+      const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({},d||{},{action:a})),redirect:"follow"});
+      if(!res.ok)throw new Error("通信エラー(HTTP "+res.status+")");
+      let r;try{r=JSON.parse(await res.text());}catch(e){throw new Error("サーバー返答形式が不正です。");}
+      if(!r||r.status!=="success")throw new Error(r&&r.message?r.message:"処理に失敗しました。");
+      return r;
     }
+    function escapeHtml(v){return String(v==null?"":v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[m]);}
+    function yen(v){return(Number(v)||0).toLocaleString("ja-JP")+"円";}
+    function getErrorMessage(e){return e&&e.message?e.message:String(e);}
 
-    function escapeHtml(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m]); }
-    function yen(v) { return (Number(v) || 0).toLocaleString("ja-JP") + "円"; }
-    function getErrorMessage(e) { return e && e.message ? e.message : String(e); }
-
-    function registerKid(name) {
-      localStorage.setItem("minematsu_kid_user", name);
-      bootKidApp(name);
+    function registerKid(n){localStorage.setItem("minematsu_kid_user",n);bootKidApp(n);}
+    function resetUser(){if(confirm("べつの人の画面にしますか？")){localStorage.removeItem("minematsu_kid_user");location.reload();}}
+    function bootKidApp(n){
+      myName=n;document.getElementById("user-select-view").style.display="none";document.getElementById("main-view").style.display="block";
+      const ic=(n==="あきひろ")?"👨‍💻":(n==="けいこ"?"👩‍💻":"👧"),sf=(n==="あきひろ"||n==="けいこ")?"（検証）":"ちゃん";
+      document.getElementById("disp-kid-name").textContent=ic+" "+n+sf;loadData();
     }
-
-    function resetUser() {
-      if (confirm("べつの人の画面にしますか？")) {
-        localStorage.removeItem("minematsu_kid_user");
-        location.reload();
-      }
-    }
-
-    function bootKidApp(name) {
-      myName = name;
-      document.getElementById("user-select-view").style.display = "none";
-      document.getElementById("main-view").style.display = "block";
-      const icon = (name === "あきひろ") ? "👨‍💻" : (name === "けいこ" ? "👩‍💻" : "👧");
-      const suffix = (name === "あきひろ" || name === "けいこ") ? "（検証）" : "ちゃん";
-      document.getElementById("disp-kid-name").textContent = icon + " " + name + suffix;
-      loadData();
-    }
-
-    function switchKidTab(tab) {
-      ["stocks", "portfolio", "bank"].forEach(t => {
-        document.getElementById("tab-" + t).style.display = (tab === t ? "block" : "none");
-        document.getElementById("tab-btn-" + t).className = "nav-btn " + (tab === t ? "active" : "");
+    function switchKidTab(tab){
+      ["stocks","portfolio","bank"].forEach(t=>{
+        document.getElementById("tab-"+t).style.display=(tab===t?"block":"none");
+        document.getElementById("tab-btn-"+t).className="nav-btn "+(tab===t?"active":"");
       });
     }
 
-    async function loadData() {
-      if (!myName || loadingData) return;
-      loadingData = true;
-      document.getElementById("ticket-status-label").textContent = "🔄 最新データを読み込み中...";
-      try {
-        appState = await callApi("getKidData", { userName: myName });
-        renderAll();
-      } catch (err) {
-        const msg = getErrorMessage(err);
-        alert("読み込みエラー:\n" + msg);
-        document.getElementById("stocks-container").innerHTML = '<div class="error-box">' + escapeHtml(msg) + '<br><br>「更新」を押して、もう一度お試しください。</div>';
-        document.getElementById("ticket-status-label").textContent = "⚠️ 読み込みに失敗しました";
-      } finally { loadingData = false; }
+    async function loadData(){
+      if(!myName||loadingData)return;loadingData=true;
+      document.getElementById("ticket-status-label").textContent="🔄 データを読み込み中...";
+      try{appState=await callApi("getKidData",{userName:myName});renderAll();}
+      catch(e){const m=getErrorMessage(e);alert("読込エラー:\n"+m);document.getElementById("stocks-container").innerHTML='<div class="error-box">'+escapeHtml(m)+'</div>';document.getElementById("ticket-status-label").textContent="⚠️ 読込失敗";}
+      finally{loadingData=false;}
     }
 
-    function renderAll() {
-      if (!appState || !appState.user) return;
-      const cash = Number(appState.user.cash) || 0;
-      const pCash = Number(appState.user.pendingWithdrawal) || 0;
-      const pDep = Number(appState.user.pendingDeposit) || 0;
-      const avail = Number.isFinite(Number(appState.user.availableCash)) ? Number(appState.user.availableCash) : Math.max(0, cash - pCash);
-      const invest = Number(appState.totalInvest) || 0;
+    function renderAll(){
+      if(!appState||!appState.user)return;
+      const cash=Number(appState.user.cash)||0,pCash=Number(appState.user.pendingWithdrawal)||0,pDep=Number(appState.user.pendingDeposit)||0;
+      const avail=Number.isFinite(Number(appState.user.availableCash))?Number(appState.user.availableCash):Math.max(0,cash-pCash);
+      const invest=Number(appState.totalInvest)||0;
 
-      document.getElementById("disp-total-all").innerHTML = (cash + invest).toLocaleString("ja-JP") + '<span style="font-size:24px;">円</span>';
-      document.getElementById("disp-cash-val").textContent = yen(cash);
-      document.getElementById("disp-invest-val").textContent = yen(invest);
-      document.getElementById("disp-port-total").textContent = yen(invest);
-      document.getElementById("disp-bank-cash").textContent = yen(cash);
-      document.getElementById("disp-available-cash").textContent = yen(avail);
-      document.getElementById("disp-pending-cash").textContent = yen(pCash);
-      document.getElementById("disp-pending-deposit").textContent = yen(pDep);
-      document.getElementById("disp-withdraw-limit").textContent = yen(avail);
-      document.getElementById("disp-withdraw-pending").textContent = yen(pCash);
-      document.getElementById("disp-deposit-pending").textContent = yen(pDep);
+      document.getElementById("disp-total-all").innerHTML=(cash+invest).toLocaleString("ja-JP")+'<span style="font-size:24px;">円</span>';
+      document.getElementById("disp-cash-val").textContent=yen(cash);
+      document.getElementById("disp-invest-val").textContent=yen(invest);
+      document.getElementById("disp-port-total").textContent=yen(invest);
+      document.getElementById("disp-bank-cash").textContent=yen(cash);
+      document.getElementById("disp-available-cash").textContent=yen(avail);
+      document.getElementById("disp-pending-cash").textContent=yen(pCash);
+      document.getElementById("disp-pending-deposit").textContent=yen(pDep);
+      document.getElementById("disp-withdraw-limit").textContent=yen(avail);
+      document.getElementById("disp-withdraw-pending").textContent=yen(pCash);
+      document.getElementById("disp-deposit-pending").textContent=yen(pDep);
 
-      const rate = Number.isFinite(Number(appState.interestRate)) ? Number(appState.interestRate) : 2;
-      document.getElementById("disp-interest-msg").textContent = "来月は +" + Math.round(cash * rate / 100).toLocaleString("ja-JP") + "円 もらえるよ！";
-      document.getElementById("ticket-status-label").textContent = "🎫 同じ銘柄は、買い・売りそれぞれ1日1回まで";
+      const rate=Number.isFinite(Number(appState.interestRate))?Number(appState.interestRate):2;
+      document.getElementById("disp-interest-msg").textContent="来月は +"+Math.round(cash*rate/100).toLocaleString("ja-JP")+"円 もらえるよ！";
+      document.getElementById("ticket-status-label").textContent="🎫 同じ銘柄は、買い・売りそれぞれ1日1回まで";
 
-      renderMarkets(cash, avail);
-      renderPortfolio();
-      renderPendingWithdrawals();
+      renderMarkets(cash,avail);renderPortfolio();
+      renderPendingList("pending-withdrawal-area","pending-withdrawal-list",appState.pendingWithdrawalRequests||[],'withdrawal','card-withdraw');
+      renderPendingList("pending-deposit-area","pending-deposit-list",appState.pendingDepositRequests||[],'deposit','card-deposit');
     }
 
-    function renderMarkets(cash, availableCash) {
-      const container = document.getElementById("stocks-container");
-      const markets = appState.markets || [];
-      const holdings = appState.holdings || [];
-      const todayTrades = appState.todayTrades || {};
-      if (markets.length === 0) return container.innerHTML = '<div class="empty-box">銘柄が登録されていません。</div>';
-
-      let html = "";
-      markets.forEach(m => {
-        const code = String(m.code || "");
-        const name = String(m.name || code);
-        const price = Number(m.price) || 0;
-        const h = holdings.find(item => String(item.code) === code);
-        const holdCount = h ? (Number(h.count) || 0) : 0;
-        const holdVal = h ? (Number(h.evalValue) || 0) : 0;
-        const tStatus = todayTrades[code] || { buyUsed: false, sellUsed: false };
-        const canBuy = !tStatus.buyUsed && price > 0 && availableCash >= price;
-        const canSell = !tStatus.sellUsed && holdCount >= 1;
-
-        let usedMsg = [];
-        if (tStatus.buyUsed) usedMsg.push("本日の買いは使用済み");
-        if (tStatus.sellUsed) usedMsg.push("本日の売りは使用済み");
-
-        html += `<div class="stock-card">
-          <button class="btn-what" data-code="${escapeHtml(code)}" data-name="${escapeHtml(name)}" onclick="showWhatFromBtn(this)">これなぁに？</button>
-          <div class="stock-tag">${escapeHtml(m.category || "株式")}</div>
-          <div class="stock-name">${escapeHtml(name)}</div>
-          <div class="stock-price">${price.toLocaleString("ja-JP")} 円 <span style="font-size:13px;color:var(--text-sub);">/ 1口</span></div>
-          <div style="font-size:13px;color:var(--text-sub);margin-top:6px;">もっている分: <b style="color:#fff;">${holdCount.toLocaleString("ja-JP")} 口</b> (${holdVal.toLocaleString("ja-JP")}円)</div>
-          ${usedMsg.length ? `<div class="used-label">🎫 ${escapeHtml(usedMsg.join("・"))}</div>` : ''}
+    function renderMarkets(cash,avail){
+      const c=document.getElementById("stocks-container"),mks=appState.markets||[],hlds=appState.holdings||[],tds=appState.todayTrades||{};
+      if(!mks.length)return c.innerHTML='<div class="empty-box">銘柄がありません。</div>';
+      c.innerHTML=mks.map(m=>{
+        const cd=String(m.code||""),nm=String(m.name||cd),pr=Number(m.price)||0;
+        const h=hlds.find(x=>String(x.code)===cd),u=h?(Number(h.count)||0):0,v=h?(Number(h.evalValue)||0):0;
+        const ts=tds[cd]||{buyUsed:false,sellUsed:false},cB=!ts.buyUsed&&pr>0&&avail>=pr,cS=!ts.sellUsed&&u>=1;
+        let uM=[];if(ts.buyUsed)uM.push("本日購入済");if(ts.sellUsed)uM.push("本日売却済");
+        return `<div class="stock-card">
+          <button class="btn-what" data-code="${escapeHtml(cd)}" data-name="${escapeHtml(nm)}" onclick="showWhat(this)">これなぁに？</button>
+          <div class="stock-tag">${escapeHtml(m.category||"株式")}</div><div class="stock-name">${escapeHtml(nm)}</div>
+          <div class="stock-price">${pr.toLocaleString("ja-JP")} 円 <span style="font-size:13px;color:var(--text-sub);">/ 1口</span></div>
+          <div style="font-size:13px;color:var(--text-sub);margin-top:6px;">保有: <b style="color:#fff;">${u.toLocaleString("ja-JP")} 口</b> (${v.toLocaleString("ja-JP")}円)</div>
+          ${uM.length?`<div class="used-label">🎫 ${escapeHtml(uM.join("・"))}</div>`:''}
           <div class="trade-actions">
-            <button class="btn-sell ${canSell ? '' : 'btn-disabled'}" data-code="${escapeHtml(code)}" data-name="${escapeHtml(name)}" data-price="${price}" data-type="sell" data-max-units="${holdCount}" onclick="openTradeFromBtn(this)">${tStatus.sellUsed ? '売却済み' : 'うる'}</button>
-            <button class="btn-buy ${canBuy ? '' : 'btn-disabled'}" data-code="${escapeHtml(code)}" data-name="${escapeHtml(name)}" data-price="${price}" data-type="buy" data-max-units="99" onclick="openTradeFromBtn(this)">${tStatus.buyUsed ? '購入済み' : 'かう！'}</button>
+            <button class="btn-sell ${cS?'':'btn-disabled'}" data-code="${escapeHtml(cd)}" data-name="${escapeHtml(nm)}" data-price="${pr}" data-type="sell" data-max="${u}" onclick="openTrade(this)">${ts.sellUsed?'売却済':'うる'}</button>
+            <button class="btn-buy ${cB?'':'btn-disabled'}" data-code="${escapeHtml(cd)}" data-name="${escapeHtml(nm)}" data-price="${pr}" data-type="buy" data-max="99" onclick="openTrade(this)">${ts.buyUsed?'購入済':'かう！'}</button>
           </div>
         </div>`;
-      });
-      container.innerHTML = html;
+      }).join("");
     }
 
-    function renderPortfolio() {
-      const container = document.getElementById("portfolio-container");
-      const active = (appState.holdings || []).filter(h => Number(h.count) > 0);
-      if (active.length === 0) {
-        return container.innerHTML = '<div class="empty-box">まだ持っている株がありません！<br>「おうえん」タブから好きな会社を応援してみよう！</div>';
-      }
-      let html = "";
-      active.forEach(item => {
-        const count = Number(item.count) || 0;
-        const evalVal = Number(item.evalValue) || 0;
-        const cost = Number.isFinite(Number(item.cost)) ? Number(item.cost) : (Number(item.avgPrice) || 0) * count;
-        const diff = Number.isFinite(Number(item.profitLoss)) ? Number(item.profitLoss) : evalVal - cost;
-        const plColor = diff > 0 ? "#f43f5e" : (diff < 0 ? "#38bdf8" : "#cbd5e1");
-        const plText = diff > 0 ? `▲ +${diff.toLocaleString("ja-JP")}円` : (diff < 0 ? `▼ ${diff.toLocaleString("ja-JP")}円` : "±0円");
+    function renderPortfolio(){
+      const c=document.getElementById("portfolio-container"),act=(appState.holdings||[]).filter(h=>Number(h.count)>0);
+      if(!act.length)return c.innerHTML='<div class="empty-box">持っている株がありません。</div>';
+      c.innerHTML=act.map(i=>{
+        const u=Number(i.count)||0,v=Number(i.evalValue)||0,cost=Number.isFinite(Number(i.cost))?Number(i.cost):(Number(i.avgPrice)||0)*u;
+        const diff=Number.isFinite(Number(i.profitLoss))?Number(i.profitLoss):v-cost;
+        const plC=diff>0?"#f43f5e":(diff<0?"#38bdf8":"#cbd5e1"),plT=diff>0?`▲ +${diff.toLocaleString("ja-JP")}円`:(diff<0?`▼ ${diff.toLocaleString("ja-JP")}円`:"±0円");
+        return `<div class="port-item">
+          <div><div class="port-name">${escapeHtml(i.name||i.code)}</div><div class="port-count">保有数: <b>${u.toLocaleString("ja-JP")} 口</b></div></div>
+          <div><div class="port-val">${v.toLocaleString("ja-JP")} 円</div><div class="port-pl" style="color:${plC};">${plT}</div></div>
+        </div>`;
+      }).join("");
+    }
 
-        html += `<div class="port-item">
-          <div>
-            <div class="port-name">${escapeHtml(item.name || item.code)}</div>
-            <div class="port-count">もっている数: <b>${count.toLocaleString("ja-JP")} 口</b></div>
-          </div>
-          <div>
-            <div class="port-val">${evalVal.toLocaleString("ja-JP")} 円</div>
-            <div class="port-pl" style="color:${plColor};">${plText}</div>
+    function renderPendingList(areaId,listId,reqs,type,cardClass){
+      const a=document.getElementById(areaId),l=document.getElementById(listId);
+      if(!reqs.length){a.style.display="none";l.innerHTML="";return;}
+      l.innerHTML=reqs.map(r=>{
+        const id=String(r.requestId||""),amt=Number(r.amount)||0;
+        return `<div class="pending-request-card ${cardClass}">
+          <div class="pending-request-main">
+            <div><div class="pending-request-amount">${escapeHtml(yen(amt))}</div><div class="pending-request-date">${escapeHtml(r.date||"")}</div></div>
+            <button class="btn-cancel-req" onclick="askCancelReq('${type}','${escapeHtml(id)}',${amt})">取り消す</button>
           </div>
         </div>`;
-      });
-      container.innerHTML = html;
+      }).join("");
+      a.style.display="block";
     }
 
-    function renderPendingWithdrawals() {
-      const area = document.getElementById("pending-withdrawal-area"), list = document.getElementById("pending-withdrawal-list");
-      const reqs = (appState && Array.isArray(appState.pendingWithdrawalRequests)) ? appState.pendingWithdrawalRequests : [];
-      if (!reqs.length) { area.style.display = "none"; list.innerHTML = ""; return; }
-      let html = "";
-      reqs.forEach(r => {
-        const id = String(r.requestId || ""), amt = Number(r.amount) || 0;
-        if (id && amt > 0) {
-          html += `<div class="pending-request-card">
-            <div class="pending-request-main">
-              <div><div class="pending-request-amount">${escapeHtml(yen(amt))}</div><div class="pending-request-date">${escapeHtml(r.date || "")}</div></div>
-              <button type="button" class="btn-cancel-withdrawal" data-request-id="${escapeHtml(id)}" data-amount="${amt}" onclick="askCancelWithdrawalFromBtn(this)">取り消す</button>
-            </div>
-          </div>`;
-        }
-      });
-      list.innerHTML = html; area.style.display = html ? "block" : "none";
+    function showWhat(b){const c=b.getAttribute("data-code")||"";showPopup("💡 "+(b.getAttribute("data-name")||c)+"って？",EXPLAIN_MAP[c]||"パパ・ママにお話を聞いてみよう！",false);}
+    function openTrade(b){
+      if(sendingOrder)return;
+      activeTrade={code:b.getAttribute("data-code")||"",name:b.getAttribute("data-name")||"",price:Number(b.getAttribute("data-price"))||0,type:b.getAttribute("data-type")||"buy",units:1,maxUnits:Number(b.getAttribute("data-max"))||0};
+      document.getElementById("tModalTitle").innerText=activeTrade.type==="buy"?"🛒 かう":"💰 うる";
+      document.getElementById("tModalPrice").innerText=activeTrade.name+"（1口 "+activeTrade.price.toLocaleString("ja-JP")+"円）";
+      document.getElementById("tOrderBtn").disabled=false;document.getElementById("tOrderBtn").textContent="注文する！";
+      updateCounter();document.getElementById("tradeModal").style.display="flex";
+    }
+    function changeUnits(d){
+      const n=activeTrade.units+d;if(n<1)return;
+      if(activeTrade.type==="sell"&&n>activeTrade.maxUnits)return alert("持っている口数を超えています！");
+      activeTrade.units=n;updateCounter();
+    }
+    function updateCounter(){
+      document.getElementById("tUnitsVal").innerText=activeTrade.units;
+      const s=activeTrade.units*activeTrade.price;
+      document.getElementById("tSumVal").innerText=(activeTrade.type==="buy"?"はらうお金: ":"もらうお金: ")+s.toLocaleString("ja-JP")+" 円";
+    }
+    function closeTradeModal(){if(!sendingOrder)document.getElementById("tradeModal").style.display="none";}
+
+    async function sendTradeOrder(){
+      if(sendingOrder)return;const s=activeTrade.units*activeTrade.price,av=getAvail();
+      if(activeTrade.type==="buy"&&s>av)return alert("利用できるお金がたりません！上限:"+yen(av));
+      sendingOrder=true;const b=document.getElementById("tOrderBtn");b.disabled=true;b.textContent="注文中...";
+      try{const r=await callApi("tradeStockByUnits",{userName:myName,code:activeTrade.code,tradeType:activeTrade.type,units:activeTrade.units});document.getElementById("tradeModal").style.display="none";alert(r.message);await loadData();}
+      catch(e){alert("注文エラー:\n"+getErrorMessage(e));}
+      finally{sendingOrder=false;b.disabled=false;b.textContent="注文する！";}
     }
 
-    function showWhatFromBtn(btn) {
-      const code = btn.getAttribute("data-code") || "";
-      showPopup("💡 " + (btn.getAttribute("data-name") || code) + "って？", EXPLAIN_MAP[code] || "パパ・ママにお話を聞いてみよう！", false);
+    function getAvail(){return appState&&appState.user?Math.max(0,(Number(appState.user.cash)||0)-(Number(appState.user.pendingWithdrawal)||0)):0;}
+
+    function askCash(amt){
+      if(reqBusy)return;const av=getAvail();
+      if(amt>av)return alert("利用できる金額（"+yen(av)+"）を超えています！");
+      showPopup("🏧 現金ちょうだい",yen(amt)+"をパパとママにお願いしますか？\n承認されると残高が減ります。",true,()=>execReq("requestCash",{userName:myName,amount:amt}));
+    }
+    function askCustomCash(){const v=Math.floor(Number(document.getElementById("customCashAmount").value));if(v>0){askCash(v);document.getElementById("customCashAmount").value="";}else alert("金額を正しく入力してください");}
+
+    function askDeposit(amt){
+      if(reqBusy)return;const v=Math.floor(Number(amt));
+      if(v<1||v>1000000)return alert("金額は1円〜100万円以内で入力してください");
+      showPopup("💴 パパ銀行へ入金",yen(v)+"をパパ銀行へ入金しますか？\n現金をパパ・ママへ渡してください。\n承認されると残高が増えます。",true,()=>execReq("requestDeposit",{userName:myName,amount:v}));
+    }
+    function askCustomDeposit(){const v=Math.floor(Number(document.getElementById("customDepositAmount").value));if(v>0){askDeposit(v);document.getElementById("customDepositAmount").value="";}else alert("金額を正しく入力してください");}
+
+    function askCancelReq(type,id,amt){
+      if(reqBusy)return;const isW=(type==='withdrawal'),act=isW?"cancelWithdrawalRequest":"cancelDepositRequest",lbl=isW?"出金申請":"入金申請";
+      showPopup("↩️ 申請の取り消し",yen(amt)+"の"+lbl+"を取り消しますか？",true,()=>execReq(act,{userName:myName,requestId:id}));
     }
 
-    function openTradeFromBtn(btn) {
-      if (sendingOrder) return;
-      activeTrade = {
-        code: btn.getAttribute("data-code") || "", name: btn.getAttribute("data-name") || "",
-        price: Number(btn.getAttribute("data-price")) || 0, type: btn.getAttribute("data-type") || "buy",
-        units: 1, maxUnits: Number(btn.getAttribute("data-max-units")) || 0
-      };
-      document.getElementById("tModalTitle").innerText = (activeTrade.type === "buy" ? "🛒 かう" : "💰 うる");
-      document.getElementById("tModalPrice").innerText = activeTrade.name + "（1口 " + activeTrade.price.toLocaleString("ja-JP") + "円）";
-      const orderBtn = document.getElementById("tOrderBtn");
-      orderBtn.disabled = false; orderBtn.textContent = "注文する！";
-      updateCounterUI();
-      document.getElementById("tradeModal").style.display = "flex";
+    async function execReq(act,data){
+      if(reqBusy)return;reqBusy=true;
+      try{const r=await callApi(act,data);alert(r.message);await loadData();}
+      catch(e){alert("失敗しました:\n"+getErrorMessage(e));}
+      finally{reqBusy=false;}
     }
 
-    function changeUnits(delta) {
-      const next = activeTrade.units + delta;
-      if (next < 1) return;
-      if (activeTrade.type === "sell" && next > activeTrade.maxUnits) return alert("持っている口数（" + activeTrade.maxUnits + "口）より多くは売れません！");
-      if (activeTrade.type === "buy" && next > 9999) return;
-      activeTrade.units = next; updateCounterUI();
+    function showPopup(t,b,showCancel,onOk){
+      const d=document.getElementById("kidDialog");
+      document.getElementById("diagTitle").innerText=t;document.getElementById("diagBody").innerText=b;
+      d.querySelector(".d-cancel").style.display=showCancel?"block":"none";d.style.display="flex";
+      const btn=document.getElementById("diagOkBtn");btn.onclick=()=>{closeKidDialog();if(typeof onOk==="function")onOk();};
     }
-
-    function updateCounterUI() {
-      document.getElementById("tUnitsVal").innerText = activeTrade.units;
-      const sum = activeTrade.units * activeTrade.price;
-      document.getElementById("tSumVal").innerText = (activeTrade.type === "buy" ? "はらうお金: " : "もらうお金: ") + sum.toLocaleString("ja-JP") + " 円";
-    }
-
-    function closeTradeModal() { if (!sendingOrder) document.getElementById("tradeModal").style.display = "none"; }
-
-    async function sendTradeOrder() {
-      if (sendingOrder) return;
-      const sum = activeTrade.units * activeTrade.price, avail = getAvailableCash();
-      if (activeTrade.type === "buy" && sum > avail) return alert("利用できるお金がたりません！\n利用可能額: " + avail.toLocaleString("ja-JP") + "円");
-
-      sendingOrder = true;
-      const btn = document.getElementById("tOrderBtn");
-      btn.disabled = true; btn.textContent = "注文中...";
-      try {
-        const res = await callApi("tradeStockByUnits", { userName: myName, code: activeTrade.code, tradeType: activeTrade.type, units: activeTrade.units });
-        document.getElementById("tradeModal").style.display = "none";
-        alert(res.message);
-        await loadData();
-      } catch (err) { alert("注文エラー:\n" + getErrorMessage(err)); }
-      finally { sendingOrder = false; btn.disabled = false; btn.textContent = "注文する！"; }
-    }
-
-    function getAvailableCash() {
-      if (!appState || !appState.user) return 0;
-      const a = Number(appState.user.availableCash);
-      return Number.isFinite(a) ? a : Math.max(0, (Number(appState.user.cash) || 0) - (Number(appState.user.pendingWithdrawal) || 0));
-    }
-
-    function askCancelWithdrawalFromBtn(btn) {
-      if (cancellingWithdrawal || sendingCashRequest || sendingDepositRequest) return;
-      const id = btn.getAttribute("data-request-id") || "";
-      const amt = Math.floor(Number(btn.getAttribute("data-amount")));
-      if (!id || !Number.isFinite(amt) || amt <= 0) return alert("申請情報を確認できませんでした。更新してください。");
-      showPopup("↩️ 出金申請の取り消し", amt.toLocaleString("ja-JP") + "円の出金申請を取り消しますか？\n\n取り消すと利用可能額へ戻ります。", true, () => cancelWithdrawalReq(id, amt));
-    }
-
-    async function cancelWithdrawalReq(id, amt) {
-      if (cancellingWithdrawal) return;
-      cancellingWithdrawal = true;
-      toggleWithdrawCancelBtns(true);
-      try {
-        const res = await callApi("cancelWithdrawalRequest", { userName: myName, requestId: id });
-        alert(res.message || (amt.toLocaleString("ja-JP") + "円の出金申請を取り消しました。"));
-        await loadData();
-      } catch (err) {
-        alert("出金申請を取り消せませんでした。\n\n" + getErrorMessage(err));
-        await loadData().catch(()=>{});
-      } finally {
-        cancellingWithdrawal = false;
-        toggleWithdrawCancelBtns(false);
-      }
-    }
-
-    function toggleWithdrawCancelBtns(disabled) {
-      document.querySelectorAll(".btn-cancel-withdrawal").forEach(b => {
-        b.disabled = disabled; b.textContent = disabled ? "処理中..." : "取り消す";
-      });
-    }
-
-    function askCash(amt) {
-      if (sendingCashRequest || sendingDepositRequest || cancellingWithdrawal) return;
-      const avail = getAvailableCash();
-      if (amt > avail) return alert("利用できる金額（" + avail.toLocaleString("ja-JP") + "円）を超えて申請することはできません！");
-      showPopup("🏧 現金ちょうだい", amt.toLocaleString("ja-JP") + "円をパパとママにお願いしますか？\n\n承認されるとパパ銀行の残高が減ります。", true, () => sendCashReq(amt));
-    }
-
-    async function sendCashReq(amt) {
-      if (sendingCashRequest) return;
-      sendingCashRequest = true;
-      try {
-        const res = await callApi("requestCash", { userName: myName, amount: amt });
-        alert(res.message);
-        await loadData();
-      } catch (err) { alert("出金申請エラー:\n" + getErrorMessage(err)); }
-      finally { sendingCashRequest = false; }
-    }
-
-    function askCustomCash() {
-      const input = document.getElementById("customCashAmount"), v = Math.floor(Number(input.value));
-      if (!Number.isFinite(v) || v <= 0) return alert("金額を正しく入力してください");
-      askCash(v); input.value = "";
-    }
-
-    function askDeposit(amt) {
-      if (sendingDepositRequest || sendingCashRequest || cancellingWithdrawal) return;
-      const v = Math.floor(Number(amt));
-      if (!Number.isFinite(v) || v <= 0 || v > 1000000) return alert("金額は1円〜100万円の間で入力してください");
-      showPopup("💴 パパ銀行へ入金", v.toLocaleString("ja-JP") + "円をパパ銀行へ入金しますか？\n\n本物の現金をパパ・ママへ渡してください。\n承認されると残高が増えます。", true, () => sendDepositReq(v));
-    }
-
-    async function sendDepositReq(amt) {
-      if (sendingDepositRequest) return;
-      sendingDepositRequest = true;
-      try {
-        const res = await callApi("requestDeposit", { userName: myName, amount: amt });
-        alert(res.message);
-        await loadData();
-      } catch (err) { alert("入金申請エラー:\n" + getErrorMessage(err)); }
-      finally { sendingDepositRequest = false; }
-    }
-
-    function askCustomDeposit() {
-      const input = document.getElementById("customDepositAmount"), v = Math.floor(Number(input.value));
-      if (!Number.isFinite(v) || v <= 0 || v > 1000000) return alert("金額は1円〜100万円の間で入力してください");
-      askDeposit(v); input.value = "";
-    }
-
-    function showPopup(title, body, showCancel, onOk) {
-      const dialog = document.getElementById("kidDialog");
-      document.getElementById("diagTitle").innerText = title;
-      document.getElementById("diagBody").innerText = body;
-      dialog.querySelector(".d-cancel").style.display = showCancel ? "block" : "none";
-      dialog.style.display = "flex";
-      const okBtn = document.getElementById("diagOkBtn");
-      okBtn.disabled = false; okBtn.textContent = "はい！";
-      okBtn.onclick = () => { closeKidDialog(); if (typeof onOk === "function") onOk(); };
-    }
-
-    function closeKidDialog() {
-      if (!sendingCashRequest && !sendingDepositRequest && !cancellingWithdrawal) {
-        document.getElementById("kidDialog").style.display = "none";
-      }
-    }
+    function closeKidDialog(){if(!reqBusy)document.getElementById("kidDialog").style.display="none";}
   </script>
 </body>
 </html>
