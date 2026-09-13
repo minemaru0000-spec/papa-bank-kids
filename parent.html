@@ -1,371 +1,274 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex,nofollow"><title>峯松証券 保護者画面</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>峯松証券 保護者管理</title>
   <style>
-    :root{--bg:#0f172a;--card:#1e293b;--card-dark:#020617;--line:#475569;--text:#f8fafc;--sub:#cbd5e1;--blue:#2563eb;--cyan:#38bdf8;--green:#059669;--green-light:#34d399;--red:#e11d48;--gold:#f59e0b;--purple:#8b5cf6;--purple-light:#c4b5fd;}
-    *{box-sizing:border-box;}body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;}
-    button,input,select,textarea{font:inherit;}button{cursor:pointer;border:0;}button:disabled{opacity:0.5;cursor:not-allowed;}input,select,textarea{user-select:text;-webkit-user-select:text;}
-    .app{width:100%;max-width:760px;margin:0 auto;padding:18px 14px 70px;}.panel{margin-bottom:16px;padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--card);}
-    .login-panel{max-width:440px;margin:50px auto 0;text-align:center;}h1,h2,h3{margin-top:0;}h1{font-size:23px;}h2{margin-bottom:14px;font-size:18px;}
-    .description{color:var(--sub);font-size:14px;line-height:1.7;}.password-input{width:100%;margin:12px 0;padding:15px;border:2px solid var(--line);border-radius:13px;outline:none;background:var(--card-dark);color:#fff;font-size:20px;letter-spacing:3px;text-align:center;}
-    .password-input:focus{border-color:#60a5fa;}.remember-row{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 18px;color:var(--sub);font-size:14px;}
-    .primary-button{width:100%;padding:14px;border-radius:13px;background:var(--blue);color:#fff;font-weight:bold;}.error{display:none;margin-top:14px;padding:12px;border:1px solid var(--red);border-radius:12px;color:#fecdd3;line-height:1.6;}
-    .header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}.header-sub{margin-top:4px;color:var(--sub);font-size:12px;}
-    .small-button{flex-shrink:0;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#334155;color:#fff;font-weight:bold;}
-    .status-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px;padding:12px;border:1px solid var(--line);border-radius:13px;color:var(--sub);font-size:13px;}
-    .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px;}.summary-card{padding:13px 5px;border:1px solid var(--line);border-radius:14px;background:var(--card);text-align:center;}
-    .summary-label{color:var(--sub);font-size:11px;}.summary-value{margin-top:5px;font-size:19px;font-weight:bold;}.withdraw-color{color:var(--green-light);}.deposit-color{color:var(--purple-light);}
-    .request-card{margin-bottom:12px;padding:15px;border:2px solid var(--line);border-radius:16px;}.withdraw-request{border-color:var(--green);background:rgba(16,185,129,0.09);}.deposit-request{border-color:var(--purple);background:rgba(139,92,246,0.1);}
-    .request-type{display:inline-block;margin-bottom:9px;padding:5px 10px;border-radius:20px;color:#fff;font-size:12px;font-weight:bold;}.withdraw-type{background:var(--green);}.deposit-type{background:var(--purple);}
-    .request-head{display:flex;justify-content:space-between;gap:12px;}.request-name{font-size:18px;font-weight:bold;}.request-date{margin-top:5px;color:var(--sub);font-size:12px;}.request-amount{font-size:21px;font-weight:bold;text-align:right;}
-    .request-explanation{margin-top:12px;padding:9px;border-radius:10px;background:rgba(2,6,23,0.5);color:var(--sub);font-size:12px;line-height:1.6;}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
-    .action-button{padding:13px;border-radius:12px;color:#fff;font-weight:bold;}.approve-withdraw{background:var(--green);}.approve-deposit{background:var(--purple);}.reject{background:var(--red);}
-    .user-row,.history-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:13px 2px;border-top:1px solid var(--line);}.user-row:first-child,.history-row:first-child{border-top:0;}
-    .user-name{font-weight:bold;}.sub-text{margin-top:4px;color:var(--sub);font-size:12px;line-height:1.7;}.money{align-self:center;color:#7dd3fc;font-size:18px;font-weight:bold;text-align:right;}
-    .history-side{text-align:right;}.history-type,.chip{display:inline-block;margin-top:5px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:bold;color:#fff;}.chip{background:#475569;}
-    .approved-chip{background:#047857;}.rejected-chip{background:#be123c;}.pending-chip{background:#b45309;}.completed-chip{background:#0369a1;}.empty{padding:20px 8px;color:var(--sub);text-align:center;line-height:1.7;}.footer-link{display:block;margin-top:20px;color:#93c5fd;text-align:center;}
-    .manual-panel{border:2px solid var(--gold);background:linear-gradient(145deg,rgba(245,158,11,0.1),var(--card));}.allowance-panel{border:2px solid var(--cyan);background:linear-gradient(145deg,rgba(56,189,248,0.1),var(--card));}
-    .manual-notice{margin-bottom:16px;padding:11px;border:1px solid rgba(245,158,11,0.55);border-radius:12px;background:rgba(245,158,11,0.08);color:#fde68a;font-size:12px;line-height:1.7;}
-    .form-group{margin-bottom:14px;}.form-label{display:block;margin-bottom:6px;color:var(--sub);font-size:13px;font-weight:bold;}.form-control{width:100%;padding:13px;border:2px solid var(--line);border-radius:12px;outline:none;background:var(--card-dark);color:#fff;}
-    .form-control:focus{border-color:var(--cyan);}textarea.form-control{min-height:85px;resize:vertical;line-height:1.6;}.selected-balance{margin-bottom:14px;padding:13px;border-radius:12px;background:var(--card-dark);color:var(--sub);font-size:13px;line-height:1.8;text-align:center;}.selected-balance strong{color:var(--cyan);font-size:21px;}
-    .manual-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}.manual-button{padding:15px 8px;border-radius:13px;color:#fff;font-size:16px;font-weight:bold;}.manual-deposit-button{background:linear-gradient(135deg,#8b5cf6,#6d28d9);}.manual-withdraw-button{background:linear-gradient(135deg,#059669,#047857);}
-    .allowance-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}.allowance-card{padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card-dark);}.allowance-title{margin-bottom:6px;font-size:14px;font-weight:900;color:var(--cyan);}
-    .btn-save-allowance{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#38bdf8,#0284c7);color:#fff;font-size:16px;font-weight:900;}
-    .manual-record{margin-bottom:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(2,6,23,0.45);}.manual-record-head{display:flex;justify-content:space-between;gap:10px;}
-    .manual-record-type{display:inline-block;margin-bottom:7px;padding:4px 9px;border-radius:20px;color:#fff;font-size:11px;font-weight:bold;}.manual-deposit-type{background:var(--purple);}.manual-withdraw-type{background:var(--green);}.manual-record-detail{margin-top:10px;padding:9px;border-radius:9px;background:rgba(15,23,42,0.8);color:var(--sub);font-size:11px;line-height:1.7;overflow-wrap:anywhere;}
-    .operation-id{margin-top:7px;color:#94a3b8;font-size:10px;overflow-wrap:anywhere;}.overlay{display:none;position:fixed;inset:0;z-index:999;align-items:center;justify-content:center;padding:20px;background:rgba(2,6,23,0.85);}.loading{max-width:360px;padding:22px;border:2px solid #60a5fa;border-radius:16px;background:var(--card);font-weight:bold;line-height:1.7;text-align:center;}
-    @media(max-width:560px){.summary{grid-template-columns:1fr 1fr;}.header h1{font-size:19px;}.manual-actions,.allowance-grid{grid-template-columns:1fr;}}
+    :root{--p:#2563eb;--bg:#f8fafc;--card:#fff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;--up:#16a34a;--dn:#dc2626;}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;}
+    body{background:var(--bg);color:var(--text);padding-bottom:60px;}
+    header{background:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:10;}
+    .container{padding:14px;max-width:600px;margin:0 auto;}
+    .card{background:var(--card);border-radius:16px;padding:16px;border:1px solid var(--bdr);margin-bottom:14px;box-shadow:0 2px 4px rgba(0,0,0,.02);}
+    .sec-title{font-size:15px;font-weight:700;color:var(--sub);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+    .ipt{width:100%;border:1px solid var(--bdr);border-radius:10px;padding:10px;font-size:15px;margin:6px 0 12px;box-sizing:border-box;}
+    .btn-main{background:var(--p);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;width:100%;}
+    .btn-sub{background:#f1f5f9;color:var(--text);border:1px solid var(--bdr);border-radius:8px;padding:6px 12px;font-weight:700;font-size:12px;cursor:pointer;}
+    .btn-ok{background:var(--up);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:700;font-size:12px;cursor:pointer;}
+    .btn-ng{background:var(--dn);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:700;font-size:12px;cursor:pointer;}
+    .list-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9;}
+    .list-item:last-child{border-bottom:none;}
+    .badge{font-size:11px;padding:2px 6px;border-radius:4px;font-weight:700;}
+    .badge-wait{background:#fef3c7;color:#b45309;}
+    .grid-user{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .user-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;}
   </style>
 </head>
 <body>
-  <main class="app">
-    <section id="loginView" class="panel login-panel">
-      <div style="font-size:48px;">🔐</div>
-      <h1>保護者画面</h1>
-      <p class="description">設定した暗証番号を入力してください。</p>
-      <input id="passwordInput" class="password-input" type="password" placeholder="暗証番号" autocomplete="current-password">
-      <label class="remember-row"><input id="rememberCheck" type="checkbox" style="width:20px;height:20px;">この端末に暗証番号を記憶する</label>
-      <button id="loginButton" class="primary-button" type="button" onclick="login()">ログイン</button>
-      <div id="loginError" class="error"></div>
-      <a class="footer-link" href="./index.html">子ども画面へ戻る</a>
-    </section>
+  <header>
+    <div style="font-weight:900;color:var(--p);font-size:17px;">峯松証券 <span style="font-size:11px;background:#e2e8f0;color:#334155;padding:2px 6px;border-radius:6px;">保護者管理</span></div>
+    <button class="btn-sub" onclick="logout()">ログアウト</button>
+  </header>
 
-    <section id="parentView" style="display:none;">
-      <header class="header">
-        <div><h1>👨‍👩‍👧 峯松証券 保護者画面</h1><div class="header-sub">入出金申請・手動入出金・おこづかい設定</div></div>
-        <button class="small-button" type="button" onclick="logout()">ログアウト</button>
-      </header>
-      <div class="status-bar"><span id="updateStatus">読み込み中</span><button class="small-button" type="button" onclick="loadParentData()">🔄 更新</button></div>
+  <div class="container">
+    <!-- 認証カード -->
+    <div class="card" id="cardAuth">
+      <div class="sec-title"><span>🔒 保護者認証</span></div>
+      <label style="font-size:12px;font-weight:700;">管理暗証番号（数字）</label>
+      <input type="password" id="iptPassword" class="ipt" placeholder="暗証番号を入力" inputmode="numeric">
+      <button class="btn-main" onclick="loadParentData()">ログイン</button>
+    </div>
 
-      <div class="summary">
-        <div class="summary-card"><div class="summary-label">登録人数</div><div id="userCount" class="summary-value">0人</div></div>
-        <div class="summary-card"><div class="summary-label">残高合計</div><div id="totalCash" class="summary-value">0円</div></div>
-        <div class="summary-card"><div class="summary-label">出金申請中</div><div id="pendingWithdrawalCount" class="summary-value withdraw-color">0件</div></div>
-        <div class="summary-card"><div class="summary-label">入金申請中</div><div id="pendingDepositCount" class="summary-value deposit-color">0件</div></div>
+    <!-- 管理画面本体 -->
+    <div id="mainPanel" style="display:none;">
+      
+      <!-- 各ユーザー残高一覧 -->
+      <div class="card">
+        <div class="sec-title"><span>👥 子どもたちの預金残高（パパ銀行）</span></div>
+        <div class="grid-user" id="listUsers"></div>
       </div>
 
-      <section class="panel"><h2>📬 承認待ちの入出金申請</h2><div id="pendingContainer"></div></section>
+      <!-- 承認待ち申請（入金・出金） -->
+      <div class="card">
+        <div class="sec-title"><span>⏳ 承認待ちの申請</span><span id="lblPendingCount" class="badge badge-wait">0件</span></div>
+        <div id="listPendingRequests"></div>
+      </div>
 
-      <section class="panel allowance-panel">
-        <h2>🗓️ 毎月1日 定期おこづかい設定</h2>
-        <div class="manual-notice" style="border-color:rgba(56,189,248,0.55);background:rgba(56,189,248,0.08);color:#bae6fd;">毎月1日に自動支給される金額です（0円で支給停止）。</div>
-        <div class="allowance-grid">
-          <div class="allowance-card"><div class="allowance-title">👧 咲織（さおり）</div><input type="number" id="alw_saori" class="form-control" placeholder="金額(円)" min="0" step="100"></div>
-          <div class="allowance-card"><div class="allowance-title">👧 優花（ゆうか）</div><input type="number" id="alw_yuka" class="form-control" placeholder="金額(円)" min="0" step="100"></div>
-          <div class="allowance-card"><div class="allowance-title">👨‍💻 あきひろ（検証）</div><input type="number" id="alw_akihiro" class="form-control" placeholder="金額(円)" min="0" step="100"></div>
-          <div class="allowance-card"><div class="allowance-title">👩‍💻 けいこ（検証）</div><input type="number" id="alw_keiko" class="form-control" placeholder="金額(円)" min="0" step="100"></div>
+      <!-- 手動入出金（ボーナス・お小遣い・調整など） -->
+      <div class="card">
+        <div class="sec-title"><span>⚡ 手動での残高調整（入金・出金）</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;">対象</label>
+            <select id="selAdjUser" class="ipt" style="margin-bottom:8px;"></select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;">区分</label>
+            <select id="selAdjType" class="ipt" style="margin-bottom:8px;">
+              <option value="deposit">入金（増やす）</option>
+              <option value="withdrawal">出金（減らす）</option>
+            </select>
+          </div>
         </div>
-        <button type="button" class="btn-save-allowance" onclick="saveAllowances()">💾 おこづかい設定を保存する</button>
-      </section>
+        <label style="font-size:11px;font-weight:700;">金額（円）</label>
+        <input type="number" id="iptAdjAmount" class="ipt" placeholder="例: 1000" min="1">
+        <label style="font-size:11px;font-weight:700;">理由・メモ（通帳に記載されます）</label>
+        <input type="text" id="iptAdjMemo" class="ipt" placeholder="例: お手伝いボーナス、誕生日など">
+        <button class="btn-main" onclick="submitAdjustment()">残高を反映する</button>
+      </div>
 
-      <section class="panel manual-panel">
-        <h2>🧾 保護者による手動入金・手動出金</h2>
-        <div class="manual-notice">この操作は子どもの申請を経由せず残高へ即座に反映されます。</div>
-        <div class="form-group"><label class="form-label" for="manualUserSelect">対象ユーザー</label><select id="manualUserSelect" class="form-control" onchange="updateSelectedUserBalance()"><option value="">選択してください</option></select></div>
-        <div id="selectedUserBalance" class="selected-balance">対象ユーザーを選択してください</div>
-        <div class="form-group"><label class="form-label" for="manualAmount">金額</label><input id="manualAmount" class="form-control" type="number" inputmode="numeric" min="1" max="1000000" step="1" placeholder="1円～1,000,000円"></div>
-        <div class="form-group"><label class="form-label" for="manualMemo">理由・メモ</label><textarea id="manualMemo" class="form-control" maxlength="100" placeholder="例：お手伝い報酬、誕生日、訂正"></textarea></div>
-        <div class="manual-actions">
-          <button class="manual-button manual-withdraw-button" type="button" onclick="confirmManualTransaction('withdrawal')">🏧 手動出金</button>
-          <button class="manual-button manual-deposit-button" type="button" onclick="confirmManualTransaction('deposit')">💴 手動入金</button>
-        </div>
-      </section>
+      <!-- おこづかい自動支給の設定 -->
+      <div class="card">
+        <div class="sec-title"><span>📅 毎月25日のおこづかい支給設定（円）</span></div>
+        <div id="listAllowanceSettings" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;"></div>
+        <button class="btn-sub" style="width:100%;" onclick="saveAllowances()">おこづかい設定を保存</button>
+      </div>
 
-      <section class="panel"><h2>🏦 ユーザー残高</h2><div id="usersContainer"></div></section>
-      <section class="panel"><h2>🧾 最近の手動入出金</h2><div id="manualHistoryContainer"></div></section>
-      <section class="panel"><h2>📋 最近の入出金申請</h2><div id="historyContainer"></div></section>
-      <a class="footer-link" href="./index.html">子ども画面へ戻る</a>
-    </section>
-  </main>
+      <!-- 手動取引履歴 -->
+      <div class="card">
+        <div class="sec-title"><span>📜 最近の手動調整・定期支給履歴</span></div>
+        <div id="listManualLogs" style="font-size:12px;max-height:240px;overflow-y:auto;"></div>
+      </div>
 
-  <div id="overlay" class="overlay"><div id="loadingText" class="loading">処理中...</div></div>
+    </div>
+  </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec";
-    const STORAGE_KEY = "minematsu_parent_password";
-    let parentPassword = "", processing = false, currentUsers = [];
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
+    let parentPw = localStorage.getItem('parent_pw') || '';
+    let parentData = null;
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("passwordInput").addEventListener("keydown", e => { if (e.key === "Enter") login(); });
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        parentPassword = saved;
-        document.getElementById("rememberCheck").checked = true;
-        autoLogin();
+    function init(){
+      if(parentPw){
+        document.getElementById('iptPassword').value = parentPw;
+        loadParentData();
       }
-    });
+    }
 
-    async function callApi(action, data) {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(Object.assign({}, data || {}, { action, parentPassword })),
-        redirect: "follow"
+    async function callGas(action, data={}){
+      const res = await fetch(GAS_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify(Object.assign({action, parentPassword:parentPw}, data))
       });
-      if (!res.ok) throw new Error("通信に失敗しました (HTTP " + res.status + ")");
-      const text = await res.text();
-      let r;
-      try { r = JSON.parse(text); } catch (e) { throw new Error("サーバー返答を読み取れませんでした。"); }
-      if (!r || r.status !== "success") throw new Error(r && r.message ? r.message : "処理に失敗しました。");
-      return r;
+      const d = await res.json();
+      if(d.status === 'error') throw new Error(d.message);
+      return d;
     }
 
-    function escapeHtml(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m]); }
-    function yen(v) { return (Number(v) || 0).toLocaleString("ja-JP") + "円"; }
-    function getErrorMessage(e) { return e && e.message ? e.message : String(e); }
-
-    async function autoLogin() {
-      if (processing) return;
-      setProcessing(true, "自動ログイン中...");
-      try { const d = await callApi("getParentData"); openParentView(); render(d); }
-      catch (e) {
-        localStorage.removeItem(STORAGE_KEY); parentPassword = "";
-        document.getElementById("rememberCheck").checked = false;
-        showError("保存された暗証番号が使えません。再入力してください。");
-      } finally { setProcessing(false); }
-    }
-
-    async function login() {
-      if (processing) return;
-      const input = document.getElementById("passwordInput"), pw = input.value.trim();
-      if (!pw) return showError("暗証番号を入力してください。");
-      parentPassword = pw; hideError(); setProcessing(true, "暗証番号を確認中...");
-      try {
-        const d = await callApi("getParentData");
-        if (document.getElementById("rememberCheck").checked) localStorage.setItem(STORAGE_KEY, parentPassword);
-        else localStorage.removeItem(STORAGE_KEY);
-        input.value = ""; openParentView(); render(d);
-      } catch (e) { parentPassword = ""; showError(getErrorMessage(e)); }
-      finally { setProcessing(false); }
-    }
-
-    function openParentView() { document.getElementById("loginView").style.display = "none"; document.getElementById("parentView").style.display = "block"; }
-    function logout() {
-      if (processing) return;
-      localStorage.removeItem(STORAGE_KEY); parentPassword = ""; currentUsers = [];
-      document.getElementById("parentView").style.display = "none"; document.getElementById("loginView").style.display = "block";
-      document.getElementById("rememberCheck").checked = false; document.getElementById("passwordInput").value = "";
-      clearManualForm(); hideError();
-    }
-
-    async function loadParentData() {
-      if (processing) return;
-      setProcessing(true, "最新データを読み込み中...");
-      try { const d = await callApi("getParentData"); render(d); }
-      catch (e) { alert(getErrorMessage(e)); }
-      finally { setProcessing(false); }
-    }
-
-    function render(data) {
-      const users = Array.isArray(data.users) ? data.users : [];
-      const pending = Array.isArray(data.pendingRequests) ? data.pendingRequests : [];
-      const history = Array.isArray(data.requests) ? data.requests : [];
-      const manuals = Array.isArray(data.manualTransactions) ? data.manualTransactions : [];
-      const alw = data.allowances || {};
-      currentUsers = users;
-
-      const pW = pending.filter(r => (r.type || '') === '出金申請');
-      const pD = pending.filter(r => (r.type || '') === '入金申請');
-      const totCash = users.reduce((s, u) => s + (Number(u.cash) || 0), 0);
-
-      document.getElementById("userCount").textContent = users.length + "人";
-      document.getElementById("totalCash").textContent = yen(totCash);
-      document.getElementById("pendingWithdrawalCount").textContent = pW.length + "件";
-      document.getElementById("pendingDepositCount").textContent = pD.length + "件";
-      document.getElementById("updateStatus").textContent = "最終更新：" + new Date().toLocaleTimeString("ja-JP");
-
-      document.getElementById("alw_saori").value = alw['咲織'] != null ? alw['咲織'] : 1000;
-      document.getElementById("alw_yuka").value = alw['優花'] != null ? alw['優花'] : 1000;
-      document.getElementById("alw_akihiro").value = alw['あきひろ'] != null ? alw['あきひろ'] : 1000;
-      document.getElementById("alw_keiko").value = alw['けいこ'] != null ? alw['けいこ'] : 1000;
-
-      renderPending(pending); renderUsers(users); renderManualUserOptions(users);
-      renderManualHistory(manuals); renderHistory(history);
-    }
-
-    async function saveAllowances() {
-      if (processing) return;
-      const settings = {
-        '咲織': Math.max(0, Math.floor(Number(document.getElementById("alw_saori").value) || 0)),
-        '優花': Math.max(0, Math.floor(Number(document.getElementById("alw_yuka").value) || 0)),
-        'あきひろ': Math.max(0, Math.floor(Number(document.getElementById("alw_akihiro").value) || 0)),
-        'けいこ': Math.max(0, Math.floor(Number(document.getElementById("alw_keiko").value) || 0))
-      };
-      setProcessing(true, "おこづかい設定を保存中...");
-      try {
-        const res = await callApi("updateAllowances", { settings });
-        alert(res.message);
-        render(await callApi("getParentData"));
-      } catch (e) { alert("保存できませんでした:\n" + getErrorMessage(e)); }
-      finally { setProcessing(false); }
-    }
-
-    function renderPending(reqs) {
-      const c = document.getElementById("pendingContainer");
-      if (!reqs.length) return c.innerHTML = '<div class="empty">承認待ちの申請はありません。</div>';
-      c.innerHTML = reqs.map(r => {
-        const isDep = (r.type === "入金申請");
-        return `<article class="request-card ${isDep ? 'deposit-request' : 'withdraw-request'}">
-          <div class="request-type ${isDep ? 'deposit-type' : 'withdraw-type'}">${isDep ? '💴 入金申請' : '🏧 出金申請'}</div>
-          <div class="request-head">
-            <div><div class="request-name">${escapeHtml(r.userName)}さん</div><div class="request-date">${escapeHtml(r.date)}</div></div>
-            <div class="request-amount ${isDep ? 'deposit-amount' : 'withdraw-amount'}">${isDep ? '＋' : '－'}${yen(r.amount)}</div>
-          </div>
-          <div class="request-explanation">${isDep ? '承認するとパパ銀行残高へ追加されます。' : '承認するとパパ銀行残高から差し引かれます。'}</div>
-          <div class="actions">
-            <button class="action-button reject" onclick="confirmRequest('${isDep ? 'rejectDepositRequest' : 'rejectWithdrawalRequest'}','${escapeHtml(r.requestId)}','${escapeHtml(r.userName)}',${Number(r.amount)},'${r.type}')">却下する</button>
-            <button class="action-button ${isDep ? 'approve-deposit' : 'approve-withdraw'}" onclick="confirmRequest('${isDep ? 'approveDepositRequest' : 'approveWithdrawalRequest'}','${escapeHtml(r.requestId)}','${escapeHtml(r.userName)}',${Number(r.amount)},'${r.type}')">承認する</button>
-          </div>
-        </article>`;
-      }).join("");
-    }
-
-    function confirmRequest(action, reqId, uName, amt, type) {
-      if (processing) return;
-      const isApprove = action.startsWith("approve");
-      let msg = isApprove ? `${uName}さんの${type} ${yen(amt)}を承認しますか？` : `${uName}さんの${type} ${yen(amt)}を却下しますか？\n残高は変更されません。`;
-      if (confirm(msg)) processReq(action, reqId, isApprove ? "承認" : "却下");
-    }
-
-    async function processReq(action, reqId, label) {
-      if (processing) return;
-      setProcessing(true, label + "処理中...");
-      try {
-        const r = await callApi(action, { requestId: reqId });
-        alert(r.message);
-        render(await callApi("getParentData"));
-      } catch (e) { alert(label + "できませんでした。\n\n" + getErrorMessage(e)); }
-      finally { setProcessing(false); }
-    }
-
-    function renderUsers(users) {
-      const c = document.getElementById("usersContainer");
-      if (!users.length) return c.innerHTML = '<div class="empty">ユーザーがいません。</div>';
-      c.innerHTML = users.map(u => {
-        const pW = Number(u.pendingWithdrawal) || 0, pD = Number(u.pendingDeposit) || 0;
-        const avail = Number.isFinite(Number(u.availableCash)) ? Number(u.availableCash) : Math.max(0, (Number(u.cash) || 0) - pW);
-        return `<div class="user-row">
-          <div>
-            <div class="user-name">${escapeHtml(u.name)}</div>
-            <div class="sub-text">利用可能：${yen(avail)}<br><span class="withdraw-color">出金申請中：${yen(pW)}</span><br><span class="deposit-color">入金申請中：${yen(pD)}</span></div>
-          </div>
-          <div class="money">${yen(u.cash)}</div>
-        </div>`;
-      }).join("");
-    }
-
-    function renderManualUserOptions(users) {
-      const s = document.getElementById("manualUserSelect"), prev = s.value;
-      s.innerHTML = '<option value="">選択してください</option>' + users.map(u => `<option value="${escapeHtml(u.name)}">${escapeHtml(u.name)}（残高 ${yen(u.cash)}）</option>`).join("");
-      if (users.some(u => u.name === prev)) s.value = prev;
-      updateSelectedUserBalance();
-    }
-
-    function updateSelectedUserBalance() {
-      const uName = document.getElementById("manualUserSelect").value, box = document.getElementById("selectedUserBalance");
-      if (!uName) return box.innerHTML = "対象ユーザーを選択してください";
-      const u = currentUsers.find(x => x.name === uName);
-      if (!u) return box.innerHTML = "ユーザー情報を取得できません。";
-      const cash = Number(u.cash) || 0, pW = Number(u.pendingWithdrawal) || 0;
-      const avail = Number.isFinite(Number(u.availableCash)) ? Number(u.availableCash) : Math.max(0, cash - pW);
-      box.innerHTML = `${escapeHtml(u.name)}さんの現在残高<br><strong>${yen(cash)}</strong><br>手動出金できる上限：${yen(avail)}`;
-    }
-
-    function confirmManualTransaction(type) {
-      if (processing) return;
-      const uName = document.getElementById("manualUserSelect").value.trim();
-      const amt = Number(document.getElementById("manualAmount").value);
-      const memo = document.getElementById("manualMemo").value.trim();
-      if (!uName) return alert("対象ユーザーを選択してください。");
-      if (!Number.isFinite(amt) || !Number.isInteger(amt) || amt <= 0 || amt > 1000000) return alert("金額は1円〜100万円以内で入力してください。");
-      if (!memo || memo.length > 100) return alert("理由・メモを1〜100文字で入力してください。");
-
-      const u = currentUsers.find(x => x.name === uName);
-      if (!u) return alert("ユーザー情報を取得できません。");
-      const cash = Number(u.cash) || 0, isDep = (type === "deposit");
-      const avail = Number.isFinite(Number(u.availableCash)) ? Number(u.availableCash) : Math.max(0, cash - (Number(u.pendingWithdrawal) || 0));
-      if (!isDep && amt > avail) return alert("手動出金額が利用可能額を超えています。\n利用可能上限：" + yen(avail));
-
-      const after = isDep ? cash + amt : cash - amt;
-      if (confirm(`${uName}さんへ【${isDep ? '手動入金' : '手動出金'}】を行いますか？\n\n金額：${isDep ? '＋' : '－'}${yen(amt)}\n理由：${memo}\n処理前：${yen(cash)} → 処理後：${yen(after)}`)) {
-        processManual(type, { uName, amt, memo, cash, after });
+    async function loadParentData(){
+      const ipt = document.getElementById('iptPassword').value.trim();
+      if(!ipt){ alert('暗証番号を入力してください'); return; }
+      parentPw = ipt;
+      try{
+        const r = await callGas('getParentData');
+        localStorage.setItem('parent_pw', parentPw);
+        parentData = r;
+        document.getElementById('cardAuth').style.display = 'none';
+        document.getElementById('mainPanel').style.display = 'block';
+        render();
+      }catch(e){
+        alert('ログインエラー: ' + e.message);
+        localStorage.removeItem('parent_pw');
       }
     }
 
-    async function processManual(type, p) {
-      if (processing) return;
-      const act = (type === "deposit" ? "manualDeposit" : "manualWithdrawal");
-      const opId = "MAN-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
-      setProcessing(true, (type === "deposit" ? "手動入金" : "手動出金") + "を処理中...");
-      try {
-        const res = await callApi(act, { userName: p.uName, amount: p.amt, memo: p.memo, operationId: opId });
-        alert(res.message + `\n\n処理前：${yen(res.beforeCash)}\n処理後：${yen(res.afterCash)}`);
-        clearManualForm();
-        render(await callApi("getParentData"));
-      } catch (e) { alert("失敗しました。\n\n" + getErrorMessage(e)); }
-      finally { setProcessing(false); }
+    function logout(){
+      localStorage.removeItem('parent_pw');
+      parentPw = '';
+      document.getElementById('iptPassword').value = '';
+      document.getElementById('cardAuth').style.display = 'block';
+      document.getElementById('mainPanel').style.display = 'none';
     }
 
-    function clearManualForm() {
-      document.getElementById("manualUserSelect").value = "";
-      document.getElementById("manualAmount").value = "";
-      document.getElementById("manualMemo").value = "";
-      updateSelectedUserBalance();
-    }
+    function render(){
+      if(!parentData) return;
+      const users = parentData.users || [];
 
-    function renderManualHistory(recs) {
-      const c = document.getElementById("manualHistoryContainer");
-      if (!recs.length) return c.innerHTML = '<div class="empty">手動入出金の履歴はありません。</div>';
-      c.innerHTML = recs.slice(0, 30).map(r => {
-        const isDep = (r.type === "手動入金");
-        return `<div class="manual-record">
-          <div class="manual-record-head">
-            <div><span class="manual-record-type ${isDep ? 'manual-deposit-type' : 'manual-withdraw-type'}">${escapeHtml(r.type)}</span><div class="user-name">${escapeHtml(r.userName)}さん</div><div class="request-date">${escapeHtml(r.date)}</div></div>
-            <div class="history-side"><div class="money" style="color:${isDep ? '#c4b5fd' : '#34d399'};">${isDep ? '＋' : '－'}${yen(r.amount)}</div><span class="chip completed-chip">完了</span></div>
+      // 1. 子どもたちの残高
+      let uHtml = '';
+      let selHtml = '';
+      users.forEach(u=>{
+        uHtml += `
+          <div class="user-box">
+            <div style="font-weight:700;font-size:14px;color:var(--p);">${u.name}</div>
+            <div style="font-size:18px;font-weight:900;margin:4px 0;">¥${u.cash.toLocaleString('ja-JP')}</div>
+            <div style="font-size:11px;color:var(--sub);">利用可能: ¥${u.availableCash.toLocaleString('ja-JP')}</div>
+            ${u.pendingWithdrawal > 0 ? `<div style="font-size:10px;color:var(--dn);font-weight:700;">出金待機中: ¥${u.pendingWithdrawal.toLocaleString('ja-JP')}</div>` : ''}
+            ${u.pendingDeposit > 0 ? `<div style="font-size:10px;color:var(--up);font-weight:700;">入金待機中: ¥${u.pendingDeposit.toLocaleString('ja-JP')}</div>` : ''}
           </div>
-          <div class="manual-record-detail">${escapeHtml(r.detail)}</div>
-          <div class="operation-id">処理ID：${escapeHtml(r.operationId)}</div>
-        </div>`;
-      }).join("");
+        `;
+        selHtml += `<option value="${u.name}">${u.name}</option>`;
+      });
+      document.getElementById('listUsers').innerHTML = uHtml;
+      document.getElementById('selAdjUser').innerHTML = selHtml;
+
+      // 2. 承認待ち申請
+      const pReqs = parentData.pendingRequests || [];
+      document.getElementById('lblPendingCount').innerText = pReqs.length + '件';
+      if(pReqs.length === 0){
+        document.getElementById('listPendingRequests').innerHTML = '<div style="text-align:center;padding:14px;color:var(--sub);font-size:13px;">承認待ちの申請はありません</div>';
+      }else{
+        document.getElementById('listPendingRequests').innerHTML = pReqs.map(p=>`
+          <div class="list-item">
+            <div>
+              <span class="badge badge-wait">${p.type}</span>
+              <strong style="margin:0 4px;">${p.userName}</strong>
+              <span style="font-size:14px;font-weight:700;color:var(--p);">¥${p.amount.toLocaleString('ja-JP')}</span>
+              <div style="font-size:10px;color:var(--sub);">${p.date}</div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-ok" onclick="handleReq('${p.requestId}','${p.type}',true)">承認</button>
+              <button class="btn-ng" onclick="handleReq('${p.requestId}','${p.type}',false)">却下</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 3. お小遣い設定
+      const alws = parentData.allowances || {};
+      let alwHtml = '';
+      users.forEach(u=>{
+        const val = alws[u.name] != null ? alws[u.name] : 1000;
+        alwHtml += `
+          <div>
+            <label style="font-size:11px;font-weight:700;">${u.name}</label>
+            <input type="number" id="alw_${u.name}" class="ipt" value="${val}" min="0" style="margin-bottom:0;">
+          </div>
+        `;
+      });
+      document.getElementById('listAllowanceSettings').innerHTML = alwHtml;
+
+      // 4. 手動履歴
+      const manuals = parentData.manualTransactions || [];
+      if(manuals.length === 0){
+        document.getElementById('listManualLogs').innerHTML = '<div style="padding:10px;color:var(--sub);">履歴はありません</div>';
+      }else{
+        document.getElementById('listManualLogs').innerHTML = manuals.map(m=>`
+          <div style="padding:6px 0;border-bottom:1px solid #f1f5f9;">
+            <div style="display:flex;justify-content:space-between;font-weight:700;">
+              <span>${m.userName} (${m.type})</span>
+              <span style="color:${m.type==='手動入金'?'var(--up)':'var(--dn)'};">¥${m.amount.toLocaleString('ja-JP')}</span>
+            </div>
+            <div style="color:var(--sub);font-size:11px;">${m.detail}</div>
+            <div style="color:#94a3b8;font-size:10px;">${m.date}</div>
+          </div>
+        `).join('');
+      }
     }
 
-    function renderHistory(reqs) {
-      const c = document.getElementById("historyContainer");
-      if (!reqs.length) return c.innerHTML = '<div class="empty">申請履歴はありません。</div>';
-      c.innerHTML = reqs.slice(0, 30).map(r => {
-        const isDep = (r.type === "入金申請");
-        const sClass = r.status === "承認済み" ? "approved-chip" : (r.status === "却下" ? "rejected-chip" : (r.status === "申請中" ? "pending-chip" : ""));
-        return `<div class="history-row">
-          <div><div class="user-name">${escapeHtml(r.userName)}さん</div><div class="sub-text">${escapeHtml(r.date)}</div><span class="history-type ${isDep ? 'deposit-type' : 'withdraw-type'}">${escapeHtml(r.type)}</span></div>
-          <div class="history-side"><div class="money" style="color:${isDep ? '#c4b5fd' : '#34d399'};">${isDep ? '＋' : '－'}${yen(r.amount)}</div><span class="chip ${sClass}">${escapeHtml(r.status)}</span></div>
-        </div>`;
-      }).join("");
+    async function handleReq(requestId, type, isApprove){
+      const actPrefix = isApprove ? 'approve' : 'reject';
+      const act = actPrefix + (type==='出金申請' ? 'WithdrawalRequest' : 'DepositRequest');
+      if(!confirm(`${type} を ${isApprove?'承認':'却下'} しますか？`)) return;
+      try{
+        const r = await callGas(act, {requestId});
+        alert(r.message);
+        loadParentData();
+      }catch(e){
+        alert('処理失敗: ' + e.message);
+      }
     }
 
-    function setProcessing(a, t) { processing = a; document.getElementById("loadingText").textContent = t || "処理中..."; document.getElementById("overlay").style.display = a ? "flex" : "none"; }
-    function showError(m) { const e = document.getElementById("loginError"); e.textContent = m; e.style.display = "block"; }
-    function hideError() { document.getElementById("loginError").style.display = "none"; }
+    async function submitAdjustment(){
+      const userName = document.getElementById('selAdjUser').value;
+      const adjType = document.getElementById('selAdjType').value;
+      const amount = parseInt(document.getElementById('iptAdjAmount').value, 10) || 0;
+      const memo = document.getElementById('iptAdjMemo').value.trim();
+      if(amount <= 0){ alert('金額を入力してください'); return; }
+      if(!memo){ alert('理由・メモを入力してください'); return; }
+
+      const act = adjType === 'deposit' ? 'manualDeposit' : 'manualWithdrawal';
+      const opId = 'MAN-' + Date.now();
+      try{
+        const r = await callGas(act, {userName, amount, memo, operationId:opId});
+        alert(r.message);
+        document.getElementById('iptAdjAmount').value = '';
+        document.getElementById('iptAdjMemo').value = '';
+        loadParentData();
+      }catch(e){
+        alert('調整失敗: ' + e.message);
+      }
+    }
+
+    async function saveAllowances(){
+      const users = parentData.users || [];
+      const settings = {};
+      users.forEach(u=>{
+        const el = document.getElementById('alw_' + u.name);
+        if(el) settings[u.name] = parseInt(el.value, 10) || 0;
+      });
+      try{
+        const r = await callGas('updateAllowances', {settings});
+        alert(r.message);
+        loadParentData();
+      }catch(e){
+        alert('保存失敗: ' + e.message);
+      }
+    }
+
+    window.onload = init;
   </script>
 </body>
 </html>
