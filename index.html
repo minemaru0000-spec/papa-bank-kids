@@ -1,387 +1,421 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>峯松証券 キッズ</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>峯松証券 キッズ</title>
   <style>
-    :root{--bg:#0f172a;--card:#1e293b;--card-border:rgba(255,255,255,0.1);--red:#f43f5e;--gold:#f59e0b;--green:#10b981;--blue:#3b82f6;--purple:#8b5cf6;--cyan:#38bdf8;--text:#fff;--text-sub:#cbd5e1;}
-    *{box-sizing:border-box;margin:0;padding:0;font-family:"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;user-select:none;-webkit-user-select:none;}
-    body{min-height:100vh;display:flex;justify-content:center;background:var(--bg);color:var(--text);touch-action:manipulation;}
-    button,input{font:inherit;}button{cursor:pointer;border:0;}button:disabled{opacity:0.5;cursor:not-allowed;}
-    .app{width:100%;max-width:480px;padding:16px 14px 100px;display:flex;flex-direction:column;}
-    #user-select-view{display:flex;flex-direction:column;align-items:center;padding-top:24px;}.big-avatar{font-size:56px;margin-bottom:8px;}
-    .select-btn{width:100%;padding:18px;margin-bottom:12px;border:3px solid rgba(255,255,255,0.2);border-radius:20px;color:#fff;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;}
-    .select-btn:active,.btn-buy:active,.btn-sell:active,.onedari-btn:active,.btn-cancel-req:active{transform:scale(0.96);}
-    .btn-test{padding:14px;border-color:#64748b;background:linear-gradient(135deg,#334155,#1e293b);font-size:16px;}.btn-saori{background:linear-gradient(135deg,#ec4899,#be185d);}.btn-yuka{background:linear-gradient(135deg,#f59e0b,#d97706);}
-    .test-heading{width:100%;margin:16px 0 12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);color:var(--text-sub);font-size:12px;text-align:center;}
-    .header-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}.kid-badge{padding:8px 18px;border:2px solid var(--card-border);border-radius:30px;background:var(--card);font-size:18px;font-weight:900;}
-    .btn-switch-user{padding:6px;color:var(--text-sub);font-size:13px;text-decoration:underline;cursor:pointer;}
-    .hero-card{margin-bottom:16px;padding:20px 16px;border:3px solid var(--cyan);border-radius:28px;background:linear-gradient(135deg,#1e293b,#0f172a);box-shadow:0 10px 30px rgba(56,189,248,0.2);text-align:center;}
-    .hero-label{color:var(--cyan);font-size:16px;font-weight:bold;}.hero-money{margin:8px 0;color:#fff;font-size:46px;font-weight:900;letter-spacing:-1px;}
-    .hero-sub{display:flex;justify-content:space-around;gap:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);color:var(--text-sub);font-size:14px;font-weight:bold;}
-    .big-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:16px;}
-    .nav-btn{padding:14px 4px;border:2px solid var(--card-border);border-radius:16px;background:var(--card);color:var(--text-sub);font-size:13px;font-weight:900;line-height:1.3;text-align:center;cursor:pointer;}
-    .nav-btn.active{border-color:#60a5fa;background:var(--blue);color:#fff;}
-    .ticket-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,0.05);color:var(--text-sub);font-size:12px;font-weight:bold;}
-    .btn-reload{padding:4px 8px;border-radius:6px;background:rgba(56,189,248,0.15);color:var(--cyan);font-size:12px;white-space:nowrap;cursor:pointer;}
-    .stock-card{position:relative;margin-bottom:14px;padding:18px;border:2px solid var(--card-border);border-radius:22px;background:var(--card);}
-    .stock-tag{display:inline-block;margin-bottom:4px;padding:3px 8px;border-radius:6px;background:#334155;font-size:12px;font-weight:bold;}.stock-name{margin-bottom:4px;padding-right:90px;font-size:20px;font-weight:900;}
-    .stock-price{color:var(--cyan);font-size:26px;font-weight:900;}.btn-what{position:absolute;top:16px;right:16px;padding:6px 12px;border-radius:20px;background:#475569;color:#fff;font-size:12px;font-weight:bold;}
-    .trade-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}.btn-buy,.btn-sell{padding:14px;border-radius:14px;color:#fff;font-size:17px;font-weight:900;}
-    .btn-buy{background:linear-gradient(135deg,#f43f5e,#be123c);}.btn-sell{background:linear-gradient(135deg,#3b82f6,#1d4ed8);}.btn-disabled{opacity:0.35;pointer-events:none;}
-    .used-label{margin-top:8px;color:var(--gold);font-size:12px;font-weight:bold;}
-    .portfolio-summary{margin-bottom:14px;padding:18px;border:2px solid var(--purple);border-radius:20px;background:linear-gradient(135deg,#1e293b,#334155);}
-    .port-item{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;padding:16px;border:2px solid var(--card-border);border-radius:18px;background:var(--card);}
-    .port-name{font-size:18px;font-weight:900;}.port-count{margin-top:4px;color:var(--text-sub);font-size:13px;}.port-val{color:var(--cyan);font-size:20px;font-weight:900;text-align:right;}.port-pl{margin-top:4px;font-size:12px;text-align:right;}
-    .bonus-notify{margin-bottom:16px;padding:16px;border:2px solid var(--gold);border-radius:18px;background:rgba(245,158,11,0.15);text-align:center;}
-    .bank-summary{margin-bottom:16px;padding:15px;border:2px solid var(--cyan);border-radius:20px;background:rgba(56,189,248,0.09);}.bank-summary-title{margin-bottom:10px;color:var(--cyan);font-size:16px;font-weight:900;text-align:center;}
-    .bank-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}.bank-summary-item{padding:10px 5px;border-radius:12px;background:#0f172a;text-align:center;}.bank-summary-label{color:var(--text-sub);font-size:11px;}.bank-summary-value{margin-top:4px;font-size:18px;font-weight:900;}
-    .bank-box{margin-bottom:16px;padding:20px;border:2px solid var(--card-border);border-radius:24px;background:var(--card);}.withdraw-box{border-color:rgba(16,185,129,0.7);}.deposit-box{border-color:rgba(139,92,246,0.85);}
-    .bank-box-title{margin-bottom:6px;font-size:20px;font-weight:900;text-align:center;}.bank-description{margin-bottom:16px;color:var(--text-sub);font-size:13px;line-height:1.6;text-align:center;}
-    .cash-status{margin-bottom:16px;padding:12px;border-radius:14px;background:#0f172a;font-size:14px;line-height:1.7;text-align:center;}.pending-request-area{margin:16px 0;}
-    .pending-request-heading{margin-bottom:10px;font-size:15px;font-weight:900;text-align:center;}.heading-withdraw{color:#34d399;}.heading-deposit{color:#c4b5fd;}
-    .pending-request-card{margin-bottom:10px;padding:14px;border:2px solid rgba(255,255,255,0.15);border-radius:16px;background:#0f172a;}
-    .card-withdraw{border-color:rgba(16,185,129,0.45);}.card-deposit{border-color:rgba(139,92,246,0.45);}
-    .pending-request-main{display:flex;justify-content:space-between;align-items:center;gap:10px;}.pending-request-amount{color:#fff;font-size:20px;font-weight:900;}.pending-request-date{margin-top:5px;color:var(--text-sub);font-size:11px;}
-    .btn-cancel-req{min-width:96px;padding:11px 12px;border-radius:12px;background:linear-gradient(135deg,#f43f5e,#be123c);color:#fff;font-size:14px;font-weight:900;}
-    .onedari-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}.onedari-btn{padding:18px 10px;border-radius:18px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-size:20px;font-weight:900;}
-    .deposit-btn{background:linear-gradient(135deg,#8b5cf6,#6d28d9);}.custom-cash-row{display:flex;gap:8px;}
-    .custom-cash-input{min-width:0;flex:1;padding:12px;border:2px solid #334155;border-radius:14px;background:#0f172a;color:#fff;font-size:18px;font-weight:bold;text-align:center;user-select:text;-webkit-user-select:text;}
-    .custom-cash-btn{padding:0 18px;border-radius:14px;background:var(--blue);color:#fff;font-size:16px;font-weight:900;}.custom-deposit-btn{background:var(--purple);}
-    .important-note{margin-top:12px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.05);color:var(--text-sub);font-size:11px;line-height:1.6;text-align:center;}
-    .overlay{display:none;position:fixed;inset:0;z-index:9999;width:100%;height:100%;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.85);}
-    .dialog-box{width:100%;max-width:380px;padding:22px;border:3px solid var(--cyan);border-radius:26px;background:#1e293b;text-align:center;}.d-title{margin-bottom:10px;font-size:20px;font-weight:900;}.d-body{margin-bottom:16px;color:var(--text-sub);font-size:15px;line-height:1.5;white-space:pre-line;}
-    .counter-row{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0;}.counter-btn{width:50px;height:50px;border-radius:14px;background:#334155;color:#fff;font-size:26px;font-weight:900;}.counter-val{min-width:60px;color:var(--cyan);font-size:32px;font-weight:900;}.calc-sum-box{margin-bottom:18px;padding:12px;border-radius:14px;background:#0f172a;color:#fff;font-size:17px;font-weight:900;}
-    .d-btns{display:flex;gap:10px;}.d-btn{flex:1;padding:16px;border-radius:14px;font-size:17px;font-weight:900;}.d-cancel{background:#475569;color:#fff;}.d-ok{background:var(--green);color:#fff;}
-    .loading-box,.error-box,.empty-box{padding:30px 18px;border-radius:20px;background:var(--card);color:var(--text-sub);text-align:center;}.error-box{border:2px solid var(--red);color:#fda4af;}
+    :root{--p:#2563eb;--bg:#f8fafc;--card:#fff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;--up:#16a34a;--dn:#dc2626;--gold:#d97706;}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;}
+    body{background:var(--bg);color:var(--text);padding-bottom:80px;}
+    header{background:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:10;}
+    .user-pill{display:flex;align-items:center;gap:6px;background:#eff6ff;padding:4px 10px;border-radius:20px;font-weight:700;color:var(--p);font-size:14px;border:none;cursor:pointer;}
+    .container{padding:14px;max-width:480px;margin:0 auto;}
+    .hero{background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:#fff;border-radius:18px;padding:18px;box-shadow:0 4px 14px rgba(37,99,235,.25);margin-bottom:14px;}
+    .hero-sub{font-size:12px;opacity:.85;}
+    .hero-val{font-size:30px;font-weight:900;letter-spacing:-.5px;margin:2px 0 8px;}
+    .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(255,255,255,.12);padding:10px;border-radius:12px;font-size:12px;}
+    .hero-grid strong{display:block;font-size:15px;margin-top:2px;}
+    .tab-content{display:none;}
+    .tab-content.active{display:block;}
+    .card{background:var(--card);border-radius:16px;padding:14px;border:1px solid var(--bdr);margin-bottom:12px;box-shadow:0 2px 4px rgba(0,0,0,.02);}
+    .sec-title{font-size:14px;font-weight:700;color:var(--sub);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+    .list-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9;}
+    .list-item:last-child{border-bottom:none;}
+    .btn-action{background:var(--p);color:#fff;border:none;border-radius:10px;padding:6px 12px;font-weight:700;font-size:13px;cursor:pointer;}
+    .badge-ticket{font-size:10px;padding:2px 6px;border-radius:6px;font-weight:700;}
+    .ticket-ok{background:#dcfce7;color:var(--up);}
+    .ticket-ng{background:#fee2e2;color:var(--dn);}
+    .bank-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin-bottom:8px;}
+    .bank-card.highlight{background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fcd34d;}
+    .interest-tag{font-size:11px;font-weight:700;background:#dbeafe;color:var(--p);padding:2px 6px;border-radius:4px;}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bdr);display:grid;grid-template-columns:repeat(3,1fr);height:60px;z-index:20;}
+    .nav-btn{background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--sub);font-size:11px;font-weight:700;cursor:pointer;}
+    .nav-btn.active{color:var(--p);}
+    .nav-icon{font-size:18px;margin-bottom:2px;}
+    .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px;}
+    .modal{background:#fff;border-radius:20px;padding:18px;width:100%;max-width:380px;box-shadow:0 10px 25px rgba(0,0,0,.15);}
+    .modal h3{font-size:16px;margin-bottom:12px;}
+    .ipt{width:100%;border:1px solid var(--bdr);border-radius:10px;padding:10px;font-size:16px;margin:8px 0 14px;box-sizing:border-box;}
+    .btn-group{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .btn-sub{background:#f1f5f9;color:var(--sub);border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer;}
+    .btn-main{background:var(--p);color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer;}
+    .btn-sell{background:var(--gold);}
+    .btn-del{background:#fee2e2;color:var(--dn);border:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;}
+    .badge-wait{background:#fef3c7;color:#b45309;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:700;}
   </style>
 </head>
 <body>
-  <div class="app">
-    <div id="user-select-view">
-      <div class="big-avatar">🐷</div>
-      <h1 style="font-size:24px;font-weight:900;margin-bottom:6px;">だれのスマホ？</h1>
-      <p style="color:var(--text-sub);margin-bottom:20px;font-size:14px;">使う人のボタンを押してね</p>
-      <div class="select-btn btn-saori" onclick="registerKid('咲織')"><span>👧</span> 咲織（さおり）</div>
-      <div class="select-btn btn-yuka" onclick="registerKid('優花')"><span>👧</span> 優花（ゆうか）</div>
-      <div class="test-heading">🛠️ 動作チェック用（パパ・ママ）</div>
-      <div class="select-btn btn-test" onclick="registerKid('あきひろ')"><span>👨‍💻</span> あきひろ（検証）</div>
-      <div class="select-btn btn-test" onclick="registerKid('けいこ')"><span>👩‍💻</span> けいこ（検証）</div>
+  <header>
+    <div style="font-weight:900;color:var(--p);font-size:17px;">峯松証券 <span style="font-size:11px;background:#fef08a;color:#854d0e;padding:2px 6px;border-radius:6px;">Kids</span></div>
+    <button class="user-pill" onclick="switchUser()"><span id="lblUser">ユーザー</span> ▾</button>
+  </header>
+
+  <div class="container">
+    <div class="hero">
+      <div class="hero-sub">そうしさん（ぜんぶの合計）</div>
+      <div class="hero-val" id="lblTotalAssets">¥0</div>
+      <div class="hero-grid">
+        <div>パパ銀行（円）<strong id="lblCash">¥0</strong></div>
+        <div>投資の時価合計<strong id="lblTotalInvest">¥0</strong></div>
+      </div>
     </div>
 
-    <div id="main-view" style="display:none;">
-      <div class="header-bar">
-        <div class="kid-badge" id="disp-kid-name">👤 ユーザー</div>
-        <div class="btn-switch-user" onclick="resetUser()">べつの人にする</div>
+    <!-- タブ1: 銘柄一覧 -->
+    <div id="tab-markets" class="tab-content active">
+      <div class="card">
+        <div class="sec-title"><span>📈 かえる銘柄（1日1回）</span><span id="lblMarketTime" style="font-size:10px;"></span></div>
+        <div id="listMarkets"></div>
       </div>
-      <div class="hero-card">
-        <div class="hero-label">👑 ぜんぶのお金</div>
-        <div class="hero-money" id="disp-total-all">0円</div>
-        <div class="hero-sub">
-          <div>🏦 パパ銀行: <span id="disp-cash-val" style="color:#fff;">0円</span></div>
-          <div>📈 投資中: <span id="disp-invest-val" style="color:#fff;">0円</span></div>
+    </div>
+
+    <!-- タブ2: 保有・ポートフォリオ -->
+    <div id="tab-holdings" class="tab-content">
+      <div class="card">
+        <div class="sec-title"><span>💼 もっている銘柄</span><span id="lblPlTotal" style="font-size:12px;font-weight:700;"></span></div>
+        <div id="listHoldings"></div>
+      </div>
+    </div>
+
+    <!-- タブ3: パパ銀行＆外貨利息 -->
+    <div id="tab-bank" class="tab-content">
+      <div class="card">
+        <div class="sec-title"><span>🏦 パパ銀行 ＆ 外貨利息</span><span class="badge-wait">毎月25日支給</span></div>
+        
+        <!-- 利息ハイライト合計 -->
+        <div class="bank-card highlight">
+          <div style="font-size:12px;color:#92400e;font-weight:700;">🎉 25日にもらえる利息合計（予定）</div>
+          <div style="font-size:24px;font-weight:900;color:#78350f;margin:2px 0;" id="lblTotalInterestPlanned">+0円</div>
+          <div style="font-size:10px;color:#a16207;">預金や外貨をあずけておくと毎月自動でふえます！</div>
         </div>
-      </div>
-      <div class="big-nav">
-        <div class="nav-btn active" id="tab-btn-stocks" onclick="switchKidTab('stocks')">おうえん<br>（株をかう）</div>
-        <div class="nav-btn" id="tab-btn-portfolio" onclick="switchKidTab('portfolio')">もっている株<br>（資産）</div>
-        <div class="nav-btn" id="tab-btn-bank" onclick="switchKidTab('bank')">パパ銀行<br>（入出金）</div>
-      </div>
-      <div class="ticket-bar">
-        <span id="ticket-status-label">🎫 売買状況を確認中...</span>
-        <span class="btn-reload" onclick="loadData()">🔄 更新</span>
-      </div>
 
-      <div id="tab-stocks"><div id="stocks-container"><div class="loading-box">読み込み中...</div></div></div>
-
-      <div id="tab-portfolio" style="display:none;">
-        <div class="portfolio-summary"><div style="font-size:13px;color:var(--text-sub);">いま持っている株のぜんぶの価値</div><div id="disp-port-total" style="font-size:32px;font-weight:900;color:#fff;margin-top:4px;">0 円</div></div>
-        <div id="portfolio-container"></div>
-      </div>
-
-      <div id="tab-bank" style="display:none;">
-        <div class="bonus-notify">
-          <div style="font-size:15px;font-weight:bold;color:var(--gold);">🎁 パパ銀行のおまけ（利息）</div>
-          <div id="disp-interest-msg" style="font-size:20px;font-weight:900;margin-top:4px;">毎月 +0円 もらえるよ！</div>
-        </div>
-        <div class="bank-summary">
-          <div class="bank-summary-title">🏦 パパ銀行の状態</div>
-          <div class="bank-summary-grid">
-            <div class="bank-summary-item"><div class="bank-summary-label">現在の残高</div><div class="bank-summary-value" id="disp-bank-cash">0円</div></div>
-            <div class="bank-summary-item"><div class="bank-summary-label">利用できる金額</div><div class="bank-summary-value" id="disp-available-cash">0円</div></div>
-            <div class="bank-summary-item"><div class="bank-summary-label">出金申請中</div><div class="bank-summary-value" id="disp-pending-cash" style="color:#34d399;">0円</div></div>
-            <div class="bank-summary-item"><div class="bank-summary-label">入金申請中</div><div class="bank-summary-value" id="disp-pending-deposit" style="color:#c4b5fd;">0円</div></div>
+        <!-- 円利息 -->
+        <div class="bank-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>🇯🇵 パパ銀行（円）</strong>
+            <span class="interest-tag" id="lblRateJpy">月利 0.2%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub);">
+            <span>預けているお金: <b style="color:var(--text);" id="lblBankCash">0円</b></span>
+            <span>来月: <b style="color:var(--up);font-size:13px;" id="lblBankInt">+0円</b></span>
           </div>
         </div>
 
-        <div class="bank-box withdraw-box">
-          <h2 class="bank-box-title">🏧 現金ちょうだい申請</h2>
-          <p class="bank-description">パパ銀行のお金を本物の現金でもらう申請です。<br>承認されると残高が減ります。</p>
-          <div class="cash-status">いま申請できる金額：<strong id="disp-withdraw-limit">0円</strong><br>出金申請中：<strong id="disp-withdraw-pending">0円</strong></div>
-          <div id="pending-withdrawal-area" class="pending-request-area" style="display:none;">
-            <div class="pending-request-heading heading-withdraw">⏳ 申請中の出金</div>
-            <div id="pending-withdrawal-list"></div>
+        <!-- ドル外貨利息 -->
+        <div class="bank-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>🇺🇸 アメリカドル（USD）</strong>
+            <span class="interest-tag" id="lblRateUsd" style="background:#fef3c7;color:#b45309;">外貨利息 月 0.4%</span>
           </div>
-          <div class="onedari-grid">
-            <button class="onedari-btn" onclick="askCash(100)">100円</button>
-            <button class="onedari-btn" onclick="askCash(300)">300円</button>
-            <button class="onedari-btn" onclick="askCash(500)">500円</button>
-            <button class="onedari-btn" onclick="askCash(1000)">1000円</button>
-          </div>
-          <div class="custom-cash-row">
-            <input type="number" id="customCashAmount" class="custom-cash-input" placeholder="金額を入力" min="1" step="1" inputmode="numeric">
-            <button class="custom-cash-btn" onclick="askCustomCash()">出金申請</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub);">
+            <span>保有: <b style="color:var(--text);" id="lblHoldingUsd">0 ドル</b></span>
+            <span>来月: <b style="color:var(--up);font-size:13px;" id="lblUsdInt">+0円</b></span>
           </div>
         </div>
 
-        <div class="bank-box deposit-box">
-          <h2 class="bank-box-title">💴 パパ銀行へ入金申請</h2>
-          <p class="bank-description">おこづかいや現金をパパ銀行へ預ける申請です。<br>承認されると残高が増えます。</p>
-          <div class="cash-status">入金申請中：<strong id="disp-deposit-pending" style="color:#c4b5fd;">0円</strong><br>承認されるまでは残高に追加されません</div>
-          <div id="pending-deposit-area" class="pending-request-area" style="display:none;">
-            <div class="pending-request-heading heading-deposit">⏳ 申請中の入金</div>
-            <div id="pending-deposit-list"></div>
+        <!-- ユーロ外貨利息 -->
+        <div class="bank-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>🇪🇺 ユーロ（EUR）</strong>
+            <span class="interest-tag" id="lblRateEur" style="background:#e0e7ff;color:#3730a3;">外貨利息 月 0.25%</span>
           </div>
-          <div class="onedari-grid">
-            <button class="onedari-btn deposit-btn" onclick="askDeposit(100)">100円</button>
-            <button class="onedari-btn deposit-btn" onclick="askDeposit(500)">500円</button>
-            <button class="onedari-btn deposit-btn" onclick="askDeposit(1000)">1000円</button>
-            <button class="onedari-btn deposit-btn" onclick="askDeposit(5000)">5000円</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub);">
+            <span>保有: <b style="color:var(--text);" id="lblHoldingEur">0 ユーロ</b></span>
+            <span>来月: <b style="color:var(--up);font-size:13px;" id="lblEurInt">+0円</b></span>
           </div>
-          <div class="custom-cash-row">
-            <input type="number" id="customDepositAmount" class="custom-cash-input" placeholder="金額を入力" min="1" max="1000000" step="1" inputmode="numeric">
-            <button class="custom-cash-btn custom-deposit-btn" onclick="askCustomDeposit()">入金申請</button>
-          </div>
-          <div class="important-note">本物の現金をパパ・ママへ渡してから申請してください。<br>パパ・ママが確認して承認します。</div>
         </div>
+
+        <!-- お金を入れる・出す申請 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+          <button class="btn-main" onclick="openMoneyModal('deposit')">💰 お金を入れる申請</button>
+          <button class="btn-sub" style="color:var(--text);" onclick="openMoneyModal('withdraw')">💸 お金を出す申請</button>
+        </div>
+      </div>
+
+      <!-- 申請中リスト -->
+      <div class="card" id="cardPending" style="display:none;">
+        <div class="sec-title"><span>⏳ 承認待ちの申請</span></div>
+        <div id="listPending"></div>
       </div>
     </div>
   </div>
 
-  <div id="kidDialog" class="overlay">
-    <div class="dialog-box">
-      <div class="d-title" id="diagTitle">確認</div>
-      <div class="d-body" id="diagBody"></div>
-      <div class="d-btns">
-        <button class="d-btn d-cancel" onclick="closeKidDialog()">やめる</button>
-        <button class="d-btn d-ok" id="diagOkBtn">はい！</button>
+  <!-- ナビゲーション -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('markets',this)"><span class="nav-icon">📈</span>銘柄一覧</button>
+    <button class="nav-btn" onclick="switchTab('holdings',this)"><span class="nav-icon">💼</span>もっている</button>
+    <button class="nav-btn" onclick="switchTab('bank',this)"><span class="nav-icon">🏦</span>パパ銀行</button>
+  </nav>
+
+  <!-- 取引モーダル -->
+  <div class="modal-backdrop" id="modalTrade">
+    <div class="modal">
+      <h3 id="mdlTitle">売買</h3>
+      <p id="mdlDesc" style="font-size:13px;color:var(--sub);margin-bottom:8px;"></p>
+      <label style="font-size:12px;font-weight:700;">購入・売却数（<span id="mdlUnitLbl">口</span>）</label>
+      <input type="number" id="mdlUnits" class="ipt" value="1" min="1" oninput="calcTradeTotal()">
+      <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-size:14px;">
+        <span>合計金額:</span><strong id="mdlTotal" style="color:var(--p);font-size:16px;">¥0</strong>
+      </div>
+      <div class="btn-group">
+        <button class="btn-sub" onclick="closeModal('modalTrade')">キャンセル</button>
+        <button class="btn-main" id="btnSubmitTrade" onclick="submitTrade()">決定</button>
       </div>
     </div>
   </div>
 
-  <div id="tradeModal" class="overlay">
-    <div class="dialog-box">
-      <div class="d-title" id="tModalTitle">注文確認</div>
-      <div id="tModalPrice" style="font-size:14px;color:var(--text-sub);">単価: 0 円</div>
-      <div class="counter-row">
-        <button class="counter-btn" onclick="changeUnits(-1)">−</button>
-        <span class="counter-val" id="tUnitsVal">1</span>
-        <button class="counter-btn" onclick="changeUnits(1)">＋</button>
-      </div>
-      <div class="calc-sum-box" id="tSumVal">合計: 0 円</div>
-      <div class="d-btns">
-        <button class="d-btn d-cancel" onclick="closeTradeModal()">やめる</button>
-        <button class="d-btn d-ok" id="tOrderBtn" onclick="sendTradeOrder()">注文する！</button>
+  <!-- 入出金申請モーダル -->
+  <div class="modal-backdrop" id="modalMoney">
+    <div class="modal">
+      <h3 id="mdlMoneyTitle">申請</h3>
+      <label style="font-size:12px;font-weight:700;">金額（円）</label>
+      <input type="number" id="mdlMoneyAmt" class="ipt" placeholder="例: 1000" min="1">
+      <div class="btn-group">
+        <button class="btn-sub" onclick="closeModal('modalMoney')">キャンセル</button>
+        <button class="btn-main" onclick="submitMoney()">申請する</button>
       </div>
     </div>
   </div>
 
   <script>
-    const API_URL="https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec";
-    let myName="",appState=null,loadingData=false,sendingOrder=false,reqBusy=false;
-    let activeTrade={code:"",name:"",price:0,type:"buy",units:1,maxUnits:99};
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbx73F0a62_g9qX2s6U6b7XpE7831yZgA3K9o9b71zZ6P3Cq6fX2B4q7Q6B2b3Z1_X9w/exec';
+    const USERS = ['咲織','優花','あきひろ','けいこ'];
+    let curUser = localStorage.getItem('kid_user') || USERS[0];
+    let curData = null, selectedTrade = null, moneyType = 'deposit';
 
-    const EXPLAIN_MAP={
-      "^N225":"日本の代表的な225社の平均点！日本全体の景気がいいと上がるよ。",
-      "8136.T":"ハローキティやシナモロールを作っている会社だよ。",
-      "7974.T":"Switchやマリオ、ポケモンなどのゲームを作る会社だよ。",
-      "2782.T":"かわいい雑貨や便利グッズがたくさんある100円ショップ！",
-      "2702.T":"みんな大好きなハンバーガーやハッピーセットのお店だよ。",
-      "2695.T":"びっくらポンが楽しいお寿司屋さん！",
-      "7203.T":"世界中で車を作って売っている日本の会社だよ。",
-      "9983.T":"ユニクロやGUなどの洋服を作っている会社だよ。",
-      "2269.T":"チョコやアイス、牛乳などのお菓子を作る会社だよ。",
-      "GOLD":"昔から世界中で大切にされているピカピカの金だよ。",
-      "OIL":"車のガソリンやプラスチックを作るための黒い油だよ。",
-      "WHEAT":"パンやうどん、お菓子の粉になる大切な麦だよ。"
-    };
-
-    window.onload=()=>{const s=localStorage.getItem("minematsu_kid_user");if(s)bootKidApp(s);};
-    async function callApi(a,d){
-      const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({},d||{},{action:a})),redirect:"follow"});
-      if(!res.ok)throw new Error("通信エラー(HTTP "+res.status+")");
-      let r;try{r=JSON.parse(await res.text());}catch(e){throw new Error("サーバー返答形式が不正です。");}
-      if(!r||r.status!=="success")throw new Error(r&&r.message?r.message:"処理に失敗しました。");
-      return r;
+    function init(){
+      document.getElementById('lblUser').innerText = curUser;
+      loadKidData();
     }
-    function escapeHtml(v){return String(v==null?"":v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[m]);}
-    function yen(v){return(Number(v)||0).toLocaleString("ja-JP")+"円";}
-    function getErrorMessage(e){return e&&e.message?e.message:String(e);}
 
-    function registerKid(n){localStorage.setItem("minematsu_kid_user",n);bootKidApp(n);}
-    function resetUser(){if(confirm("べつの人の画面にしますか？")){localStorage.removeItem("minematsu_kid_user");location.reload();}}
-    function bootKidApp(n){
-      myName=n;document.getElementById("user-select-view").style.display="none";document.getElementById("main-view").style.display="block";
-      const ic=(n==="あきひろ")?"👨‍💻":(n==="けいこ"?"👩‍💻":"👧"),sf=(n==="あきひろ"||n==="けいこ")?"（検証）":"ちゃん";
-      document.getElementById("disp-kid-name").textContent=ic+" "+n+sf;loadData();
+    function switchUser(){
+      const n = prompt('利用するユーザーを選んでください\n(' + USERS.join('・') + ')', curUser);
+      if(n && USERS.includes(n.trim())){
+        curUser = n.trim();
+        localStorage.setItem('kid_user', curUser);
+        document.getElementById('lblUser').innerText = curUser;
+        loadKidData();
+      }
     }
-    function switchKidTab(tab){
-      ["stocks","portfolio","bank"].forEach(t=>{
-        document.getElementById("tab-"+t).style.display=(tab===t?"block":"none");
-        document.getElementById("tab-btn-"+t).className="nav-btn "+(tab===t?"active":"");
+
+    function switchTab(tid, btn){
+      document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
+      document.getElementById('tab-' + tid).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    async function callGas(action, data={}){
+      const res = await fetch(GAS_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify(Object.assign({action, userName:curUser}, data))
       });
+      const d = await res.json();
+      if(d.status === 'error') throw new Error(d.message);
+      return d;
     }
 
-    async function loadData(){
-      if(!myName||loadingData)return;loadingData=true;
-      document.getElementById("ticket-status-label").textContent="🔄 データを読み込み中...";
-      try{appState=await callApi("getKidData",{userName:myName});renderAll();}
-      catch(e){const m=getErrorMessage(e);alert("読込エラー:\n"+m);document.getElementById("stocks-container").innerHTML='<div class="error-box">'+escapeHtml(m)+'</div>';document.getElementById("ticket-status-label").textContent="⚠️ 読込失敗";}
-      finally{loadingData=false;}
+    async function loadKidData(){
+      try{
+        const r = await callGas('getKidData');
+        curData = r;
+        render();
+      }catch(e){
+        alert('データ取得エラー: ' + e.message);
+      }
     }
 
-    function renderAll(){
-      if(!appState||!appState.user)return;
-      const cash=Number(appState.user.cash)||0,pCash=Number(appState.user.pendingWithdrawal)||0,pDep=Number(appState.user.pendingDeposit)||0;
-      const avail=Number.isFinite(Number(appState.user.availableCash))?Number(appState.user.availableCash):Math.max(0,cash-pCash);
-      const invest=Number(appState.totalInvest)||0;
+    function render(){
+      if(!curData) return;
+      const u = curData.user;
+      const hList = curData.holdings || [];
+      const rates = curData.interestRates || {JPY:0.2, USDJPY:0.4, EURJPY:0.25};
 
-      document.getElementById("disp-total-all").innerHTML=(cash+invest).toLocaleString("ja-JP")+'<span style="font-size:24px;">円</span>';
-      document.getElementById("disp-cash-val").textContent=yen(cash);
-      document.getElementById("disp-invest-val").textContent=yen(invest);
-      document.getElementById("disp-port-total").textContent=yen(invest);
-      document.getElementById("disp-bank-cash").textContent=yen(cash);
-      document.getElementById("disp-available-cash").textContent=yen(avail);
-      document.getElementById("disp-pending-cash").textContent=yen(pCash);
-      document.getElementById("disp-pending-deposit").textContent=yen(pDep);
-      document.getElementById("disp-withdraw-limit").textContent=yen(avail);
-      document.getElementById("disp-withdraw-pending").textContent=yen(pCash);
-      document.getElementById("disp-deposit-pending").textContent=yen(pDep);
+      // 資産ヘッダー
+      document.getElementById('lblTotalAssets').innerText = '¥' + (curData.totalAssets||0).toLocaleString('ja-JP');
+      document.getElementById('lblCash').innerText = '¥' + (u.cash||0).toLocaleString('ja-JP');
+      document.getElementById('lblTotalInvest').innerText = '¥' + (curData.totalInvest||0).toLocaleString('ja-JP');
+      document.getElementById('lblMarketTime').innerText = curData.marketUpdatedAt ? curData.marketUpdatedAt.slice(5,16) : '';
 
-      const rate=Number.isFinite(Number(appState.interestRate))?Number(appState.interestRate):2;
-      document.getElementById("disp-interest-msg").textContent="来月は +"+Math.round(cash*rate/100).toLocaleString("ja-JP")+"円 もらえるよ！";
-      document.getElementById("ticket-status-label").textContent="🎫 同じ銘柄は、買い・売りそれぞれ1日1回まで";
+      // 銘柄一覧レンダリング
+      let mHtml = '';
+      (curData.markets||[]).forEach(m=>{
+        const isFx = m.code.toUpperCase().includes('JPY');
+        const rateTag = isFx ? `<span style="font-size:10px;background:#fef3c7;color:#b45309;padding:1px 5px;border-radius:4px;margin-left:4px;">外貨利息 月${rates[m.code.toUpperCase()]||0}%</span>` : '';
+        const chgSign = m.change > 0 ? '+' : '';
+        const chgColor = m.change > 0 ? 'var(--up)' : (m.change < 0 ? 'var(--dn)' : 'var(--sub)');
+        const tMap = (curData.todayTrades||{})[m.code] || {buyUsed:false, sellUsed:false};
 
-      renderMarkets(cash,avail);renderPortfolio();
-      renderPendingList("pending-withdrawal-area","pending-withdrawal-list",appState.pendingWithdrawalRequests||[],'withdrawal','card-withdraw');
-      renderPendingList("pending-deposit-area","pending-deposit-list",appState.pendingDepositRequests||[],'deposit','card-deposit');
-    }
-
-    function renderMarkets(cash,avail){
-      const c=document.getElementById("stocks-container"),mks=appState.markets||[],hlds=appState.holdings||[],tds=appState.todayTrades||{};
-      if(!mks.length)return c.innerHTML='<div class="empty-box">銘柄がありません。</div>';
-      c.innerHTML=mks.map(m=>{
-        const cd=String(m.code||""),nm=String(m.name||cd),pr=Number(m.price)||0;
-        const h=hlds.find(x=>String(x.code)===cd),u=h?(Number(h.count)||0):0,v=h?(Number(h.evalValue)||0):0;
-        const ts=tds[cd]||{buyUsed:false,sellUsed:false},cB=!ts.buyUsed&&pr>0&&avail>=pr,cS=!ts.sellUsed&&u>=1;
-        let uM=[];if(ts.buyUsed)uM.push("本日購入済");if(ts.sellUsed)uM.push("本日売却済");
-        return `<div class="stock-card">
-          <button class="btn-what" data-code="${escapeHtml(cd)}" data-name="${escapeHtml(nm)}" onclick="showWhat(this)">これなぁに？</button>
-          <div class="stock-tag">${escapeHtml(m.category||"株式")}</div><div class="stock-name">${escapeHtml(nm)}</div>
-          <div class="stock-price">${pr.toLocaleString("ja-JP")} 円 <span style="font-size:13px;color:var(--text-sub);">/ 1口</span></div>
-          <div style="font-size:13px;color:var(--text-sub);margin-top:6px;">保有: <b style="color:#fff;">${u.toLocaleString("ja-JP")} 口</b> (${v.toLocaleString("ja-JP")}円)</div>
-          ${uM.length?`<div class="used-label">🎫 ${escapeHtml(uM.join("・"))}</div>`:''}
-          <div class="trade-actions">
-            <button class="btn-sell ${cS?'':'btn-disabled'}" data-code="${escapeHtml(cd)}" data-name="${escapeHtml(nm)}" data-price="${pr}" data-type="sell" data-max="${u}" onclick="openTrade(this)">${ts.sellUsed?'売却済':'うる'}</button>
-            <button class="btn-buy ${cB?'':'btn-disabled'}" data-code="${escapeHtml(cd)}" data-name="${escapeHtml(nm)}" data-price="${pr}" data-type="buy" data-max="99" onclick="openTrade(this)">${ts.buyUsed?'購入済':'かう！'}</button>
+        mHtml += `
+          <div class="list-item">
+            <div>
+              <div style="font-weight:700;font-size:14px;">${m.name}${rateTag}</div>
+              <div style="font-size:12px;color:var(--sub);">1${m.unitLabel} = <b>¥${m.price.toLocaleString('ja-JP')}</b> <span style="color:${chgColor};font-weight:700;">(${chgSign}${m.change}%)</span></div>
+            </div>
+            <div>
+              ${tMap.buyUsed 
+                ? '<span class="badge-ticket ticket-ng">本日購入済</span>' 
+                : `<button class="btn-action" onclick="openTradeModal('${m.code}','buy')">買う</button>`}
+            </div>
           </div>
-        </div>`;
-      }).join("");
-    }
+        `;
+      });
+      document.getElementById('listMarkets').innerHTML = mHtml;
 
-    function renderPortfolio(){
-      const c=document.getElementById("portfolio-container"),act=(appState.holdings||[]).filter(h=>Number(h.count)>0);
-      if(!act.length)return c.innerHTML='<div class="empty-box">持っている株がありません。</div>';
-      c.innerHTML=act.map(i=>{
-        const u=Number(i.count)||0,v=Number(i.evalValue)||0,cost=Number.isFinite(Number(i.cost))?Number(i.cost):(Number(i.avgPrice)||0)*u;
-        const diff=Number.isFinite(Number(i.profitLoss))?Number(i.profitLoss):v-cost;
-        const plC=diff>0?"#f43f5e":(diff<0?"#38bdf8":"#cbd5e1"),plT=diff>0?`▲ +${diff.toLocaleString("ja-JP")}円`:(diff<0?`▼ ${diff.toLocaleString("ja-JP")}円`:"±0円");
-        return `<div class="port-item">
-          <div><div class="port-name">${escapeHtml(i.name||i.code)}</div><div class="port-count">保有数: <b>${u.toLocaleString("ja-JP")} 口</b></div></div>
-          <div><div class="port-val">${v.toLocaleString("ja-JP")} 円</div><div class="port-pl" style="color:${plC};">${plT}</div></div>
-        </div>`;
-      }).join("");
-    }
+      // 保有銘柄レンダリング
+      let hHtml = '';
+      if(hList.length === 0){
+        hHtml = '<div style="text-align:center;padding:20px;color:var(--sub);font-size:13px;">まだ持っている銘柄はありません</div>';
+      }else{
+        hList.forEach(h=>{
+          const plSign = h.profitLoss > 0 ? '+' : '';
+          const plColor = h.profitLoss > 0 ? 'var(--up)' : (h.profitLoss < 0 ? 'var(--dn)' : 'var(--sub)');
+          const tMap = (curData.todayTrades||{})[h.code] || {buyUsed:false, sellUsed:false};
 
-    function renderPendingList(areaId,listId,reqs,type,cardClass){
-      const a=document.getElementById(areaId),l=document.getElementById(listId);
-      if(!reqs.length){a.style.display="none";l.innerHTML="";return;}
-      l.innerHTML=reqs.map(r=>{
-        const id=String(r.requestId||""),amt=Number(r.amount)||0;
-        return `<div class="pending-request-card ${cardClass}">
-          <div class="pending-request-main">
-            <div><div class="pending-request-amount">${escapeHtml(yen(amt))}</div><div class="pending-request-date">${escapeHtml(r.date||"")}</div></div>
-            <button class="btn-cancel-req" onclick="askCancelReq('${type}','${escapeHtml(id)}',${amt})">取り消す</button>
+          hHtml += `
+            <div class="list-item">
+              <div>
+                <div style="font-weight:700;font-size:14px;">${h.name}</div>
+                <div style="font-size:12px;color:var(--sub);">${h.count}${h.unitLabel}保有 / 時価 ¥${h.evalValue.toLocaleString('ja-JP')}</div>
+                <div style="font-size:11px;font-weight:700;color:${plColor};">${plSign}¥${h.profitLoss.toLocaleString('ja-JP')} (${plSign}${h.profitLossRate.toFixed(1)}%)</div>
+              </div>
+              <div>
+                ${tMap.sellUsed 
+                  ? '<span class="badge-ticket ticket-ng">本日売却済</span>' 
+                  : `<button class="btn-action btn-sell" onclick="openTradeModal('${h.code}','sell')">売る</button>`}
+              </div>
+            </div>
+          `;
+        });
+      }
+      document.getElementById('listHoldings').innerHTML = hHtml;
+      const tPl = curData.portfolio ? curData.portfolio.totalProfitLoss : 0;
+      document.getElementById('lblPlTotal').innerHTML = `<span style="color:${tPl>=0?'var(--up)':'var(--dn)'}">評価損益: ${tPl>=0?'+':''}¥${tPl.toLocaleString('ja-JP')}</span>`;
+
+      // 銀行＆外貨利息レンダリング
+      document.getElementById('lblBankCash').innerText = (u.cash||0).toLocaleString('ja-JP') + '円';
+      document.getElementById('lblRateJpy').innerText = `月利 ${rates.JPY}%`;
+      const jpyInt = Math.round((u.cash||0) * (rates.JPY / 100));
+      document.getElementById('lblBankInt').innerText = `+${jpyInt.toLocaleString('ja-JP')}円`;
+
+      // ドル計算
+      const usdH = hList.find(x=>x.code.toUpperCase()==='USDJPY');
+      const usdUnits = usdH ? usdH.count : 0;
+      const usdEval = usdH ? usdH.evalValue : 0;
+      const usdRate = rates.USDJPY || 0.4;
+      const usdInt = Math.round(usdEval * (usdRate / 100));
+      document.getElementById('lblHoldingUsd').innerText = `${usdUnits.toLocaleString('ja-JP')} ドル (¥${usdEval.toLocaleString('ja-JP')})`;
+      document.getElementById('lblRateUsd').innerText = `外貨利息 月 ${usdRate}%`;
+      document.getElementById('lblUsdInt').innerText = `+${usdInt.toLocaleString('ja-JP')}円`;
+
+      // ユーロ計算
+      const eurH = hList.find(x=>x.code.toUpperCase()==='EURJPY');
+      const eurUnits = eurH ? eurH.count : 0;
+      const eurEval = eurH ? eurH.evalValue : 0;
+      const eurRate = rates.EURJPY || 0.25;
+      const eurInt = Math.round(eurEval * (eurRate / 100));
+      document.getElementById('lblHoldingEur').innerText = `${eurUnits.toLocaleString('ja-JP')} ユーロ (¥${eurEval.toLocaleString('ja-JP')})`;
+      document.getElementById('lblRateEur').innerText = `外貨利息 月 ${eurRate}%`;
+      document.getElementById('lblEurInt').innerText = `+${eurInt.toLocaleString('ja-JP')}円`;
+
+      // 合計利息
+      document.getElementById('lblTotalInterestPlanned').innerText = `+${(jpyInt + usdInt + eurInt).toLocaleString('ja-JP')}円`;
+
+      // 承認待ちリストレンダリング
+      const pW = curData.pendingWithdrawalRequests || [];
+      const pD = curData.pendingDepositRequests || [];
+      const pAll = [...pW.map(x=>Object.assign({type:'出金'},x)), ...pD.map(x=>Object.assign({type:'入金'},x))];
+      const pCard = document.getElementById('cardPending');
+      if(pAll.length > 0){
+        pCard.style.display = 'block';
+        document.getElementById('listPending').innerHTML = pAll.map(p=>`
+          <div class="list-item">
+            <div>
+              <span class="badge-wait">${p.type}申請</span>
+              <strong style="margin-left:6px;">¥${p.amount.toLocaleString('ja-JP')}</strong>
+              <div style="font-size:10px;color:var(--sub);">${p.date}</div>
+            </div>
+            <button class="btn-del" onclick="cancelReq('${p.requestId}','${p.type}')">取消</button>
           </div>
-        </div>`;
-      }).join("");
-      a.style.display="block";
+        `).join('');
+      }else{
+        pCard.style.display = 'none';
+      }
     }
 
-    function showWhat(b){const c=b.getAttribute("data-code")||"";showPopup("💡 "+(b.getAttribute("data-name")||c)+"って？",EXPLAIN_MAP[c]||"パパ・ママにお話を聞いてみよう！",false);}
-    function openTrade(b){
-      if(sendingOrder)return;
-      activeTrade={code:b.getAttribute("data-code")||"",name:b.getAttribute("data-name")||"",price:Number(b.getAttribute("data-price"))||0,type:b.getAttribute("data-type")||"buy",units:1,maxUnits:Number(b.getAttribute("data-max"))||0};
-      document.getElementById("tModalTitle").innerText=activeTrade.type==="buy"?"🛒 かう":"💰 うる";
-      document.getElementById("tModalPrice").innerText=activeTrade.name+"（1口 "+activeTrade.price.toLocaleString("ja-JP")+"円）";
-      document.getElementById("tOrderBtn").disabled=false;document.getElementById("tOrderBtn").textContent="注文する！";
-      updateCounter();document.getElementById("tradeModal").style.display="flex";
-    }
-    function changeUnits(d){
-      const n=activeTrade.units+d;if(n<1)return;
-      if(activeTrade.type==="sell"&&n>activeTrade.maxUnits)return alert("持っている口数を超えています！");
-      activeTrade.units=n;updateCounter();
-    }
-    function updateCounter(){
-      document.getElementById("tUnitsVal").innerText=activeTrade.units;
-      const s=activeTrade.units*activeTrade.price;
-      document.getElementById("tSumVal").innerText=(activeTrade.type==="buy"?"はらうお金: ":"もらうお金: ")+s.toLocaleString("ja-JP")+" 円";
-    }
-    function closeTradeModal(){if(!sendingOrder)document.getElementById("tradeModal").style.display="none";}
-
-    async function sendTradeOrder(){
-      if(sendingOrder)return;const s=activeTrade.units*activeTrade.price,av=getAvail();
-      if(activeTrade.type==="buy"&&s>av)return alert("利用できるお金がたりません！上限:"+yen(av));
-      sendingOrder=true;const b=document.getElementById("tOrderBtn");b.disabled=true;b.textContent="注文中...";
-      try{const r=await callApi("tradeStockByUnits",{userName:myName,code:activeTrade.code,tradeType:activeTrade.type,units:activeTrade.units});document.getElementById("tradeModal").style.display="none";alert(r.message);await loadData();}
-      catch(e){alert("注文エラー:\n"+getErrorMessage(e));}
-      finally{sendingOrder=false;b.disabled=false;b.textContent="注文する！";}
+    function openTradeModal(code, type){
+      const m = curData.markets.find(x=>x.code===code);
+      if(!m) return;
+      selectedTrade = {code, type, market:m};
+      document.getElementById('mdlTitle').innerText = (type==='buy'?'購入: ':'売却: ') + m.name;
+      document.getElementById('mdlDesc').innerText = `1${m.unitLabel}あたり ¥${m.price.toLocaleString('ja-JP')}`;
+      document.getElementById('mdlUnitLbl').innerText = m.unitLabel;
+      document.getElementById('mdlUnits').value = 1;
+      const btn = document.getElementById('btnSubmitTrade');
+      btn.className = type==='buy' ? 'btn-main' : 'btn-main btn-sell';
+      btn.innerText = type==='buy' ? '購入する' : '売却する';
+      calcTradeTotal();
+      document.getElementById('modalTrade').style.display = 'flex';
     }
 
-    function getAvail(){return appState&&appState.user?Math.max(0,(Number(appState.user.cash)||0)-(Number(appState.user.pendingWithdrawal)||0)):0;}
-
-    function askCash(amt){
-      if(reqBusy)return;const av=getAvail();
-      if(amt>av)return alert("利用できる金額（"+yen(av)+"）を超えています！");
-      showPopup("🏧 現金ちょうだい",yen(amt)+"をパパとママにお願いしますか？\n承認されると残高が減ります。",true,()=>execReq("requestCash",{userName:myName,amount:amt}));
-    }
-    function askCustomCash(){const v=Math.floor(Number(document.getElementById("customCashAmount").value));if(v>0){askCash(v);document.getElementById("customCashAmount").value="";}else alert("金額を正しく入力してください");}
-
-    function askDeposit(amt){
-      if(reqBusy)return;const v=Math.floor(Number(amt));
-      if(v<1||v>1000000)return alert("金額は1円〜100万円以内で入力してください");
-      showPopup("💴 パパ銀行へ入金",yen(v)+"をパパ銀行へ入金しますか？\n現金をパパ・ママへ渡してください。\n承認されると残高が増えます。",true,()=>execReq("requestDeposit",{userName:myName,amount:v}));
-    }
-    function askCustomDeposit(){const v=Math.floor(Number(document.getElementById("customDepositAmount").value));if(v>0){askDeposit(v);document.getElementById("customDepositAmount").value="";}else alert("金額を正しく入力してください");}
-
-    function askCancelReq(type,id,amt){
-      if(reqBusy)return;const isW=(type==='withdrawal'),act=isW?"cancelWithdrawalRequest":"cancelDepositRequest",lbl=isW?"出金申請":"入金申請";
-      showPopup("↩️ 申請の取り消し",yen(amt)+"の"+lbl+"を取り消しますか？",true,()=>execReq(act,{userName:myName,requestId:id}));
+    function calcTradeTotal(){
+      if(!selectedTrade) return;
+      const u = parseInt(document.getElementById('mdlUnits').value, 10) || 0;
+      document.getElementById('mdlTotal').innerText = '¥' + (u * selectedTrade.market.price).toLocaleString('ja-JP');
     }
 
-    async function execReq(act,data){
-      if(reqBusy)return;reqBusy=true;
-      try{const r=await callApi(act,data);alert(r.message);await loadData();}
-      catch(e){alert("失敗しました:\n"+getErrorMessage(e));}
-      finally{reqBusy=false;}
+    async function submitTrade(){
+      const u = parseInt(document.getElementById('mdlUnits').value, 10) || 0;
+      if(u <= 0){ alert('1以上の数量を入力してください'); return; }
+      closeModal('modalTrade');
+      try{
+        const r = await callGas('tradeStockByUnits', {code:selectedTrade.code, tradeType:selectedTrade.type, units:u});
+        alert(r.message);
+        loadKidData();
+      }catch(e){
+        alert('取引失敗: ' + e.message);
+      }
     }
 
-    function showPopup(t,b,showCancel,onOk){
-      const d=document.getElementById("kidDialog");
-      document.getElementById("diagTitle").innerText=t;document.getElementById("diagBody").innerText=b;
-      d.querySelector(".d-cancel").style.display=showCancel?"block":"none";d.style.display="flex";
-      const btn=document.getElementById("diagOkBtn");btn.onclick=()=>{closeKidDialog();if(typeof onOk==="function")onOk();};
+    function openMoneyModal(type){
+      moneyType = type;
+      document.getElementById('mdlMoneyTitle').innerText = type==='deposit' ? '💰 パパ銀行へ入金申請' : '💸 パパ銀行から出金申請';
+      document.getElementById('mdlMoneyAmt').value = '';
+      document.getElementById('modalMoney').style.display = 'flex';
     }
-    function closeKidDialog(){if(!reqBusy)document.getElementById("kidDialog").style.display="none";}
+
+    async function submitMoney(){
+      const amt = parseInt(document.getElementById('mdlMoneyAmt').value, 10) || 0;
+      if(amt <= 0){ alert('金額を入力してください'); return; }
+      closeModal('modalMoney');
+      try{
+        const act = moneyType==='deposit' ? 'requestDeposit' : 'requestCash';
+        const r = await callGas(act, {amount:amt});
+        alert(r.message);
+        loadKidData();
+      }catch(e){
+        alert('申請失敗: ' + e.message);
+      }
+    }
+
+    async function cancelReq(requestId, type){
+      if(!confirm(type + '申請を取り消しますか？')) return;
+      try{
+        const act = type==='出金' ? 'cancelWithdrawalRequest' : 'cancelDepositRequest';
+        const r = await callGas(act, {requestId});
+        alert(r.message);
+        loadKidData();
+      }catch(e){
+        alert('取消失敗: ' + e.message);
+      }
+    }
+
+    function closeModal(id){
+      document.getElementById(id).style.display = 'none';
+    }
+
+    window.onload = init;
   </script>
 </body>
 </html>
