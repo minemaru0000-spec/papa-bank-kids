@@ -27,8 +27,8 @@
     .ipt{width:100%;border:1px solid var(--bdr);border-radius:10px;padding:10px;font-size:15px;margin:6px 0 12px;}
     .btn-main{background:var(--acc);color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;width:100%;cursor:pointer;}
     .btn-sub{background:#f1f5f9;color:var(--sub);border:none;border-radius:10px;padding:10px;font-weight:700;width:100%;cursor:pointer;}
-    .tag{font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;}
 
+    /* 全画面暗転スピナー */
     #loadingOverlay{
       display:none;
       position:fixed;
@@ -53,9 +53,11 @@
     }
     @keyframes spin{to{transform:rotate(360deg);}}
 
+    /* モーダル */
     .modal-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px;}
     .modal{background:#fff;border-radius:20px;padding:18px;width:100%;max-width:380px;box-shadow:0 10px 25px rgba(0,0,0,.15);}
 
+    /* ログイン画面 */
     #loginScreen{position:fixed;inset:0;background:#f8fafc;z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;}
     .login-box{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:340px;box-shadow:0 4px 20px rgba(0,0,0,.08);text-align:center;}
   </style>
@@ -66,12 +68,13 @@
     <div id="loadingMsg" style="font-weight:700;font-size:14px;letter-spacing:0.5px;">通信中...</div>
   </div>
 
+  <!-- ログイン画面 -->
   <div id="loginScreen">
     <div class="login-box">
       <div style="font-size:32px;margin-bottom:8px;">🔒</div>
       <h3 style="margin-bottom:6px;">保護者認証</h3>
-      <p style="font-size:12px;color:var(--sub);margin-bottom:16px;">設定したパスワードを入力してください</p>
-      <input type="password" id="pwInput" class="ipt" placeholder="パスワード" inputmode="numeric" style="text-align:center;font-size:20px;letter-spacing:4px;">
+      <p style="font-size:12px;color:var(--sub);margin-bottom:16px;">設定した暗証番号を入力してください</p>
+      <input type="password" id="pwInput" class="ipt" placeholder="暗証番号" inputmode="numeric" style="text-align:center;font-size:20px;letter-spacing:4px;">
       <button class="btn-main" onclick="handleLogin()">ログイン</button>
     </div>
   </div>
@@ -85,6 +88,7 @@
   </header>
 
   <div class="container">
+    <!-- 承認待ち申請 -->
     <div class="card">
       <div class="sec-title">
         <span>📬 承認待ちの申請</span>
@@ -93,28 +97,38 @@
       <div id="listRequests"></div>
     </div>
 
+    <!-- 子ども口座一覧 -->
     <div class="card">
       <div class="sec-title"><span>👥 子ども口座一覧 ＆ 資産状況</span></div>
       <div id="listUsers"></div>
     </div>
 
+    <!-- おこづかい設定 -->
     <div class="card">
-      <div class="sec-title"><span>⚙️ システム管理</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <button class="btn-sub" style="color:var(--text);" onclick="triggerMarketUpdate()">📈 本日の株価を手動更新</button>
-        <button class="btn-sub" style="color:var(--text);" onclick="triggerInterest()">🎉 利息・配当を手動配分</button>
-      </div>
+      <div class="sec-title"><span>💰 毎月のおこづかい支給額（円）</span></div>
+      <div id="listAllowances" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
+      <button class="btn-main" onclick="saveAllowances()">おこづかい設定を保存</button>
     </div>
   </div>
 
+  <!-- 手動入出金（残高調整）モーダル -->
   <div class="modal-bd" id="modalAdjust">
     <div class="modal">
       <h3 id="mdlAdjustTitle">残高調整</h3>
       <p id="mdlAdjustDesc" style="font-size:12px;color:var(--sub);margin:4px 0 8px;"></p>
-      <label style="font-size:12px;font-weight:700;">変動金額（円）※マイナスも可</label>
-      <input type="number" id="mdlAdjustAmt" class="ipt" placeholder="例: 1000 または -500">
-      <label style="font-size:12px;font-weight:700;">理由・メモ</label>
-      <input type="text" id="mdlAdjustReason" class="ipt" placeholder="例: お手伝いボーナス">
+      
+      <label style="font-size:12px;font-weight:700;">区分</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 8px;">
+        <button id="btnAdjDep" type="button" class="btn-main" onclick="setAdjType('deposit')">手動入金（増やす）</button>
+        <button id="btnAdjWd" type="button" class="btn-sub" onclick="setAdjType('withdrawal')">手動出金（減らす）</button>
+      </div>
+
+      <label style="font-size:12px;font-weight:700;">金額（円）</label>
+      <input type="number" id="mdlAdjustAmt" class="ipt" placeholder="例: 1000">
+
+      <label style="font-size:12px;font-weight:700;">理由・メモ（必須）</label>
+      <input type="text" id="mdlAdjustMemo" class="ipt" placeholder="例: お手伝いボーナス">
+
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <button class="btn-sub" onclick="closeModal('modalAdjust')">キャンセル</button>
         <button class="btn-main" onclick="submitAdjust()">確定</button>
@@ -124,7 +138,7 @@
 
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
-    let pData = null, selectedUser = null, currentPassword = '';
+    let pData = null, selectedUser = null, currentPassword = '', currentAdjType = 'deposit';
 
     function showLoading(msg='通信中...'){
       const el = document.getElementById('loadingOverlay');
@@ -135,6 +149,7 @@
       document.getElementById('loadingOverlay').style.display = 'none';
     }
 
+    // 自動リトライ（最大3回）＆ 必ず parentPassword を送信
     async function callGas(action, data={}, maxRetries=3){
       let attempt = 0;
       while(attempt < maxRetries){
@@ -143,11 +158,9 @@
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-          // GAS側との整合性維持のため password と pin の両方を送信
           const payload = Object.assign({
-            action,
-            password: currentPassword,
-            pin: currentPassword
+            action: action,
+            parentPassword: currentPassword
           }, data);
 
           const res = await fetch(GAS_URL, {
@@ -162,8 +175,8 @@
           if(d.status === 'error') throw new Error(d.message);
           return d;
         }catch(e){
-          console.warn(`通信試行 ${attempt}/${maxRetries} 失敗:`, e);
-          if(e.message && (e.message.includes('パスワード') || e.message.includes('暗証番号'))){
+          console.warn(`試行 ${attempt}/${maxRetries} 失敗:`, e);
+          if(e.message && (e.message.includes('暗証番号') || e.message.includes('パスワード'))){
             throw e;
           }
           if(attempt >= maxRetries){
@@ -175,9 +188,9 @@
     }
 
     function init(){
-      const savedPw = localStorage.getItem('parent_password');
-      if(savedPw){
-        currentPassword = savedPw;
+      const saved = localStorage.getItem('parent_password');
+      if(saved){
+        currentPassword = saved;
         loadParentData();
       } else {
         document.getElementById('loginScreen').style.display = 'flex';
@@ -186,7 +199,7 @@
 
     async function handleLogin(){
       const p = document.getElementById('pwInput').value.trim();
-      if(!p){ alert('パスワードを入力してください'); return; }
+      if(!p){ alert('暗証番号を入力してください'); return; }
       currentPassword = p;
       showLoading('認証中...');
       try{
@@ -216,8 +229,8 @@
         document.getElementById('loginScreen').style.display = 'none';
         render();
       }catch(e){
-        if(e.message && (e.message.includes('パスワード') || e.message.includes('暗証番号'))){
-          alert('パスワードが間違っています。再入力してください。');
+        if(e.message && (e.message.includes('暗証番号') || e.message.includes('パスワード'))){
+          alert('暗証番号が違います。再入力してください。');
           logout();
         } else {
           alert('読み込みエラー: ' + e.message);
@@ -232,6 +245,7 @@
     function render(){
       if(!pData) return;
 
+      // 1. 申請一覧
       const reqs = pData.pendingRequests || [];
       document.getElementById('badgePendingCount').innerText = reqs.length + '件';
       document.getElementById('badgePendingCount').className = reqs.length ? 'badge badge-wait' : 'badge badge-up';
@@ -240,7 +254,7 @@
         document.getElementById('listRequests').innerHTML = '<div style="text-align:center;padding:16px;color:var(--sub);font-size:13px;">承認待ちの申請はありません</div>';
       } else {
         document.getElementById('listRequests').innerHTML = reqs.map(r=>{
-          const isDep = r.type === '入金';
+          const isDep = r.type === '入金申請';
           const tColor = isDep ? 'var(--acc)' : 'var(--dn)';
           return `
             <div class="list-item">
@@ -258,11 +272,9 @@
         }).join('');
       }
 
+      // 2. 口座一覧
       const users = pData.users || [];
       document.getElementById('listUsers').innerHTML = users.map(u=>{
-        const h = (pData.holdingsMap && pData.holdingsMap[u.name]) ? pData.holdingsMap[u.name] : [];
-        const investVal = h.reduce((s,i)=>s + (i.evalValue||0), 0);
-        const total = (u.cash||0) + investVal;
         return `
           <div class="list-item" style="flex-direction:column;align-items:stretch;gap:6px;">
             <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -270,19 +282,30 @@
               <button class="btn-action" style="background:#f1f5f9;color:var(--text);border:1px solid var(--bdr);" onclick="openAdjustModal('${u.name}',${u.cash||0})">残高調整</button>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:#f8fafc;padding:8px;border-radius:8px;font-size:11px;">
-              <div>現金: <b style="display:block;font-size:13px;color:var(--acc);">¥${fmt(u.cash)}</b></div>
-              <div>投資時価: <b style="display:block;font-size:13px;">¥${fmt(investVal)}</b></div>
-              <div>総資産: <b style="display:block;font-size:13px;color:var(--text);">¥${fmt(total)}</b></div>
+              <div>現金残高: <b style="display:block;font-size:13px;color:var(--acc);">¥${fmt(u.cash)}</b></div>
+              <div>出金中: <b style="display:block;font-size:13px;color:var(--dn);">¥${fmt(u.pendingWithdrawal)}</b></div>
+              <div>利用可能: <b style="display:block;font-size:13px;color:var(--text);">¥${fmt(u.availableCash)}</b></div>
             </div>
           </div>`;
       }).join('');
+
+      // 3. おこづかい設定
+      const alw = pData.allowances || {};
+      const kidNames = ['咲織','優花','あきひろ','けいこ'];
+      document.getElementById('listAllowances').innerHTML = kidNames.map(name=>`
+        <div style="background:#f8fafc;padding:8px;border-radius:8px;border:1px solid var(--bdr);">
+          <div style="font-size:12px;font-weight:700;margin-bottom:4px;">${name}</div>
+          <input type="number" id="alw_${name}" class="ipt" style="margin:0;padding:6px;font-size:14px;" value="${alw[name]||1000}">
+        </div>
+      `).join('');
     }
 
     async function approveReq(requestId, type){
-      if(!confirm(`${type}申請を承認しますか？`)) return;
+      if(!confirm(`${type}を承認しますか？`)) return;
+      const act = (type === '出金申請') ? 'approveWithdrawalRequest' : 'approveDepositRequest';
       showLoading('承認処理中...');
       try{
-        const r = await callGas('approveRequest', {requestId, reqType:type});
+        const r = await callGas(act, {requestId});
         alert(r.message);
         await loadParentData();
       }catch(e){
@@ -293,10 +316,11 @@
     }
 
     async function rejectReq(requestId, type){
-      if(!confirm(`${type}申請を却下しますか？`)) return;
+      if(!confirm(`${type}を却下しますか？`)) return;
+      const act = (type === '出金申請') ? 'rejectWithdrawalRequest' : 'rejectDepositRequest';
       showLoading('却下処理中...');
       try{
-        const r = await callGas('rejectRequest', {requestId, reqType:type});
+        const r = await callGas(act, {requestId});
         alert(r.message);
         await loadParentData();
       }catch(e){
@@ -308,21 +332,38 @@
 
     function openAdjustModal(userName, currentCash){
       selectedUser = userName;
-      document.getElementById('mdlAdjustTitle').innerText = `${userName} の現金調整`;
-      document.getElementById('mdlAdjustDesc').innerText = `現在のパパ銀行残高: ¥${fmt(currentCash)}`;
+      document.getElementById('mdlAdjustTitle').innerText = `${userName} の残高調整`;
+      document.getElementById('mdlAdjustDesc').innerText = `現在の残高: ¥${fmt(currentCash)}`;
       document.getElementById('mdlAdjustAmt').value = '';
-      document.getElementById('mdlAdjustReason').value = '';
+      document.getElementById('mdlAdjustMemo').value = '';
+      setAdjType('deposit');
       document.getElementById('modalAdjust').style.display = 'flex';
+    }
+
+    function setAdjType(t){
+      currentAdjType = t;
+      document.getElementById('btnAdjDep').className = (t === 'deposit') ? 'btn-main' : 'btn-sub';
+      document.getElementById('btnAdjWd').className = (t === 'withdrawal') ? 'btn-main' : 'btn-sub';
     }
 
     async function submitAdjust(){
       const amt = parseInt(document.getElementById('mdlAdjustAmt').value, 10);
-      const reason = document.getElementById('mdlAdjustReason').value.trim();
-      if(isNaN(amt) || amt === 0){ alert('金額を入力してください（0以外）'); return; }
+      const memo = document.getElementById('mdlAdjustMemo').value.trim();
+      if(isNaN(amt) || amt <= 0){ alert('正しい金額を入力してください'); return; }
+      if(!memo){ alert('理由・メモを入力してください'); return; }
+
       closeModal('modalAdjust');
       showLoading('残高調整中...');
+      const act = (currentAdjType === 'deposit') ? 'manualDeposit' : 'manualWithdrawal';
+      const opId = 'OP-' + Date.now();
+
       try{
-        const r = await callGas('adjustBalance', {userName:selectedUser, amount:amt, reason});
+        const r = await callGas(act, {
+          userName: selectedUser,
+          amount: amt,
+          memo: memo,
+          operationId: opId
+        });
         alert(r.message);
         await loadParentData();
       }catch(e){
@@ -332,29 +373,18 @@
       }
     }
 
-    async function triggerMarketUpdate(){
-      if(!confirm('本日の株価・為替を手動で再取得・更新しますか？')) return;
-      showLoading('市場データを取得・更新中...');
+    async function saveAllowances(){
+      const settings = {};
+      ['咲織','優花','あきひろ','けいこ'].forEach(n=>{
+        settings[n] = parseInt(document.getElementById('alw_' + n).value, 10) || 0;
+      });
+      showLoading('設定を保存中...');
       try{
-        const r = await callGas('manualUpdateMarket');
+        const r = await callGas('updateAllowances', {settings});
         alert(r.message);
         await loadParentData();
       }catch(e){
-        alert('更新失敗: ' + e.message);
-      }finally{
-        hideLoading();
-      }
-    }
-
-    async function triggerInterest(){
-      if(!confirm('利息・配当金の手動配分（毎月25日分）を実行しますか？')) return;
-      showLoading('利息・配当を計算・配分中...');
-      try{
-        const r = await callGas('manualDistributeInterest');
-        alert(r.message);
-        await loadParentData();
-      }catch(e){
-        alert('実行失敗: ' + e.message);
+        alert('保存失敗: ' + e.message);
       }finally{
         hideLoading();
       }
