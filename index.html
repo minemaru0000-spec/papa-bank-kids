@@ -453,6 +453,60 @@
       text-align: center;
     }
 
+    .pending-request-area {
+      margin: 16px 0;
+    }
+
+    .pending-request-heading {
+      margin-bottom: 10px;
+      color: #34d399;
+      font-size: 15px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .pending-request-card {
+      margin-bottom: 10px;
+      padding: 14px;
+      border: 2px solid rgba(16,185,129,0.45);
+      border-radius: 16px;
+      background: #0f172a;
+    }
+
+    .pending-request-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pending-request-amount {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .pending-request-date {
+      margin-top: 5px;
+      color: var(--text-sub);
+      font-size: 11px;
+    }
+
+    .btn-cancel-withdrawal {
+      min-width: 96px;
+      padding: 11px 12px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .btn-cancel-withdrawal:active {
+      transform: scale(0.96);
+    }
+
     .onedari-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -779,27 +833,21 @@
 
           <div class="bank-summary-grid">
             <div class="bank-summary-item">
-              <div class="bank-summary-label">
-                現在の残高
-              </div>
+              <div class="bank-summary-label">現在の残高</div>
               <div class="bank-summary-value" id="disp-bank-cash">
                 0円
               </div>
             </div>
 
             <div class="bank-summary-item">
-              <div class="bank-summary-label">
-                利用できる金額
-              </div>
+              <div class="bank-summary-label">利用できる金額</div>
               <div class="bank-summary-value" id="disp-available-cash">
                 0円
               </div>
             </div>
 
             <div class="bank-summary-item">
-              <div class="bank-summary-label">
-                出金申請中
-              </div>
+              <div class="bank-summary-label">出金申請中</div>
               <div
                 class="bank-summary-value"
                 id="disp-pending-cash"
@@ -810,9 +858,7 @@
             </div>
 
             <div class="bank-summary-item">
-              <div class="bank-summary-label">
-                入金申請中
-              </div>
+              <div class="bank-summary-label">入金申請中</div>
               <div
                 class="bank-summary-value"
                 id="disp-pending-deposit"
@@ -840,6 +886,18 @@
             <br>
             出金申請中：
             <strong id="disp-withdraw-pending">0円</strong>
+          </div>
+
+          <div
+            id="pending-withdrawal-area"
+            class="pending-request-area"
+            style="display:none;"
+          >
+            <div class="pending-request-heading">
+              ⏳ 申請中の出金
+            </div>
+
+            <div id="pending-withdrawal-list"></div>
           </div>
 
           <div class="onedari-grid">
@@ -1034,6 +1092,7 @@
     var sendingOrder = false;
     var sendingCashRequest = false;
     var sendingDepositRequest = false;
+    var cancellingWithdrawal = false;
 
     var activeTrade = {
       code: "",
@@ -1083,9 +1142,10 @@
     };
 
     window.onload = function() {
-      var saved = localStorage.getItem(
-        "minematsu_kid_user"
-      );
+      var saved =
+        localStorage.getItem(
+          "minematsu_kid_user"
+        );
 
       if (saved) {
         bootKidApp(saved);
@@ -1093,28 +1153,31 @@
     };
 
     async function callApi(action, data) {
-      var requestData = Object.assign(
-        {},
-        data || {},
-        {
-          action: action
-        }
-      );
+      var requestData =
+        Object.assign(
+          {},
+          data || {},
+          {
+            action: action
+          }
+        );
 
-      var response = await fetch(
-        API_URL,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(
-            requestData
-          ),
-          redirect: "follow"
-        }
-      );
+      var response =
+        await fetch(
+          API_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "text/plain;charset=utf-8"
+            },
+            body:
+              JSON.stringify(
+                requestData
+              ),
+            redirect: "follow"
+          }
+        );
 
       if (!response.ok) {
         throw new Error(
@@ -1297,9 +1360,7 @@
 
       } catch (error) {
         var message =
-          error && error.message
-            ? error.message
-            : String(error);
+          getErrorMessage(error);
 
         alert(
           "読み込みエラー:\n" +
@@ -1317,6 +1378,8 @@
           "ticket-status-label"
         ).textContent =
           "⚠️ 読み込みに失敗しました";
+
+        throw error;
 
       } finally {
         loadingData = false;
@@ -1350,10 +1413,11 @@
         );
 
       if (!Number.isFinite(availableCash)) {
-        availableCash = Math.max(
-          0,
-          cash - pendingCash
-        );
+        availableCash =
+          Math.max(
+            0,
+            cash - pendingCash
+          );
       }
 
       var invest =
@@ -1448,6 +1512,7 @@
       );
 
       renderPortfolio();
+      renderPendingWithdrawals();
     }
 
     function renderMarkets(
@@ -1810,6 +1875,101 @@
         htmlPort;
     }
 
+    function renderPendingWithdrawals() {
+      var area =
+        document.getElementById(
+          "pending-withdrawal-area"
+        );
+
+      var list =
+        document.getElementById(
+          "pending-withdrawal-list"
+        );
+
+      if (!area || !list) {
+        return;
+      }
+
+      var requests =
+        appState &&
+        Array.isArray(
+          appState.pendingWithdrawalRequests
+        )
+          ? appState.pendingWithdrawalRequests
+          : [];
+
+      if (requests.length === 0) {
+        area.style.display = "none";
+        list.innerHTML = "";
+        return;
+      }
+
+      var html = "";
+
+      for (
+        var i = 0;
+        i < requests.length;
+        i++
+      ) {
+        var request =
+          requests[i];
+
+        var requestId =
+          String(
+            request.requestId || ""
+          );
+
+        var amount =
+          Number(request.amount) || 0;
+
+        var date =
+          String(request.date || "");
+
+        if (
+          !requestId ||
+          amount <= 0
+        ) {
+          continue;
+        }
+
+        html +=
+          '<div class="pending-request-card">' +
+            '<div class="pending-request-main">' +
+              '<div>' +
+                '<div class="pending-request-amount">' +
+                  escapeHtml(yen(amount)) +
+                '</div>' +
+                '<div class="pending-request-date">' +
+                  escapeHtml(date) +
+                '</div>' +
+              '</div>' +
+              '<button' +
+                ' type="button"' +
+                ' class="btn-cancel-withdrawal"' +
+                ' data-request-id="' +
+                  escapeHtml(requestId) +
+                '"' +
+                ' data-amount="' +
+                  amount +
+                '"' +
+                ' onclick="askCancelWithdrawalFromButton(this)"' +
+              '>' +
+                '取り消す' +
+              '</button>' +
+            '</div>' +
+          '</div>';
+      }
+
+      if (!html) {
+        area.style.display = "none";
+        list.innerHTML = "";
+        return;
+      }
+
+      list.innerHTML = html;
+      area.style.display = "block";
+    }
+
     function showWhatFromButton(button) {
       var code =
         button.getAttribute(
@@ -2101,10 +2261,193 @@
       return availableCash;
     }
 
+    function askCancelWithdrawalFromButton(
+      button
+    ) {
+      if (
+        cancellingWithdrawal ||
+        sendingCashRequest ||
+        sendingDepositRequest
+      ) {
+        return;
+      }
+
+      var requestId =
+        button.getAttribute(
+          "data-request-id"
+        ) || "";
+
+      var amount =
+        Math.floor(
+          Number(
+            button.getAttribute(
+              "data-amount"
+            )
+          )
+        );
+
+      if (
+        !requestId ||
+        !Number.isFinite(amount) ||
+        amount <= 0
+      ) {
+        alert(
+          "申請情報を確認できませんでした。画面を更新してください。"
+        );
+
+        return;
+      }
+
+      showPopup(
+        "↩️ 出金申請の取り消し",
+        amount.toLocaleString(
+          "ja-JP"
+        ) +
+        "円の出金申請を取り消しますか？\n\n" +
+        "取り消すと、申請中だった金額をもう一度利用できるようになります。",
+        true,
+        function() {
+          cancelWithdrawalRequest(
+            requestId,
+            amount
+          );
+        }
+      );
+    }
+
+    async function cancelWithdrawalRequest(
+      requestId,
+      amount
+    ) {
+      if (cancellingWithdrawal) {
+        return;
+      }
+
+      cancellingWithdrawal = true;
+
+      setWithdrawalCancelButtonsDisabled(
+        true
+      );
+
+      try {
+        var result =
+          await callApi(
+            "cancelWithdrawalRequest",
+            {
+              userName: myName,
+              requestId: requestId
+            }
+          );
+
+        alert(
+          result.message ||
+          amount.toLocaleString(
+            "ja-JP"
+          ) +
+          "円の出金申請を取り消しました。"
+        );
+
+        await loadData();
+
+      } catch (error) {
+        var message =
+          getErrorMessage(error);
+
+        try {
+          await loadData();
+
+          var stillPending =
+            hasPendingWithdrawalRequest(
+              requestId
+            );
+
+          if (!stillPending) {
+            alert(
+              "通信結果を確認できませんでしたが、出金申請は取り消されています。"
+            );
+
+          } else {
+            alert(
+              "出金申請を取り消せませんでした。\n\n" +
+              message
+            );
+          }
+
+        } catch (reloadError) {
+          alert(
+            "処理結果を確認できませんでした。\n\n" +
+            "更新ボタンを押して、申請の状態を確認してください。\n" +
+            "確認するまでは取消ボタンをもう一度押さないでください。\n\n" +
+            message
+          );
+        }
+
+      } finally {
+        cancellingWithdrawal = false;
+
+        setWithdrawalCancelButtonsDisabled(
+          false
+        );
+      }
+    }
+
+    function hasPendingWithdrawalRequest(
+      requestId
+    ) {
+      var requests =
+        appState &&
+        Array.isArray(
+          appState.pendingWithdrawalRequests
+        )
+          ? appState.pendingWithdrawalRequests
+          : [];
+
+      for (
+        var i = 0;
+        i < requests.length;
+        i++
+      ) {
+        if (
+          String(
+            requests[i].requestId || ""
+          ) ===
+          String(requestId)
+        ) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    function setWithdrawalCancelButtonsDisabled(
+      disabled
+    ) {
+      var buttons =
+        document.querySelectorAll(
+          ".btn-cancel-withdrawal"
+        );
+
+      for (
+        var i = 0;
+        i < buttons.length;
+        i++
+      ) {
+        buttons[i].disabled =
+          disabled;
+
+        buttons[i].textContent =
+          disabled
+            ? "処理中..."
+            : "取り消す";
+      }
+    }
+
     function askCash(amount) {
       if (
         sendingCashRequest ||
-        sendingDepositRequest
+        sendingDepositRequest ||
+        cancellingWithdrawal
       ) {
         return;
       }
@@ -2201,7 +2544,8 @@
     function askDeposit(amount) {
       if (
         sendingDepositRequest ||
-        sendingCashRequest
+        sendingCashRequest ||
+        cancellingWithdrawal
       ) {
         return;
       }
@@ -2354,6 +2698,9 @@
           "diagOkBtn"
         );
 
+      okButton.disabled = false;
+      okButton.textContent = "はい！";
+
       okButton.onclick =
         function() {
           closeKidDialog();
@@ -2370,7 +2717,8 @@
     function closeKidDialog() {
       if (
         sendingCashRequest ||
-        sendingDepositRequest
+        sendingDepositRequest ||
+        cancellingWithdrawal
       ) {
         return;
       }
