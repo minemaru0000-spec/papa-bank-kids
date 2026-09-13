@@ -106,4 +106,230 @@
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(Object.assign({}, data || {}, { action, parentPassword })),
-        redirect
+        redirect: "follow"
+      });
+      if (!res.ok) throw new Error("通信に失敗しました (HTTP " + res.status + ")");
+      const text = await res.text();
+      let r;
+      try { r = JSON.parse(text); } catch (e) { throw new Error("サーバー返答を読み取れませんでした。"); }
+      if (!r || r.status !== "success") throw new Error(r && r.message ? r.message : "処理に失敗しました。");
+      return r;
+    }
+
+    function escapeHtml(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m]); }
+    function yen(v) { return (Number(v) || 0).toLocaleString("ja-JP") + "円"; }
+    function getErrorMessage(e) { return e && e.message ? e.message : String(e); }
+
+    async function autoLogin() {
+      if (processing) return;
+      setProcessing(true, "自動ログイン中...");
+      try {
+        const d = await callApi("getParentData");
+        openParentView(); render(d);
+      } catch (e) {
+        localStorage.removeItem(STORAGE_KEY); parentPassword = "";
+        document.getElementById("rememberCheck").checked = false;
+        showError("保存された暗証番号が使えません。再入力してください。");
+      } finally { setProcessing(false); }
+    }
+
+    async function login() {
+      if (processing) return;
+      const input = document.getElementById("passwordInput"), pw = input.value.trim();
+      if (!pw) return showError("暗証番号を入力してください。");
+      parentPassword = pw; hideError(); setProcessing(true, "暗証番号を確認中...");
+      try {
+        const d = await callApi("getParentData");
+        if (document.getElementById("rememberCheck").checked) localStorage.setItem(STORAGE_KEY, parentPassword);
+        else localStorage.removeItem(STORAGE_KEY);
+        input.value = ""; openParentView(); render(d);
+      } catch (e) { parentPassword = ""; showError(getErrorMessage(e)); }
+      finally { setProcessing(false); }
+    }
+
+    function openParentView() { document.getElementById("loginView").style.display = "none"; document.getElementById("parentView").style.display = "block"; }
+    function logout() {
+      if (processing) return;
+      localStorage.removeItem(STORAGE_KEY); parentPassword = ""; currentUsers = [];
+      document.getElementById("parentView").style.display = "none"; document.getElementById("loginView").style.display = "block";
+      document.getElementById("rememberCheck").checked = false; document.getElementById("passwordInput").value = "";
+      clearManualForm(); hideError();
+    }
+
+    async function loadParentData() {
+      if (processing) return;
+      setProcessing(true, "最新データを読み込み中...");
+      try { const d = await callApi("getParentData"); render(d); }
+      catch (e) { alert(getErrorMessage(e)); }
+      finally { setProcessing(false); }
+    }
+
+    function render(data) {
+      const users = Array.isArray(data.users) ? data.users : [];
+      const pending = Array.isArray(data.pendingRequests) ? data.pendingRequests : [];
+      const history = Array.isArray(data.requests) ? data.requests : [];
+      const manuals = Array.isArray(data.manualTransactions) ? data.manualTransactions : [];
+      currentUsers = users;
+
+      const pW = pending.filter(r => (r.type || '') === '出金申請');
+      const pD = pending.filter(r => (r.type || '') === '入金申請');
+      const totCash = users.reduce((s, u) => s + (Number(u.cash) || 0), 0);
+
+      document.getElementById("userCount").textContent = users.length + "人";
+      document.getElementById("totalCash").textContent = yen(totCash);
+      document.getElementById("pendingWithdrawalCount").textContent = pW.length + "件";
+      document.getElementById("pendingDepositCount").textContent = pD.length + "件";
+      document.getElementById("updateStatus").textContent = "最終更新：" + new Date().toLocaleTimeString("ja-JP");
+
+      renderPending(pending); renderUsers(users); renderManualUserOptions(users);
+      renderManualHistory(manuals); renderHistory(history);
+    }
+
+    function renderPending(reqs) {
+      const c = document.getElementById("pendingContainer");
+      if (!reqs.length) return c.innerHTML = '<div class="empty">承認待ちの申請はありません。</div>';
+      c.innerHTML = reqs.map(r => {
+        const isDep = (r.type === "入金申請");
+        return `<article class="request-card ${isDep ? 'deposit-request' : 'withdraw-request'}">
+          <div class="request-type ${isDep ? 'deposit-type' : 'withdraw-type'}">${isDep ? '💴 入金申請' : '🏧 出金申請'}</div>
+          <div class="request-head">
+            <div><div class="request-name">${escapeHtml(r.userName)}さん</div><div class="request-date">${escapeHtml(r.date)}</div></div>
+            <div class="request-amount ${isDep ? 'deposit-amount' : 'withdraw-amount'}">${isDep ? '＋' : '－'}${yen(r.amount)}</div>
+          </div>
+          <div class="request-explanation">${isDep ? '承認するとパパ銀行残高へ追加されます。' : '承認するとパパ銀行残高から差し引かれます。'}</div>
+          <div class="actions">
+            <button class="action-button reject" onclick="confirmRequest('${isDep ? 'rejectDepositRequest' : 'rejectWithdrawalRequest'}','${escapeHtml(r.requestId)}','${escapeHtml(r.userName)}',${Number(r.amount)},'${r.type}')">却下する</button>
+            <button class="action-button ${isDep ? 'approve-deposit' : 'approve-withdraw'}" onclick="confirmRequest('${isDep ? 'approveDepositRequest' : 'approveWithdrawalRequest'}','${escapeHtml(r.requestId)}','${escapeHtml(r.userName)}',${Number(r.amount)},'${r.type}')">承認する</button>
+          </div>
+        </article>`;
+      }).join("");
+    }
+
+    function confirmRequest(action, reqId, uName, amt, type) {
+      if (processing) return;
+      const isApprove = action.startsWith("approve"), isDep = (type === "入金申請");
+      let msg = isApprove ? `${uName}さんの${type} ${yen(amt)}を承認しますか？` : `${uName}さんの${type} ${yen(amt)}を却下しますか？\n残高は変更されません。`;
+      if (confirm(msg)) processReq(action, reqId, isApprove ? "承認" : "却下");
+    }
+
+    async function processReq(action, reqId, label) {
+      if (processing) return;
+      setProcessing(true, label + "処理中...");
+      try {
+        const r = await callApi(action, { requestId: reqId });
+        alert(r.message);
+        render(await callApi("getParentData"));
+      } catch (e) { alert(label + "できませんでした。\n\n" + getErrorMessage(e)); }
+      finally { setProcessing(false); }
+    }
+
+    function renderUsers(users) {
+      const c = document.getElementById("usersContainer");
+      if (!users.length) return c.innerHTML = '<div class="empty">ユーザーがいません。</div>';
+      c.innerHTML = users.map(u => {
+        const pW = Number(u.pendingWithdrawal) || 0, pD = Number(u.pendingDeposit) || 0;
+        const avail = Number.isFinite(Number(u.availableCash)) ? Number(u.availableCash) : Math.max(0, (Number(u.cash) || 0) - pW);
+        return `<div class="user-row">
+          <div>
+            <div class="user-name">${escapeHtml(u.name)}</div>
+            <div class="sub-text">利用可能：${yen(avail)}<br><span class="withdraw-color">出金申請中：${yen(pW)}</span><br><span class="deposit-color">入金申請中：${yen(pD)}</span></div>
+          </div>
+          <div class="money">${yen(u.cash)}</div>
+        </div>`;
+      }).join("");
+    }
+
+    function renderManualUserOptions(users) {
+      const s = document.getElementById("manualUserSelect"), prev = s.value;
+      s.innerHTML = '<option value="">選択してください</option>' + users.map(u => `<option value="${escapeHtml(u.name)}">${escapeHtml(u.name)}（残高 ${yen(u.cash)}）</option>`).join("");
+      if (users.some(u => u.name === prev)) s.value = prev;
+      updateSelectedUserBalance();
+    }
+
+    function updateSelectedUserBalance() {
+      const uName = document.getElementById("manualUserSelect").value, box = document.getElementById("selectedUserBalance");
+      if (!uName) return box.innerHTML = "対象ユーザーを選択してください";
+      const u = currentUsers.find(x => x.name === uName);
+      if (!u) return box.innerHTML = "ユーザー情報を取得できません。";
+      const cash = Number(u.cash) || 0, pW = Number(u.pendingWithdrawal) || 0;
+      const avail = Number.isFinite(Number(u.availableCash)) ? Number(u.availableCash) : Math.max(0, cash - pW);
+      box.innerHTML = `${escapeHtml(u.name)}さんの現在残高<br><strong>${yen(cash)}</strong><br>手動出金できる上限：${yen(avail)}`;
+    }
+
+    function confirmManualTransaction(type) {
+      if (processing) return;
+      const uName = document.getElementById("manualUserSelect").value.trim();
+      const amt = Number(document.getElementById("manualAmount").value);
+      const memo = document.getElementById("manualMemo").value.trim();
+      if (!uName) return alert("対象ユーザーを選択してください。");
+      if (!Number.isFinite(amt) || !Number.isInteger(amt) || amt <= 0 || amt > 1000000) return alert("金額は1円〜100万円以内で入力してください。");
+      if (!memo || memo.length > 100) return alert("理由・メモを1〜100文字で入力してください。");
+
+      const u = currentUsers.find(x => x.name === uName);
+      if (!u) return alert("ユーザー情報を取得できません。");
+      const cash = Number(u.cash) || 0, isDep = (type === "deposit");
+      const avail = Number.isFinite(Number(u.availableCash)) ? Number(u.availableCash) : Math.max(0, cash - (Number(u.pendingWithdrawal) || 0));
+      if (!isDep && amt > avail) return alert("手動出金額が利用可能額を超えています。\n利用可能上限：" + yen(avail));
+
+      const after = isDep ? cash + amt : cash - amt;
+      if (confirm(`${uName}さんへ【${isDep ? '手動入金' : '手動出金'}】を行いますか？\n\n金額：${isDep ? '＋' : '－'}${yen(amt)}\n理由：${memo}\n処理前：${yen(cash)} → 処理後：${yen(after)}`)) {
+        processManual(type, { uName, amt, memo, cash, after });
+      }
+    }
+
+    async function processManual(type, p) {
+      if (processing) return;
+      const act = (type === "deposit" ? "manualDeposit" : "manualWithdrawal");
+      const opId = "MAN-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+      setProcessing(true, (type === "deposit" ? "手動入金" : "手動出金") + "を処理中...");
+      try {
+        const res = await callApi(act, { userName: p.uName, amount: p.amt, memo: p.memo, operationId: opId });
+        alert(res.message + `\n\n処理前：${yen(res.beforeCash)}\n処理後：${yen(res.afterCash)}`);
+        clearManualForm();
+        render(await callApi("getParentData"));
+      } catch (e) { alert("失敗しました。\n\n" + getErrorMessage(e)); }
+      finally { setProcessing(false); }
+    }
+
+    function clearManualForm() {
+      document.getElementById("manualUserSelect").value = "";
+      document.getElementById("manualAmount").value = "";
+      document.getElementById("manualMemo").value = "";
+      updateSelectedUserBalance();
+    }
+
+    function renderManualHistory(recs) {
+      const c = document.getElementById("manualHistoryContainer");
+      if (!recs.length) return c.innerHTML = '<div class="empty">手動入出金の履歴はありません。</div>';
+      c.innerHTML = recs.slice(0, 30).map(r => {
+        const isDep = (r.type === "手動入金");
+        return `<div class="manual-record">
+          <div class="manual-record-head">
+            <div><span class="manual-record-type ${isDep ? 'manual-deposit-type' : 'manual-withdraw-type'}">${escapeHtml(r.type)}</span><div class="user-name">${escapeHtml(r.userName)}さん</div><div class="request-date">${escapeHtml(r.date)}</div></div>
+            <div class="history-side"><div class="money" style="color:${isDep ? '#c4b5fd' : '#34d399'};">${isDep ? '＋' : '－'}${yen(r.amount)}</div><span class="chip completed-chip">完了</span></div>
+          </div>
+          <div class="manual-record-detail">${escapeHtml(r.detail)}</div>
+          <div class="operation-id">処理ID：${escapeHtml(r.operationId)}</div>
+        </div>`;
+      }).join("");
+    }
+
+    function renderHistory(reqs) {
+      const c = document.getElementById("historyContainer");
+      if (!reqs.length) return c.innerHTML = '<div class="empty">申請履歴はありません。</div>';
+      c.innerHTML = reqs.slice(0, 30).map(r => {
+        const isDep = (r.type === "入金申請");
+        const sClass = r.status === "承認済み" ? "approved-chip" : (r.status === "却下" ? "rejected-chip" : (r.status === "申請中" ? "pending-chip" : ""));
+        return `<div class="history-row">
+          <div><div class="user-name">${escapeHtml(r.userName)}さん</div><div class="sub-text">${escapeHtml(r.date)}</div><span class="history-type ${isDep ? 'deposit-type' : 'withdraw-type'}">${escapeHtml(r.type)}</span></div>
+          <div class="history-side"><div class="money" style="color:${isDep ? '#c4b5fd' : '#34d399'};">${isDep ? '＋' : '－'}${yen(r.amount)}</div><span class="chip ${sClass}">${escapeHtml(r.status)}</span></div>
+        </div>`;
+      }).join("");
+    }
+
+    function setProcessing(a, t) { processing = a; document.getElementById("loadingText").textContent = t || "処理中..."; document.getElementById("overlay").style.display = a ? "flex" : "none"; }
+    function showError(m) { const e = document.getElementById("loginError"); e.textContent = m; e.style.display = "block"; }
+    function hideError() { document.getElementById("loginError").style.display = "none"; }
+  </script>
+</body>
+</html>
