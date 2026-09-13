@@ -23,7 +23,7 @@
     body{background:var(--bg);color:var(--text);padding-top:var(--st);padding-bottom:calc(85px + var(--sb));user-select:none;-webkit-user-select:none;}
     header{background:#fff;border-bottom:3px solid var(--p-pink-light);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20;box-shadow:0 4px 12px rgba(255,117,151,0.08);}
     .logo{font-size:17px;font-weight:900;color:var(--title-color);display:flex;align-items:center;gap:6px;}
-    .user-select-btn{background:var(--p-pink-light);color:var(--p-pink-deep);border:2px solid var(--p-pink);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:4px;}
+    .user-badge{background:var(--p-pink-light);color:var(--p-pink-deep);border:2px solid var(--p-pink);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:800;display:flex;align-items:center;gap:4px;}
     .container{padding:14px;max-width:500px;margin:0 auto;}
     .card{background:var(--card);border-radius:22px;padding:16px;margin-bottom:14px;border:3px solid var(--bdr);box-shadow:0 6px 16px rgba(255,182,193,0.18);}
     .card-title{font-size:15px;font-weight:900;color:var(--p-pink-deep);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
@@ -57,19 +57,40 @@
     .modal{background:#fff;border-radius:26px;padding:22px;width:100%;max-width:350px;border:4px solid var(--p-pink-light);text-align:center;}
     .ipt{width:100%;border:2px solid var(--bdr);border-radius:14px;padding:10px;font-size:16px;font-weight:800;margin:10px 0;text-align:center;background:#fff8fa;color:var(--text);}
     .modal-btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+    
+    /* 初回アカウント設定画面 */
+    #setupScreen{display:none;position:fixed;inset:0;background:#fff5f7;z-index:500;align-items:center;justify-content:center;padding:16px;}
+    .setup-box{background:#fff;border-radius:26px;padding:24px;width:100%;max-width:340px;border:4px solid var(--p-pink-light);box-shadow:0 8px 24px rgba(255,117,151,0.2);text-align:center;}
   </style>
 </head>
 <body>
+  <!-- 暗転スピナー -->
   <div id="loadingOverlay">
     <div class="spin-heart">💖</div>
     <div id="loadingMsg" style="font-weight:900;font-size:14px;color:var(--p-pink-deep);margin-top:8px;">よみこみ中...</div>
   </div>
 
+  <!-- 初回端末設定画面（端末で最初の1回だけ表示・以降は完全固定） -->
+  <div id="setupScreen">
+    <div class="setup-box">
+      <div style="font-size:36px;margin-bottom:8px;">🌸</div>
+      <h3 style="color:var(--title-color);margin-bottom:6px;">ようこそ！</h3>
+      <p style="font-size:12px;color:var(--sub);margin-bottom:16px;">このスマホを使う人を選んでね<br><small style="color:var(--p-pink-deep);">※あとから変更はできません</small></p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button class="btn-pink" onclick="initDeviceUser('咲織')">🌸 さおり</button>
+        <button class="btn-pink" onclick="initDeviceUser('優花')">🌻 ゆうか</button>
+        <button class="btn-lavender" onclick="initDeviceUser('あきひろ')">⭐ あきひろ</button>
+        <button class="btn-lavender" onclick="initDeviceUser('けいこ')">🍀 けいこ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ヘッダー（右上の名前は変更不可の固定バッジ） -->
   <header>
     <div class="logo">🌸 <span>みねまつマネーランド</span></div>
-    <button class="user-select-btn" onclick="openUserModal()">
-      <span>👤</span><span id="headerUserName">咲織</span>
-    </button>
+    <div class="user-badge">
+      <span>👧</span><span id="headerUserName">...</span>
+    </div>
   </header>
 
   <div class="container">
@@ -142,20 +163,6 @@
     <button class="nav-btn" onclick="refreshData()"><span>⟳</span><span>こうしん</span></button>
   </nav>
 
-  <!-- ユーザー選択モーダル -->
-  <div class="modal-bd" id="modalUser">
-    <div class="modal">
-      <h3 style="color:var(--p-pink-deep);margin-bottom:12px;">👧 だれがつかう？</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <button class="btn-pink" onclick="setUser('咲織')">🌸 さおり</button>
-        <button class="btn-pink" onclick="setUser('優花')">🌻 ゆうか</button>
-        <button class="btn-lavender" onclick="setUser('あきひろ')">⭐ あきひろ</button>
-        <button class="btn-lavender" onclick="setUser('けいこ')">🍀 けいこ</button>
-      </div>
-      <button style="margin-top:14px;background:none;border:none;color:var(--sub);font-size:12px;font-weight:800;cursor:pointer;" onclick="closeModal('modalUser')">とじる</button>
-    </div>
-  </div>
-
   <!-- 入出金モーダル -->
   <div class="modal-bd" id="modalMoney">
     <div class="modal">
@@ -186,7 +193,7 @@
 
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
-    let currentUser = localStorage.getItem('kid_user') || '咲織';
+    let currentUser = localStorage.getItem('kid_user') || '';
     let kidData = null, moneyType = 'deposit', tradeTarget = null;
 
     function showLoading(msg='よみこみ中...'){
@@ -194,6 +201,15 @@
       document.getElementById('loadingOverlay').style.display = 'flex';
     }
     function hideLoading(){ document.getElementById('loadingOverlay').style.display = 'none'; }
+
+    // 初回端末紐付け（1度決定したらこの端末からは変更不可）
+    function initDeviceUser(name){
+      if(!confirm(`この端末を「${name}」専用に設定しますか？\n（あとから変更はできません）`)) return;
+      currentUser = name;
+      localStorage.setItem('kid_user', name);
+      document.getElementById('setupScreen').style.display = 'none';
+      loadData();
+    }
 
     async function callGas(action, data={}, maxRetries=3){
       let attempt = 0;
@@ -221,6 +237,10 @@
     }
 
     async function loadData(){
+      if(!currentUser){
+        document.getElementById('setupScreen').style.display = 'flex';
+        return;
+      }
       document.getElementById('headerUserName').innerText = currentUser;
       showLoading('データをつれてきているよ...');
       try{
@@ -333,14 +353,6 @@
         document.getElementById(id).className = active ? 'nav-btn active' : 'nav-btn';
       });
       window.scrollTo(0,0);
-    }
-
-    function openUserModal(){ document.getElementById('modalUser').style.display = 'flex'; }
-    function setUser(name){
-      currentUser = name;
-      localStorage.setItem('kid_user', name);
-      closeModal('modalUser');
-      loadData();
     }
 
     function openMoneyModal(typ){
