@@ -70,7 +70,7 @@
     <div id="loadingMsg" style="font-weight:900;font-size:14px;color:var(--p-pink-deep);margin-top:8px;">よみこみ中...</div>
   </div>
 
-  <!-- 初回端末設定画面（端末で最初の1回だけ表示・以降は完全固定） -->
+  <!-- 初回端末設定画面 -->
   <div id="setupScreen">
     <div class="setup-box">
       <div style="font-size:36px;margin-bottom:8px;">🌸</div>
@@ -86,7 +86,7 @@
     </div>
   </div>
 
-  <!-- ヘッダー（右上の名前は変更不可の固定バッジ） -->
+  <!-- ヘッダー -->
   <header>
     <div class="logo">🌸 <span>みねまつマネーランド</span></div>
     <div class="user-badge">
@@ -139,7 +139,7 @@
       </div>
     </div>
 
-    <!-- タブ3: 履歴・お小遣い -->
+    <!-- タブ3: ルール -->
     <div id="tabInfo" style="display:none;">
       <div class="card">
         <div class="card-title">🎁 お金がふえるルール</div>
@@ -183,7 +183,7 @@
       <h3 id="mdlTradeTitle" style="color:var(--p-pink-deep);margin-bottom:4px;">売買</h3>
       <p id="mdlTradePrice" style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:8px;"></p>
       <p id="mdlTradeDesc" style="font-size:11px;color:var(--sub);"></p>
-      <input type="number" id="mdlTradeUnits" class="ipt" value="1" min="1" inputmode="numeric">
+      <input type="number" id="mdlTradeUnits" class="ipt" value="1" min="1" inputmode="numeric" oninput="calcTradeTotal()">
       <div style="font-size:13px;font-weight:900;margin:6px 0 12px;color:var(--p-pink-deep);" id="mdlTradeTotal">合計: ¥0</div>
       <div class="modal-btn-row">
         <button class="btn-mini" style="background:#e2e8f0;color:var(--sub);" onclick="closeModal('modalTrade')">やめる</button>
@@ -304,4 +304,126 @@
                 <b style="font-size:14px;margin-left:4px;">${item.name}</b>
                 <div style="font-size:11px;color:var(--sub);margin-top:2px;">
                   ${item.count}${item.unitLabel} ｜ いま: ¥${fmt(item.evalValue)}
-                  <span style="color:${isUp?'var(--mint)':'var(--p-pink-deep)'};font-weight:800;">(${isUp?'+':''}${fmt(item
+                  <span style="color:${isUp?'var(--mint)':'var(--p-pink-deep)'};font-weight:800;">(${isUp?'+':''}${fmt(item.profitLoss)}円)</span>
+                </div>
+              </div>
+              <button class="btn-mini btn-sell" onclick="openTradeModal('${item.symbol||item.code}','sell')">売る</button>
+            </div>`;
+        }).join('');
+      }
+
+      const mkts = kidData.markets || [];
+      document.getElementById('marketUpTime').innerText = kidData.marketUpdatedAt ? `更新: ${kidData.marketUpdatedAt}` : '';
+      document.getElementById('listMarkets').innerHTML = mkts.map(m=>{
+        return `
+          <div class="list-item">
+            <div>
+              <span class="badge ${m.category==='かぶ'?'badge-pink':'badge-lavender'}">${m.category}</span>
+              <b style="font-size:14px;margin-left:4px;">${m.name}</b>
+              <div style="font-size:12px;font-weight:900;color:var(--title-color);margin-top:2px;">¥${fmt(m.price)} <small style="font-size:10px;color:var(--sub);font-weight:500;">/ ${m.unitLabel}</small></div>
+            </div>
+            <button class="btn-mini btn-buy" onclick="openTradeModal('${m.code}','buy')">かう</button>
+          </div>`;
+      }).join('');
+
+      const tickets = kidData.todayTrades || {};
+      let th = '';
+      mkts.forEach(m=>{
+        const t = tickets[m.code] || {buyUsed:false, sellUsed:false};
+        th += `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #ffe3ec;">
+          <span>${m.name}</span>
+          <span>買: ${!t.buyUsed?'⭕':'❌'} / 売: ${!t.sellUsed?'⭕':'❌'}</span>
+        </div>`;
+      });
+      document.getElementById('ticketStatus').innerHTML = th || 'なし';
+    }
+
+    function switchTab(tId){
+      ['tabHome','tabMarket','tabInfo'].forEach(id=>{
+        document.getElementById(id).style.display = (id === tId) ? 'block' : 'none';
+      });
+      document.getElementById('navHome').className = 'nav-btn' + (tId==='tabHome'?' active':'');
+      document.getElementById('navMarket').className = 'nav-btn' + (tId==='tabMarket'?' active':'');
+      document.getElementById('navInfo').className = 'nav-btn' + (tId==='tabInfo'?' active':'');
+    }
+
+    function refreshData(){ loadData(); }
+
+    function openMoneyModal(type){
+      moneyType = type;
+      document.getElementById('mdlMoneyTitle').innerText = (type==='deposit') ? '💰 お金をあずける' : '👛 お金をひきだす';
+      document.getElementById('mdlMoneySub').innerText = (type==='deposit') ? 'いくらあずける？パパにわたしてね！' : 'いくらひきだす？パパからもらってね！';
+      document.getElementById('mdlMoneyAmt').value = '';
+      document.getElementById('modalMoney').style.display = 'flex';
+    }
+
+    async function submitMoneyReq(){
+      const amt = parseInt(document.getElementById('mdlMoneyAmt').value, 10);
+      if(isNaN(amt) || amt <= 0){ alert('正しい金額を入れてね'); return; }
+      closeModal('modalMoney');
+      showLoading('おねがい中...');
+      const act = (moneyType==='deposit') ? 'requestDeposit' : 'requestCash';
+      try{
+        const r = await callGas(act, {amount:amt});
+        alert(r.message);
+        await loadData();
+      }catch(e){
+        alert('失敗しちゃった: ' + e.message);
+      }finally{
+        hideLoading();
+      }
+    }
+
+    async function cancelReq(requestId, type){
+      if(!confirm('申請をとりけしますか？')) return;
+      showLoading('とりけし中...');
+      const act = (type==='deposit') ? 'cancelDepositRequest' : 'cancelWithdrawalRequest';
+      try{
+        const r = await callGas(act, {requestId});
+        alert(r.message);
+        await loadData();
+      }catch(e){
+        alert('とりけし失敗: ' + e.message);
+      }finally{
+        hideLoading();
+      }
+    }
+
+    function openTradeModal(code, type){
+      const m = (kidData.markets||[]).find(x=>x.code===code);
+      if(!m) return;
+      tradeTarget = { code, type, price: m.price, unitLabel: m.unitLabel, name: m.name };
+      document.getElementById('mdlTradeTitle').innerText = `${m.name} を${type==='buy'?'かう':'うる'}`;
+      document.getElementById('mdlTradePrice').innerText = `1${m.unitLabel} = ¥${fmt(m.price)}`;
+      document.getElementById('mdlTradeUnits').value = 1;
+      calcTradeTotal();
+      document.getElementById('modalTrade').style.display = 'flex';
+    }
+
+    function calcTradeTotal(){
+      if(!tradeTarget) return;
+      const u = parseInt(document.getElementById('mdlTradeUnits').value, 10) || 0;
+      document.getElementById('mdlTradeTotal').innerText = `合計: ¥${fmt(u * tradeTarget.price)}`;
+    }
+
+    async function submitTrade(){
+      const u = parseInt(document.getElementById('mdlTradeUnits').value, 10);
+      if(isNaN(u) || u <= 0){ alert('1以上の数をいれてね'); return; }
+      closeModal('modalTrade');
+      showLoading('とりひき中...');
+      try{
+        const r = await callGas('tradeStockByUnits', {code: tradeTarget.code, tradeType: tradeTarget.type, units: u});
+        alert(r.message);
+        await loadData();
+      }catch(e){
+        alert('とりひき失敗: ' + e.message);
+      }finally{
+        hideLoading();
+      }
+    }
+
+    function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+    window.onload = loadData;
+  </script>
+</body>
+</html>
