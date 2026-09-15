@@ -289,11 +289,11 @@
           </div>`;
       }).join('');
 
-      // 3. おこづかい設定
+      // 3. おこづかい設定（5人分）
       const alw = pData.allowances || {};
-      const kidNames = ['咲織','優花','あきひろ','けいこ'];
-      document.getElementById('listAllowances').innerHTML = kidNames.map(name=>`
-        <div style="background:#f8fafc;padding:8px;border-radius:8px;border:1px solid var(--bdr);">
+      const kidNames = ['咲織','優花','あきひろ','けいこ','にしお'];
+      document.getElementById('listAllowances').innerHTML = kidNames.map((name, idx)=>`
+        <div style="background:#f8fafc;padding:8px;border-radius:8px;border:1px solid var(--bdr);${idx === 4 ? 'grid-column: span 2;' : ''}">
           <div style="font-size:12px;font-weight:700;margin-bottom:4px;">${name}</div>
           <input type="number" id="alw_${name}" class="ipt" style="margin:0;padding:6px;font-size:14px;" value="${alw[name]||1000}">
         </div>
@@ -375,7 +375,7 @@
 
     async function saveAllowances(){
       const settings = {};
-      ['咲織','優花','あきひろ','けいこ'].forEach(n=>{
+      ['咲織','優花','あきひろ','けいこ','にしお'].forEach(n=>{
         settings[n] = parseInt(document.getElementById('alw_' + n).value, 10) || 0;
       });
       showLoading('設定を保存中...');
