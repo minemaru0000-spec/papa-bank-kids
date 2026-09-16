@@ -4,11 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
   <title>峯松証券 保護者管理</title>
+
+  <!-- PWA・アプリ化設定 -->
+  <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="峯松管理">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#1e293b">
+
   <style>
     :root{--p:#1e293b;--acc:#2563eb;--bg:#f8fafc;--card:#fff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;--up:#16a34a;--dn:#dc2626;--gold:#d97706;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);}
     *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;}
@@ -137,6 +141,11 @@
   </div>
 
   <script>
+    // PWA Service Worker 登録
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
     let pData = null, selectedUser = null, currentPassword = '', currentAdjType = 'deposit';
 
@@ -149,7 +158,6 @@
       document.getElementById('loadingOverlay').style.display = 'none';
     }
 
-    // 自動リトライ（最大3回）＆ 必ず parentPassword を送信
     async function callGas(action, data={}, maxRetries=3){
       let attempt = 0;
       while(attempt < maxRetries){
@@ -289,7 +297,7 @@
           </div>`;
       }).join('');
 
-      // 3. おこづかい設定（5人分）
+      // 3. おこづかい設定
       const alw = pData.allowances || {};
       const kidNames = ['咲織','優花','あきひろ','けいこ','にしお'];
       document.getElementById('listAllowances').innerHTML = kidNames.map((name, idx)=>`
@@ -355,14 +363,12 @@
       closeModal('modalAdjust');
       showLoading('残高調整中...');
       const act = (currentAdjType === 'deposit') ? 'manualDeposit' : 'manualWithdrawal';
-      const opId = 'OP-' + Date.now();
 
       try{
         const r = await callGas(act, {
           userName: selectedUser,
           amount: amt,
-          memo: memo,
-          operationId: opId
+          memo: memo
         });
         alert(r.message);
         await loadParentData();
