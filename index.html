@@ -4,14 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
   <title>みねまつマネーランド 🌸</title>
+  
+  <!-- PWA・アプリ化設定 -->
+  <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="マネーランド">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#fff5f7">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
     :root{
       --p-pink:#ff7597;--p-pink-light:#ffe4ec;--p-pink-deep:#f43f5e;
@@ -193,6 +198,11 @@
   </div>
 
   <script>
+    // PWA Service Worker 登録
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
     let currentUser = localStorage.getItem('kid_user') || '';
     let kidData = null, moneyType = 'deposit', tradeTarget = null;
@@ -203,7 +213,6 @@
     }
     function hideLoading(){ document.getElementById('loadingOverlay').style.display = 'none'; }
 
-    // 初回端末紐付け（1度決定したらこの端末からは変更不可）
     function initDeviceUser(name){
       if(!confirm(`この端末を「${name}」専用に設定しますか？\n（あとから変更はできません）`)) return;
       currentUser = name;
