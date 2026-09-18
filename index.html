@@ -4,26 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
   <title>みねまつマネーランド 🌸</title>
-
-  <!-- PWA・アプリ化設定 -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="マネーランド">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#fff5f7">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
-
   <style>
-    :root{
-      --p-pink:#ff7597;--p-pink-light:#ffe4ec;--p-pink-deep:#f43f5e;
-      --title-color:#3b2d54;--bg:#fff5f7;--card:#ffffff;--text:#4a3b4e;--sub:#8e7b93;
-      --bdr:#ffd1dc;--mint:#10b981;--mint-light:#d1fae5;--lavender:#a78bfa;--lavender-light:#ede9fe;
-      --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
-    }
+    :root{--p-pink:#ff7597;--p-pink-light:#ffe4ec;--p-pink-deep:#f43f5e;--title-color:#3b2d54;--bg:#fff5f7;--card:#ffffff;--text:#4a3b4e;--sub:#8e7b93;--bdr:#ffd1dc;--mint:#10b981;--mint-light:#d1fae5;--lavender:#a78bfa;--lavender-light:#ede9fe;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);}
     *{box-sizing:border-box;margin:0;padding:0;font-family:'M PLUS Rounded 1c',-apple-system,sans-serif;-webkit-tap-highlight-color:transparent;}
     body{background:var(--bg);color:var(--text);padding-top:var(--st);padding-bottom:calc(85px + var(--sb));user-select:none;-webkit-user-select:none;}
     header{background:#fff;border-bottom:3px solid var(--p-pink-light);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20;box-shadow:0 4px 12px rgba(255,117,151,0.08);}
@@ -62,20 +53,15 @@
     .modal{background:#fff;border-radius:26px;padding:22px;width:100%;max-width:350px;border:4px solid var(--p-pink-light);text-align:center;}
     .ipt{width:100%;border:2px solid var(--bdr);border-radius:14px;padding:10px;font-size:16px;font-weight:800;margin:10px 0;text-align:center;background:#fff8fa;color:var(--text);}
     .modal-btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
-
-    /* 初回アカウント設定画面 */
     #setupScreen{display:none;position:fixed;inset:0;background:#fff5f7;z-index:500;align-items:center;justify-content:center;padding:16px;}
     .setup-box{background:#fff;border-radius:26px;padding:24px;width:100%;max-width:340px;border:4px solid var(--p-pink-light);box-shadow:0 8px 24px rgba(255,117,151,0.2);text-align:center;}
   </style>
 </head>
 <body>
-  <!-- 暗転スピナー -->
   <div id="loadingOverlay">
     <div class="spin-heart">💖</div>
     <div id="loadingMsg" style="font-weight:900;font-size:14px;color:var(--p-pink-deep);margin-top:8px;">よみこみ中...</div>
   </div>
-
-  <!-- 初回端末設定画面 -->
   <div id="setupScreen">
     <div class="setup-box">
       <div style="font-size:36px;margin-bottom:8px;">🌸</div>
@@ -90,61 +76,39 @@
       </div>
     </div>
   </div>
-
-  <!-- ヘッダー -->
   <header>
     <div class="logo">🌸 <span>みねまつマネーランド</span></div>
-    <div class="user-badge">
-      <span>👧</span><span id="headerUserName">...</span>
-    </div>
+    <div class="user-badge"><span>👧</span><span id="headerUserName">...</span></div>
   </header>
-
   <div class="container">
-    <!-- タブ1: ホーム（資産） -->
     <div id="tabHome">
       <div class="card hero-card">
         <div class="hero-sub">✨ ぜんぶの資産（あわせたお金）</div>
         <div class="hero-val" id="valTotalAssets">¥0</div>
         <div class="hero-grid">
-          <div class="hero-cell">
-            <div class="hero-cell-lbl">🐷 パパ銀行のげんきん</div>
-            <div class="hero-cell-val" id="valCash">¥0</div>
-          </div>
-          <div class="hero-cell">
-            <div class="hero-cell-lbl">📈 かぶ・おカネのじか</div>
-            <div class="hero-cell-val" id="valInvest">¥0</div>
-          </div>
+          <div class="hero-cell"><div class="hero-cell-lbl">🐷 パパ銀行のげんきん</div><div class="hero-cell-val" id="valCash">¥0</div></div>
+          <div class="hero-cell"><div class="hero-cell-lbl">📈 かぶ・おカネのじか</div><div class="hero-cell-val" id="valInvest">¥0</div></div>
         </div>
       </div>
-
       <div class="btn-row">
         <button class="btn-pink" onclick="openMoneyModal('deposit')">💰 お金をあずける</button>
         <button class="btn-lavender" onclick="openMoneyModal('withdraw')">👛 お金をひきだす</button>
       </div>
-
       <div id="pendingArea" style="display:none;" class="card">
         <div class="card-title">⏳ パパにおねがい中（しんせい）</div>
         <div id="listPending"></div>
       </div>
-
       <div class="card">
         <div class="card-title">🎒 いま持っているもの（ポートフォリオ）</div>
         <div id="listHoldings">読み込み中...</div>
       </div>
     </div>
-
-    <!-- タブ2: おかいもの（株式・外貨） -->
     <div id="tabMarket" style="display:none;">
       <div class="card">
-        <div class="card-title">
-          <span>🛍️ おかいもの（かぶ・がいか）</span>
-          <span style="font-size:10px;font-weight:700;color:var(--sub);" id="marketUpTime"></span>
-        </div>
+        <div class="card-title"><span>🛍️ おかいもの（かぶ・がいか）</span><span style="font-size:10px;font-weight:700;color:var(--sub);" id="marketUpTime"></span></div>
         <div id="listMarkets">読み込み中...</div>
       </div>
     </div>
-
-    <!-- タブ3: ルール -->
     <div id="tabInfo" style="display:none;">
       <div class="card">
         <div class="card-title">🎁 お金がふえるルール</div>
@@ -161,15 +125,12 @@
       </div>
     </div>
   </div>
-
   <nav>
     <button class="nav-btn active" id="navHome" onclick="switchTab('tabHome')"><span>🏠</span><span>ホーム</span></button>
     <button class="nav-btn" id="navMarket" onclick="switchTab('tabMarket')"><span>🛍️</span><span>おかいもの</span></button>
     <button class="nav-btn" id="navInfo" onclick="switchTab('tabInfo')"><span>🎀</span><span>ルール</span></button>
     <button class="nav-btn" onclick="refreshData()"><span>⟳</span><span>こうしん</span></button>
   </nav>
-
-  <!-- 入出金モーダル -->
   <div class="modal-bd" id="modalMoney">
     <div class="modal">
       <h3 id="mdlMoneyTitle" style="color:var(--p-pink-deep);margin-bottom:6px;">お金のおねがい</h3>
@@ -181,8 +142,6 @@
       </div>
     </div>
   </div>
-
-  <!-- 売買モーダル -->
   <div class="modal-bd" id="modalTrade">
     <div class="modal">
       <h3 id="mdlTradeTitle" style="color:var(--p-pink-deep);margin-bottom:4px;">売買</h3>
@@ -196,304 +155,183 @@
       </div>
     </div>
   </div>
-
   <script>
-    // PWA Service Worker 登録
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
     let currentUser = localStorage.getItem('kid_user') || '';
     let kidData = null, moneyType = 'deposit', tradeTarget = null;
 
-    // ============================================================
-    // ★修正①: 「業務エラー」と「通信エラー」を区別するためのクラス
-    // GASが正しく応答したエラー（残高不足など）はこちらに分類し、
-    // 二重送信を防ぐためリトライしないようにする。
-    // ============================================================
-    class BusinessError extends Error {
-      constructor(message){ super(message); this.name = 'BusinessError'; }
-    }
+    class BusinessError extends Error { constructor(message){ super(message); this.name = 'BusinessError'; } }
 
-    // ============================================================
-    // ★修正②: 冪等キー（idempotencyKey）を発行する関数
-    // 同じ取引・申請が二重に処理されるのを防ぐための一意なID。
-    // ============================================================
     function generateIdempotencyKey(){
       if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
       return 'idk_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     }
 
-    // 「状態を変更する」アクション（=二重実行が危険なもの）の一覧
-    const MUTATING_ACTIONS = [
-      'tradeStockByUnits',
-      'requestCash',
-      'requestDeposit',
-      'cancelWithdrawalRequest',
-      'cancelDepositRequest'
-    ];
+    const MUTATING_ACTIONS = ['tradeStockByUnits','requestCash','requestDeposit','cancelWithdrawalRequest','cancelDepositRequest'];
 
-    function showLoading(msg='よみこみ中...'){
-      document.getElementById('loadingMsg').innerText = msg;
-      document.getElementById('loadingOverlay').style.display = 'flex';
+    function showLoading(msg='よみこみ中...'){ document.getElementById('loadingMsg').innerText = msg; document.getElementById('loadingOverlay').style.display = 'flex'; }
+    function hideLoading(){ document.getElementById('loadingOverlay').style.display = 'none'; }
+
+    function initDeviceUser(name){
+      if(!confirm(`この端末を「${name}」専用に設定しますか？\\n（あとから変更はできません）`)) return;
+      currentUser = name;
+      localStorage.setItem('kid_user', name);
+      document.getElementById('setupScreen').style.display = 'none';
+      loadData();
     }
-      function hideLoading(){ document.getElementById('loadingOverlay').style.display = 'none'; }
 
-      function initDeviceUser(name){
-        if(!confirm(`この端末を「${name}」専用に設定しますか？\n（あとから変更はできません）`)) return;
-        currentUser = name;
-        localStorage.setItem('kid_user', name);
-        document.getElementById('setupScreen').style.display = 'none';
-        loadData();
-      }
+    async function callGas(action, data={}, maxRetries=3){
+      const payloadBase = Object.assign({ action, userName: currentUser }, data);
+      if (MUTATING_ACTIONS.includes(action) && !payloadBase.idempotencyKey) payloadBase.idempotencyKey = generateIdempotencyKey();
 
-      // ============================================================
-      // ★修正①+②: callGas全体を書き直し
-      // - 業務エラー(BusinessError)はリトライしない
-      // - ネットワークエラー(タイムアウト・切断)のみリトライする
-      // - 状態変更系アクションには冪等キーを付与し、リトライ時も同じキーを使う
-      // ============================================================
-      async function callGas(action, data={}, maxRetries=3){
-        const payloadBase = Object.assign({ action, userName: currentUser }, data);
-        if (MUTATING_ACTIONS.includes(action) && !payloadBase.idempotencyKey) {
-          payloadBase.idempotencyKey = generateIdempotencyKey();
-        }
-
-        let attempt = 0;
-        while (attempt < maxRetries) {
-          attempt++;
-          try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 20000);
-
-            const res = await fetch(GAS_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'text/plain' },
-              body: JSON.stringify(payloadBase),
-              signal: controller.signal
-            });
-            clearTimeout(timeoutId);
-
-            const d = await res.json();
-
-            // GASが「正しく応答した」うえでのエラー(残高不足・口数不足等)は
-            // 通信エラーではないので、即座に投げてリトライしない。
-            if (d.status === 'error') {
-              throw new BusinessError(d.message);
-            }
-            return d;
-
-          } catch (e) {
-            // 業務エラーは即座に呼び出し元へ伝える(リトライ禁止)
-            if (e instanceof BusinessError) {
-              throw e;
-            }
-            // ここに来るのは「タイムアウト」「ネットワーク切断」など通信系のみ
-            console.warn(`通信リトライ ${attempt}/${maxRetries}:`, e);
-            if (attempt >= maxRetries) throw e;
-            await new Promise(r => setTimeout(r, 1000));
-          }
+      let attempt = 0;
+      while (attempt < maxRetries) {
+        attempt++;
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 20000);
+          const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payloadBase), signal: controller.signal });
+          clearTimeout(timeoutId);
+          const d = await res.json();
+          if (d.status === 'error') throw new BusinessError(d.message);
+          return d;
+        } catch (e) {
+          if (e instanceof BusinessError) throw e;
+          console.warn(`通信リトライ ${attempt}/${maxRetries}:`, e);
+          if (attempt >= maxRetries) throw e;
+          await new Promise(r => setTimeout(r, 1000));
         }
       }
+    }
 
-      async function loadData(){
-        if(!currentUser){
-          document.getElementById('setupScreen').style.display = 'flex';
-          return;
-        }
-        document.getElementById('headerUserName').innerText = currentUser;
-        showLoading('データをつれてきているよ...');
-        try{
-          kidData = await callGas('getKidData');
-          render();
-        }catch(e){
-          alert('つながらなかったよ: ' + e.message);
-        }finally{
-          hideLoading();
-        }
+    async function loadData(){
+      if(!currentUser){ document.getElementById('setupScreen').style.display = 'flex'; return; }
+      document.getElementById('headerUserName').innerText = currentUser;
+      showLoading('データをつれてきているよ...');
+      try{ kidData = await callGas('getKidData'); render(); }
+      catch(e){ alert('つながらなかったよ: ' + e.message); }
+      finally{ hideLoading(); }
+    }
+
+    function fmt(n){ return (n||0).toLocaleString('ja-JP'); }
+
+    function render(){
+      if(!kidData) return;
+      const u = kidData.user || {};
+      const port = kidData.portfolio || {};
+      document.getElementById('valCash').innerText = '¥' + fmt(u.cash);
+      document.getElementById('valInvest').innerText = '¥' + fmt(port.totalInvest);
+      document.getElementById('valTotalAssets').innerText = '¥' + fmt((u.cash||0) + (port.totalInvest||0));
+
+      const wReqs = kidData.pendingWithdrawalRequests || [];
+      const dReqs = kidData.pendingDepositRequests || [];
+      const pArea = document.getElementById('pendingArea');
+      const pList = document.getElementById('listPending');
+      if(wReqs.length === 0 && dReqs.length === 0){ pArea.style.display = 'none'; }
+      else {
+        pArea.style.display = 'block';
+        let h = '';
+        dReqs.forEach(r=>{ h += `<div class="list-item"><div><span class="badge badge-pink">あずけ入れ</span> <b>¥${fmt(r.amount)}</b></div><button class="btn-mini" style="background:#fee2e2;color:#ef4444;" onclick="cancelReq('${r.requestId}','deposit')">とりけし</button></div>`; });
+        wReqs.forEach(r=>{ h += `<div class="list-item"><div><span class="badge badge-lavender">ひきだし</span> <b>¥${fmt(r.amount)}</b></div><button class="btn-mini" style="background:#fee2e2;color:#ef4444;" onclick="cancelReq('${r.requestId}','withdrawal')">とりけし</button></div>`; });
+        pList.innerHTML = h;
       }
 
-      function fmt(n){ return (n||0).toLocaleString('ja-JP'); }
-
-      function render(){
-        if(!kidData) return;
-        const u = kidData.user || {};
-        const port = kidData.portfolio || {};
-
-        document.getElementById('valCash').innerText = '¥' + fmt(u.cash);
-        document.getElementById('valInvest').innerText = '¥' + fmt(port.totalInvest);
-        document.getElementById('valTotalAssets').innerText = '¥' + fmt((u.cash||0) + (port.totalInvest||0));
-
-        const wReqs = kidData.pendingWithdrawalRequests || [];
-        const dReqs = kidData.pendingDepositRequests || [];
-        const pArea = document.getElementById('pendingArea');
-        const pList = document.getElementById('listPending');
-
-        if(wReqs.length === 0 && dReqs.length === 0){
-          pArea.style.display = 'none';
-        } else {
-          pArea.style.display = 'block';
-          let h = '';
-          dReqs.forEach(r=>{
-            h += `<div class="list-item">
-              <div><span class="badge badge-pink">あずけ入れ</span> <b>¥${fmt(r.amount)}</b></div>
-              <button class="btn-mini" style="background:#fee2e2;color:#ef4444;" onclick="cancelReq('${r.requestId}','deposit')">とりけし</button>
-            </div>`;
-          });
-          wReqs.forEach(r=>{
-            h += `<div class="list-item">
-              <div><span class="badge badge-lavender">ひきだし</span> <b>¥${fmt(r.amount)}</b></div>
-              <button class="btn-mini" style="background:#fee2e2;color:#ef4444;" onclick="cancelReq('${r.requestId}','withdrawal')">とりけし</button>
-            </div>`;
-          });
-          pList.innerHTML = h;
-        }
-
-        const holdings = kidData.holdings || [];
-        const hl = document.getElementById('listHoldings');
-        if(holdings.length === 0){
-          hl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--sub);font-size:13px;">まだ持っているものはないよ！<br>「おかいもの」でえらんでみてね🍓</div>';
-        } else {
-          hl.innerHTML = holdings.map(item=>{
-            const isUp = (item.profitLoss || 0) >= 0;
-            return `
-              <div class="list-item">
-                <div>
-                  <span class="badge badge-pink">${item.category}</span>
-                  <b style="font-size:14px;margin-left:4px;">${item.name}</b>
-                  <div style="font-size:11px;color:var(--sub);margin-top:2px;">
-                    ${item.count}${item.unitLabel} ｜ いま: ¥${fmt(item.evalValue)}
-                    <span style="color:${isUp?'var(--mint)':'var(--p-pink-deep)'};font-weight:800;">(${isUp?'+':''}${fmt(item.profitLoss)}円)</span>
-                  </div>
-                </div>
-                <button class="btn-mini btn-sell" onclick="openTradeModal('${item.symbol||item.code}','sell')">売る</button>
-              </div>`;
-          }).join('');
-        }
-
-        const mkts = kidData.markets || [];
-        document.getElementById('marketUpTime').innerText = kidData.marketUpdatedAt ? `更新: ${kidData.marketUpdatedAt}` : '';
-        document.getElementById('listMarkets').innerHTML = mkts.map(m=>{
-          return `
-            <div class="list-item">
-              <div>
-                <span class="badge ${m.category==='かぶ'?'badge-pink':'badge-lavender'}">${m.category}</span>
-                <b style="font-size:14px;margin-left:4px;">${m.name}</b>
-                <div style="font-size:12px;font-weight:900;color:var(--title-color);margin-top:2px;">¥${fmt(m.price)} <small style="font-size:10px;color:var(--sub);font-weight:500;">/ ${m.unitLabel}</small></div>
-              </div>
-              <button class="btn-mini btn-buy" onclick="openTradeModal('${m.code}','buy')">かう</button>
-            </div>`;
+      const holdings = kidData.holdings || [];
+      const hl = document.getElementById('listHoldings');
+      if(holdings.length === 0){ hl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--sub);font-size:13px;">まだ持っているものはないよ！<br>「おかいもの」でえらんでみてね🍓</div>'; }
+      else {
+        hl.innerHTML = holdings.map(item=>{
+          const isUp = (item.profitLoss || 0) >= 0;
+          return `<div class="list-item"><div><span class="badge badge-pink">${item.category}</span><b style="font-size:14px;margin-left:4px;">${item.name}</b><div style="font-size:11px;color:var(--sub);margin-top:2px;">${item.count}${item.unitLabel} ｜ いま: ¥${fmt(item.evalValue)} <span style="color:${isUp?'var(--mint)':'var(--p-pink-deep)'};font-weight:800;">(${isUp?'+':''}${fmt(item.profitLoss)}円)</span></div></div><button class="btn-mini btn-sell" onclick="openTradeModal('${item.symbol||item.code}','sell')">売る</button></div>`;
         }).join('');
-
-        const tickets = kidData.todayTrades || {};
-        let th = '';
-        mkts.forEach(m=>{
-          const t = tickets[m.code] || {buyUsed:false, sellUsed:false};
-          th += `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #ffe3ec;">
-            <span>${m.name}</span>
-            <span>買: ${!t.buyUsed?'⭕':'❌'} / 売: ${!t.sellUsed?'⭕':'❌'}</span>
-          </div>`;
-        });
-        document.getElementById('ticketStatus').innerHTML = th || 'なし';
       }
 
-      function switchTab(tId){
-        ['tabHome','tabMarket','tabInfo'].forEach(id=>{
-          document.getElementById(id).style.display = (id === tId) ? 'block' : 'none';
-        });
-        document.getElementById('navHome').className = 'nav-btn' + (tId==='tabHome'?' active':'');
-        document.getElementById('navMarket').className = 'nav-btn' + (tId==='tabMarket'?' active':'');
-        document.getElementById('navInfo').className = 'nav-btn' + (tId==='tabInfo'?' active':'');
-      }
+      const mkts = kidData.markets || [];
+      document.getElementById('marketUpTime').innerText = kidData.marketUpdatedAt ? `更新: ${kidData.marketUpdatedAt}` : '';
+      document.getElementById('listMarkets').innerHTML = mkts.map(m=>{
+        return `<div class="list-item"><div><span class="badge ${m.category==='かぶ'?'badge-pink':'badge-lavender'}">${m.category}</span><b style="font-size:14px;margin-left:4px;">${m.name}</b><div style="font-size:12px;font-weight:900;color:var(--title-color);margin-top:2px;">¥${fmt(m.price)} <small style="font-size:10px;color:var(--sub);font-weight:500;">/ ${m.unitLabel}</small></div></div><button class="btn-mini btn-buy" onclick="openTradeModal('${m.code}','buy')">かう</button></div>`;
+      }).join('');
 
-      function refreshData(){ loadData(); }
+      const tickets = kidData.todayTrades || {};
+      let th = '';
+      mkts.forEach(m=>{
+        const t = tickets[m.code] || {buyUsed:false, sellUsed:false};
+        th += `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #ffe3ec;"><span>${m.name}</span><span>買: ${!t.buyUsed?'⭕':'❌'} / 売: ${!t.sellUsed?'⭕':'❌'}</span></div>`;
+      });
+      document.getElementById('ticketStatus').innerHTML = th || 'なし';
+    }
 
-      function openMoneyModal(type){
-        moneyType = type;
-        document.getElementById('mdlMoneyTitle').innerText = (type==='deposit') ? '💰 お金をあずける' : '👛 お金をひきだす';
-        document.getElementById('mdlMoneySub').innerText = (type==='deposit') ? 'いくらあずける？パパにわたしてね！' : 'いくらひきだす？パパからもらってね！';
-        document.getElementById('mdlMoneyAmt').value = '';
-        document.getElementById('modalMoney').style.display = 'flex';
-      }
+    function switchTab(tId){
+      ['tabHome','tabMarket','tabInfo'].forEach(id=>{ document.getElementById(id).style.display = (id === tId) ? 'block' : 'none'; });
+      document.getElementById('navHome').className = 'nav-btn' + (tId==='tabHome'?' active':'');
+      document.getElementById('navMarket').className = 'nav-btn' + (tId==='tabMarket'?' active':'');
+      document.getElementById('navInfo').className = 'nav-btn' + (tId==='tabInfo'?' active':'');
+    }
 
-      async function submitMoneyReq(){
-        const amt = parseInt(document.getElementById('mdlMoneyAmt').value, 10);
-        if(isNaN(amt) || amt <= 0){ alert('正しい金額を入れてね'); return; }
-        closeModal('modalMoney');
-        showLoading('おねがい中...');
-        const act = (moneyType==='deposit') ? 'requestDeposit' : 'requestCash';
-        try{
-          const r = await callGas(act, {amount:amt});
-          alert(r.message);
-          await loadData();
-        }catch(e){
-          alert('失敗しちゃった: ' + e.message);
-        }finally{
-          hideLoading();
-        }
-      }
+    function refreshData(){ loadData(); }
 
-      async function cancelReq(requestId, type){
-        if(!confirm('申請をとりけしますか？')) return;
-        showLoading('とりけし中...');
-        const act = (type==='deposit') ? 'cancelDepositRequest' : 'cancelWithdrawalRequest';
-        try{
-          const r = await callGas(act, {requestId});
-          alert(r.message);
-          await loadData();
-        }catch(e){
-          alert('とりけし失敗: ' + e.message);
-        }finally{
-          hideLoading();
-        }
-      }
+    function openMoneyModal(type){
+      moneyType = type;
+      document.getElementById('mdlMoneyTitle').innerText = (type==='deposit') ? '💰 お金をあずける' : '👛 お金をひきだす';
+      document.getElementById('mdlMoneySub').innerText = (type==='deposit') ? 'いくらあずける？パパにわたしてね！' : 'いくらひきだす？パパからもらってね！';
+      document.getElementById('mdlMoneyAmt').value = '';
+      document.getElementById('modalMoney').style.display = 'flex';
+    }
 
-      function openTradeModal(code, type){
-        const m = (kidData.markets||[]).find(x=>x.code===code);
-        if(!m){ alert('この銘柄のデータが見つからないよ。「こうしん」を押してみてね'); return; }
-        tradeTarget = { code, type, price: m.price, unitLabel: m.unitLabel, name: m.name };
-        document.getElementById('mdlTradeTitle').innerText = `${m.name} を${type==='buy'?'かう':'うる'}`;
-        document.getElementById('mdlTradePrice').innerText = `1${m.unitLabel} = ¥${fmt(m.price)}`;
-        document.getElementById('mdlTradeUnits').value = 1;
-        calcTradeTotal();
-        document.getElementById('modalTrade').style.display = 'flex';
-      }
+    async function submitMoneyReq(){
+      const amt = parseInt(document.getElementById('mdlMoneyAmt').value, 10);
+      if(isNaN(amt) || amt <= 0){ alert('正しい金額を入れてね'); return; }
+      closeModal('modalMoney');
+      showLoading('おねがい中...');
+      const act = (moneyType==='deposit') ? 'requestDeposit' : 'requestCash';
+      try{ const r = await callGas(act, {amount:amt}); alert(r.message); await loadData(); }
+      catch(e){ alert('失敗しちゃった: ' + e.message); }
+      finally{ hideLoading(); }
+    }
 
-      function calcTradeTotal(){
-        if(!tradeTarget) return;
-        const u = parseInt(document.getElementById('mdlTradeUnits').value, 10) || 0;
-        document.getElementById('mdlTradeTotal').innerText = `合計: ¥${fmt(u * tradeTarget.price)}`;
-      }
+    async function cancelReq(requestId, type){
+      if(!confirm('申請をとりけしますか？')) return;
+      showLoading('とりけし中...');
+      const act = (type==='deposit') ? 'cancelDepositRequest' : 'cancelWithdrawalRequest';
+      try{ const r = await callGas(act, {requestId}); alert(r.message); await loadData(); }
+      catch(e){ alert('とりけし失敗: ' + e.message); }
+      finally{ hideLoading(); }
+    }
 
-      // ============================================================
-      // ★修正③: 冪等キーは取引開始時に1回だけ生成し、
-      // タイムアウトしても同じキーで再送されるようにする
-      // ============================================================
-      async function submitTrade(){
-        const u = parseInt(document.getElementById('mdlTradeUnits').value, 10);
-        if(isNaN(u) || u <= 0){ alert('1以上の数をいれてね'); return; }
-        closeModal('modalTrade');
-        showLoading('とりひき中...');
-        const idempotencyKey = generateIdempotencyKey();
-        try{
-          const r = await callGas('tradeStockByUnits', {
-            code: tradeTarget.code,
-            tradeType: tradeTarget.type,
-            units: u,
-            idempotencyKey
-          });
-          alert(r.message);
-          await loadData();
-        }catch(e){
-          alert('とりひき失敗: ' + e.message);
-        }finally{
-          hideLoading();
-        }
-      }
+    function openTradeModal(code, type){
+      const m = (kidData.markets||[]).find(x=>x.code===code);
+      if(!m){ alert('この銘柄のデータが見つからないよ。「こうしん」を押してみてね'); return; }
+      tradeTarget = { code, type, price: m.price, unitLabel: m.unitLabel, name: m.name };
+      document.getElementById('mdlTradeTitle').innerText = `${m.name} を${type==='buy'?'かう':'うる'}`;
+      document.getElementById('mdlTradePrice').innerText = `1${m.unitLabel} = ¥${fmt(m.price)}`;
+      document.getElementById('mdlTradeUnits').value = 1;
+      calcTradeTotal();
+      document.getElementById('modalTrade').style.display = 'flex';
+    }
 
-      function closeModal(id){ document.getElementById(id).style.display = 'none'; }
-      window.onload = loadData;
-    </script>
+    function calcTradeTotal(){
+      if(!tradeTarget) return;
+      const u = parseInt(document.getElementById('mdlTradeUnits').value, 10) || 0;
+      document.getElementById('mdlTradeTotal').innerText = `合計: ¥${fmt(u * tradeTarget.price)}`;
+    }
+
+    async function submitTrade(){
+      const u = parseInt(document.getElementById('mdlTradeUnits').value, 10);
+      if(isNaN(u) || u <= 0){ alert('1以上の数をいれてね'); return; }
+      closeModal('modalTrade');
+      showLoading('とりひき中...');
+      const idempotencyKey = generateIdempotencyKey();
+      try{
+        const r = await callGas('tradeStockByUnits', { code: tradeTarget.code, tradeType: tradeTarget.type, units: u, idempotencyKey });
+        alert(r.message);
+        await loadData();
+      }catch(e){ alert('とりひき失敗: ' + e.message); }
+      finally{ hideLoading(); }
+    }
+
+    function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+    window.onload = loadData;
+  </script>
 </body>
 </html>
