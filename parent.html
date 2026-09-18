@@ -4,15 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
   <title>峯松証券 保護者管理</title>
-
-  <!-- PWA・アプリ化設定 -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="峯松管理">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#1e293b">
-
   <style>
     :root{--p:#1e293b;--acc:#2563eb;--bg:#f8fafc;--card:#fff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;--up:#16a34a;--dn:#dc2626;--gold:#d97706;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);}
     *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;}
@@ -33,37 +30,11 @@
     .btn-main{background:var(--acc);color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;width:100%;cursor:pointer;}
     .btn-main:disabled{background:#93c5fd;cursor:not-allowed;}
     .btn-sub{background:#f1f5f9;color:var(--sub);border:none;border-radius:10px;padding:10px;font-weight:700;width:100%;cursor:pointer;}
-
-    /* 全画面暗転スピナー */
-    #loadingOverlay{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(15,23,42,0.65);
-      z-index:9999;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      backdrop-filter:blur(3px);
-      -webkit-backdrop-filter:blur(3px);
-      color:#fff;
-    }
-    .spinner{
-      width:48px;
-      height:48px;
-      border:4px solid rgba(255,255,255,0.25);
-      border-top-color:#38bdf8;
-      border-radius:50%;
-      animation:spin 0.8s linear infinite;
-      margin-bottom:12px;
-    }
+    #loadingOverlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.65);z-index:9999;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);color:#fff;}
+    .spinner{width:48px;height:48px;border:4px solid rgba(255,255,255,0.25);border-top-color:#38bdf8;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:12px;}
     @keyframes spin{to{transform:rotate(360deg);}}
-
-    /* モーダル */
     .modal-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px;}
     .modal{background:#fff;border-radius:20px;padding:18px;width:100%;max-width:380px;box-shadow:0 10px 25px rgba(0,0,0,.15);}
-
-    /* ログイン画面 */
     #loginScreen{position:fixed;inset:0;background:#f8fafc;z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;}
     .login-box{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:340px;box-shadow:0 4px 20px rgba(0,0,0,.08);text-align:center;}
   </style>
@@ -73,8 +44,6 @@
     <div class="spinner"></div>
     <div id="loadingMsg" style="font-weight:700;font-size:14px;letter-spacing:0.5px;">通信中...</div>
   </div>
-
-  <!-- ログイン画面 -->
   <div id="loginScreen">
     <div class="login-box">
       <div style="font-size:32px;margin-bottom:8px;">🔒</div>
@@ -84,7 +53,6 @@
       <button class="btn-main" onclick="handleLogin()">ログイン</button>
     </div>
   </div>
-
   <header>
     <div style="font-weight:900;font-size:16px;">峯松証券 <span style="font-size:11px;background:#334155;color:#94a3b8;padding:2px 6px;border-radius:6px;">保護者管理</span></div>
     <div style="display:flex;gap:6px;">
@@ -92,112 +60,60 @@
       <button onclick="logout()" style="background:#475569;color:#fff;border:none;border-radius:8px;padding:5px 8px;font-size:12px;cursor:pointer;">ログアウト</button>
     </div>
   </header>
-
   <div class="container">
-    <!-- 承認待ち申請 -->
     <div class="card">
-      <div class="sec-title">
-        <span>📬 承認待ちの申請</span>
-        <span id="badgePendingCount" class="badge badge-wait">0件</span>
-      </div>
+      <div class="sec-title"><span>📬 承認待ちの申請</span><span id="badgePendingCount" class="badge badge-wait">0件</span></div>
       <div id="listRequests"></div>
     </div>
-
-    <!-- 子ども口座一覧 -->
     <div class="card">
       <div class="sec-title"><span>👥 子ども口座一覧 ＆ 資産状況</span></div>
       <div id="listUsers"></div>
     </div>
-
-    <!-- おこづかい設定 -->
     <div class="card">
       <div class="sec-title"><span>💰 毎月のおこづかい支給額（円）</span></div>
       <div id="listAllowances" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
       <button class="btn-main" id="btnSaveAllowances" onclick="saveAllowances()">おこづかい設定を保存</button>
     </div>
   </div>
-
-  <!-- 手動入出金（残高調整）モーダル -->
   <div class="modal-bd" id="modalAdjust">
     <div class="modal">
       <h3 id="mdlAdjustTitle">残高調整</h3>
       <p id="mdlAdjustDesc" style="font-size:12px;color:var(--sub);margin:4px 0 8px;"></p>
-
       <label style="font-size:12px;font-weight:700;">区分</label>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 8px;">
         <button id="btnAdjDep" type="button" class="btn-main" onclick="setAdjType('deposit')">手動入金（増やす）</button>
         <button id="btnAdjWd" type="button" class="btn-sub" onclick="setAdjType('withdrawal')">手動出金（減らす）</button>
       </div>
-
       <label style="font-size:12px;font-weight:700;">金額（円）</label>
       <input type="number" id="mdlAdjustAmt" class="ipt" placeholder="例: 1000">
-
       <label style="font-size:12px;font-weight:700;">理由・メモ（必須）</label>
       <input type="text" id="mdlAdjustMemo" class="ipt" placeholder="例: お手伝いボーナス">
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <button class="btn-sub" onclick="closeModal('modalAdjust')">キャンセル</button>
         <button class="btn-main" id="btnAdjustSubmit" onclick="submitAdjust()">確定</button>
       </div>
     </div>
   </div>
-
   <script>
-    // PWA Service Worker 登録
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
     let pData = null, selectedUser = null, currentPassword = '', currentAdjType = 'deposit';
 
-    // ============================================================
-    // ★修正①: 業務エラーと通信エラーを区別するクラス
-    // ============================================================
-    class BusinessError extends Error {
-      constructor(message){ super(message); this.name = 'BusinessError'; }
-    }
+    class BusinessError extends Error { constructor(message){ super(message); this.name = 'BusinessError'; } }
 
-    // ============================================================
-    // ★修正②: 冪等キー発行関数
-    // ============================================================
     function generateIdempotencyKey(){
       if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
       return 'idk_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     }
 
-    // 状態を変更するアクション一覧（二重実行が危険なもの）
-    const MUTATING_ACTIONS = [
-      'approveWithdrawalRequest',
-      'approveDepositRequest',
-      'rejectWithdrawalRequest',
-      'rejectDepositRequest',
-      'manualDeposit',
-      'manualWithdrawal',
-      'updateAllowances'
-    ];
+    const MUTATING_ACTIONS = ['approveWithdrawalRequest','approveDepositRequest','rejectWithdrawalRequest','rejectDepositRequest','manualDeposit','manualWithdrawal','updateAllowances'];
 
-    function showLoading(msg='通信中...'){
-      const el = document.getElementById('loadingOverlay');
-      document.getElementById('loadingMsg').innerText = msg;
-      el.style.display = 'flex';
-    }
-    function hideLoading(){
-      document.getElementById('loadingOverlay').style.display = 'none';
-    }
+    function showLoading(msg='通信中...'){ document.getElementById('loadingMsg').innerText = msg; document.getElementById('loadingOverlay').style.display = 'flex'; }
+    function hideLoading(){ document.getElementById('loadingOverlay').style.display = 'none'; }
 
-    // ============================================================
-    // ★修正①+②: callGas全体を書き直し
-    // ============================================================
     async function callGas(action, data={}, maxRetries=3){
-      const payloadBase = Object.assign({
-        action: action,
-        parentPassword: currentPassword
-      }, data);
-
-      if (MUTATING_ACTIONS.includes(action) && !payloadBase.idempotencyKey) {
-        payloadBase.idempotencyKey = generateIdempotencyKey();
-      }
+      const payloadBase = Object.assign({ action: action, parentPassword: currentPassword }, data);
+      if (MUTATING_ACTIONS.includes(action) && !payloadBase.idempotencyKey) payloadBase.idempotencyKey = generateIdempotencyKey();
 
       let attempt = 0;
       while (attempt < maxRetries) {
@@ -205,31 +121,15 @@
         try {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 20000);
-
-          const res = await fetch(GAS_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify(payloadBase),
-            signal: controller.signal
-          });
+          const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payloadBase), signal: controller.signal });
           clearTimeout(timeoutId);
-
           const d = await res.json();
-
-          if (d.status === 'error') {
-            throw new BusinessError(d.message);
-          }
+          if (d.status === 'error') throw new BusinessError(d.message);
           return d;
-
         } catch (e) {
-          // 暗証番号エラー・業務エラーはリトライしない
-          if (e instanceof BusinessError) {
-            throw e;
-          }
+          if (e instanceof BusinessError) throw e;
           console.warn(`試行 ${attempt}/${maxRetries} 失敗:`, e);
-          if (attempt >= maxRetries) {
-            throw e;
-          }
+          if (attempt >= maxRetries) throw e;
           await new Promise(r => setTimeout(r, 1000));
         }
       }
@@ -237,12 +137,8 @@
 
     function init(){
       const saved = localStorage.getItem('parent_password');
-      if(saved){
-        currentPassword = saved;
-        loadParentData();
-      } else {
-        document.getElementById('loginScreen').style.display = 'flex';
-      }
+      if(saved){ currentPassword = saved; loadParentData(); }
+      else { document.getElementById('loginScreen').style.display = 'flex'; }
     }
 
     async function handleLogin(){
@@ -255,12 +151,8 @@
         localStorage.setItem('parent_password', currentPassword);
         document.getElementById('loginScreen').style.display = 'none';
         render();
-      }catch(e){
-        alert('認証エラー: ' + e.message);
-        currentPassword = '';
-      }finally{
-        hideLoading();
-      }
+      }catch(e){ alert('認証エラー: ' + e.message); currentPassword = ''; }
+      finally{ hideLoading(); }
     }
 
     function logout(){
@@ -280,12 +172,8 @@
         if(e.message && (e.message.includes('暗証番号') || e.message.includes('パスワード'))){
           alert('暗証番号が違います。再入力してください。');
           logout();
-        } else {
-          alert('読み込みエラー: ' + e.message);
-        }
-      }finally{
-        hideLoading();
-      }
+        } else { alert('読み込みエラー: ' + e.message); }
+      }finally{ hideLoading(); }
     }
 
     function fmt(n){ return (n||0).toLocaleString('ja-JP'); }
@@ -293,7 +181,6 @@
     function render(){
       if(!pData) return;
 
-      // 1. 申請一覧
       const reqs = pData.pendingRequests || [];
       document.getElementById('badgePendingCount').innerText = reqs.length + '件';
       document.getElementById('badgePendingCount').className = reqs.length ? 'badge badge-wait' : 'badge badge-up';
@@ -304,70 +191,29 @@
         document.getElementById('listRequests').innerHTML = reqs.map(r=>{
           const isDep = r.type === '入金申請';
           const tColor = isDep ? 'var(--acc)' : 'var(--dn)';
-          return `
-            <div class="list-item">
-              <div>
-                <span class="badge" style="background:${isDep?'#dbeafe':'#fee2e2'};color:${tColor};">${r.type}</span>
-                <strong style="margin:0 4px;font-size:14px;">${r.userName}</strong>
-                <span style="font-weight:900;font-size:15px;color:${tColor};">¥${fmt(r.amount)}</span>
-                <div style="font-size:10px;color:var(--sub);margin-top:2px;">${r.date}</div>
-              </div>
-              <div style="display:flex;gap:6px;">
-                <button class="btn-action" style="background:var(--up);" onclick="approveReq('${r.requestId}','${r.type}', this)">承認</button>
-                <button class="btn-action" style="background:#ef4444;" onclick="rejectReq('${r.requestId}','${r.type}', this)">却下</button>
-              </div>
-            </div>`;
+          return `<div class="list-item"><div><span class="badge" style="background:${isDep?'#dbeafe':'#fee2e2'};color:${tColor};">${r.type}</span><strong style="margin:0 4px;font-size:14px;">${r.userName}</strong><span style="font-weight:900;font-size:15px;color:${tColor};">¥${fmt(r.amount)}</span><div style="font-size:10px;color:var(--sub);margin-top:2px;">${r.date}</div></div><div style="display:flex;gap:6px;"><button class="btn-action" style="background:var(--up);" onclick="approveReq('${r.requestId}','${r.type}', this)">承認</button><button class="btn-action" style="background:#ef4444;" onclick="rejectReq('${r.requestId}','${r.type}', this)">却下</button></div></div>`;
         }).join('');
       }
 
-      // 2. 口座一覧
       const users = pData.users || [];
       document.getElementById('listUsers').innerHTML = users.map(u=>{
-        return `
-          <div class="list-item" style="flex-direction:column;align-items:stretch;gap:6px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong style="font-size:15px;">${u.name}</strong>
-              <button class="btn-action" style="background:#f1f5f9;color:var(--text);border:1px solid var(--bdr);" onclick="openAdjustModal('${u.name}',${u.cash||0})">残高調整</button>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:#f8fafc;padding:8px;border-radius:8px;font-size:11px;">
-              <div>現金残高: <b style="display:block;font-size:13px;color:var(--acc);">¥${fmt(u.cash)}</b></div>
-              <div>出金中: <b style="display:block;font-size:13px;color:var(--dn);">¥${fmt(u.pendingWithdrawal)}</b></div>
-              <div>利用可能: <b style="display:block;font-size:13px;color:var(--text);">¥${fmt(u.availableCash)}</b></div>
-            </div>
-          </div>`;
+        return `<div class="list-item" style="flex-direction:column;align-items:stretch;gap:6px;"><div style="display:flex;justify-content:space-between;align-items:center;"><strong style="font-size:15px;">${u.name}</strong><button class="btn-action" style="background:#f1f5f9;color:var(--text);border:1px solid var(--bdr);" onclick="openAdjustModal('${u.name}',${u.cash||0})">残高調整</button></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:#f8fafc;padding:8px;border-radius:8px;font-size:11px;"><div>現金残高: <b style="display:block;font-size:13px;color:var(--acc);">¥${fmt(u.cash)}</b></div><div>出金中: <b style="display:block;font-size:13px;color:var(--dn);">¥${fmt(u.pendingWithdrawal)}</b></div><div>利用可能: <b style="display:block;font-size:13px;color:var(--text);">¥${fmt(u.availableCash)}</b></div></div></div>`;
       }).join('');
 
-      // 3. おこづかい設定
       const alw = pData.allowances || {};
       const kidNames = ['咲織','優花','あきひろ','けいこ','にしお'];
-      document.getElementById('listAllowances').innerHTML = kidNames.map((name, idx)=>`
-        <div style="background:#f8fafc;padding:8px;border-radius:8px;border:1px solid var(--bdr);${idx === 4 ? 'grid-column: span 2;' : ''}">
-          <div style="font-size:12px;font-weight:700;margin-bottom:4px;">${name}</div>
-          <input type="number" id="alw_${name}" class="ipt" style="margin:0;padding:6px;font-size:14px;" value="${alw[name]||1000}">
-        </div>
-      `).join('');
+      document.getElementById('listAllowances').innerHTML = kidNames.map((name, idx)=>`<div style="background:#f8fafc;padding:8px;border-radius:8px;border:1px solid var(--bdr);${idx === 4 ? 'grid-column: span 2;' : ''}"><div style="font-size:12px;font-weight:700;margin-bottom:4px;">${name}</div><input type="number" id="alw_${name}" class="ipt" style="margin:0;padding:6px;font-size:14px;" value="${alw[name]||1000}"></div>`).join('');
     }
 
-    // ============================================================
-    // ★修正③: 承認・却下ボタンを押した瞬間に無効化し、
-    // 二度押し・二重送信を物理的に防止する
-    // ============================================================
     async function approveReq(requestId, type, btnEl){
       if(!confirm(`${type}を承認しますか？`)) return;
       const row = btnEl.closest('.list-item');
       row.querySelectorAll('button').forEach(b => b.disabled = true);
       const act = (type === '出金申請') ? 'approveWithdrawalRequest' : 'approveDepositRequest';
       showLoading('承認処理中...');
-      try{
-        const r = await callGas(act, {requestId});
-        alert(r.message);
-        await loadParentData();
-      }catch(e){
-        alert('エラー: ' + e.message);
-        row.querySelectorAll('button').forEach(b => b.disabled = false);
-      }finally{
-        hideLoading();
-      }
+      try{ const r = await callGas(act, {requestId}); alert(r.message); await loadParentData(); }
+      catch(e){ alert('エラー: ' + e.message); row.querySelectorAll('button').forEach(b => b.disabled = false); }
+      finally{ hideLoading(); }
     }
 
     async function rejectReq(requestId, type, btnEl){
@@ -376,16 +222,9 @@
       row.querySelectorAll('button').forEach(b => b.disabled = true);
       const act = (type === '出金申請') ? 'rejectWithdrawalRequest' : 'rejectDepositRequest';
       showLoading('却下処理中...');
-      try{
-        const r = await callGas(act, {requestId});
-        alert(r.message);
-        await loadParentData();
-      }catch(e){
-        alert('エラー: ' + e.message);
-        row.querySelectorAll('button').forEach(b => b.disabled = false);
-      }finally{
-        hideLoading();
-      }
+      try{ const r = await callGas(act, {requestId}); alert(r.message); await loadParentData(); }
+      catch(e){ alert('エラー: ' + e.message); row.querySelectorAll('button').forEach(b => b.disabled = false); }
+      finally{ hideLoading(); }
     }
 
     function openAdjustModal(userName, currentCash){
@@ -404,9 +243,6 @@
       document.getElementById('btnAdjWd').className = (t === 'withdrawal') ? 'btn-main' : 'btn-sub';
     }
 
-    // ============================================================
-    // ★修正②: 残高調整も冪等キーを発行し、二重処理を防止
-    // ============================================================
     async function submitAdjust(){
       const amt = parseInt(document.getElementById('mdlAdjustAmt').value, 10);
       const memo = document.getElementById('mdlAdjustMemo').value.trim();
@@ -421,40 +257,22 @@
       const idempotencyKey = generateIdempotencyKey();
 
       try{
-        const r = await callGas(act, {
-          userName: selectedUser,
-          amount: amt,
-          memo: memo,
-          idempotencyKey
-        });
+        const r = await callGas(act, { userName: selectedUser, amount: amt, memo: memo, idempotencyKey });
         alert(r.message);
         await loadParentData();
-      }catch(e){
-        alert('調整失敗: ' + e.message);
-      }finally{
-        hideLoading();
-        btn.disabled = false;
-      }
+      }catch(e){ alert('調整失敗: ' + e.message); }
+      finally{ hideLoading(); btn.disabled = false; }
     }
 
     async function saveAllowances(){
       const btn = document.getElementById('btnSaveAllowances');
       btn.disabled = true;
       const settings = {};
-      ['咲織','優花','あきひろ','けいこ','にしお'].forEach(n=>{
-        settings[n] = parseInt(document.getElementById('alw_' + n).value, 10) || 0;
-      });
+      ['咲織','優花','あきひろ','けいこ','にしお'].forEach(n=>{ settings[n] = parseInt(document.getElementById('alw_' + n).value, 10) || 0; });
       showLoading('設定を保存中...');
-      try{
-        const r = await callGas('updateAllowances', {settings});
-        alert(r.message);
-        await loadParentData();
-      }catch(e){
-        alert('保存失敗: ' + e.message);
-      }finally{
-        hideLoading();
-        btn.disabled = false;
-      }
+      try{ const r = await callGas('updateAllowances', {settings}); alert(r.message); await loadParentData(); }
+      catch(e){ alert('保存失敗: ' + e.message); }
+      finally{ hideLoading(); btn.disabled = false; }
     }
 
     function closeModal(id){ document.getElementById(id).style.display = 'none'; }
