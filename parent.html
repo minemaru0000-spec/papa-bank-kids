@@ -24,12 +24,14 @@
     .list-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9;}
     .list-item:last-child{border-bottom:none;}
     .btn-action{background:var(--acc);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:700;font-size:12px;cursor:pointer;}
+    .btn-action:disabled{background:#cbd5e1;cursor:not-allowed;}
     .badge{font-size:10px;padding:2px 6px;border-radius:6px;font-weight:700;}
     .badge-wait{background:#fef3c7;color:#b45309;}
     .badge-dn{background:#fee2e2;color:var(--dn);}
     .badge-up{background:#dcfce7;color:var(--up);}
     .ipt{width:100%;border:1px solid var(--bdr);border-radius:10px;padding:10px;font-size:15px;margin:6px 0 12px;}
     .btn-main{background:var(--acc);color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;width:100%;cursor:pointer;}
+    .btn-main:disabled{background:#93c5fd;cursor:not-allowed;}
     .btn-sub{background:#f1f5f9;color:var(--sub);border:none;border-radius:10px;padding:10px;font-weight:700;width:100%;cursor:pointer;}
 
     /* 全画面暗転スピナー */
@@ -111,7 +113,7 @@
     <div class="card">
       <div class="sec-title"><span>💰 毎月のおこづかい支給額（円）</span></div>
       <div id="listAllowances" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;"></div>
-      <button class="btn-main" onclick="saveAllowances()">おこづかい設定を保存</button>
+      <button class="btn-main" id="btnSaveAllowances" onclick="saveAllowances()">おこづかい設定を保存</button>
     </div>
   </div>
 
@@ -120,7 +122,7 @@
     <div class="modal">
       <h3 id="mdlAdjustTitle">残高調整</h3>
       <p id="mdlAdjustDesc" style="font-size:12px;color:var(--sub);margin:4px 0 8px;"></p>
-      
+
       <label style="font-size:12px;font-weight:700;">区分</label>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 8px;">
         <button id="btnAdjDep" type="button" class="btn-main" onclick="setAdjType('deposit')">手動入金（増やす）</button>
@@ -135,7 +137,7 @@
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <button class="btn-sub" onclick="closeModal('modalAdjust')">キャンセル</button>
-        <button class="btn-main" onclick="submitAdjust()">確定</button>
+        <button class="btn-main" id="btnAdjustSubmit" onclick="submitAdjust()">確定</button>
       </div>
     </div>
   </div>
@@ -149,6 +151,32 @@
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHXhW4qe6pWMHCgMlQi-2o3rk-3oVnxlUP9FTVD-tev_kpGzriSSQcq8DOyaHQvQZH/exec';
     let pData = null, selectedUser = null, currentPassword = '', currentAdjType = 'deposit';
 
+    // ============================================================
+    // ★修正①: 業務エラーと通信エラーを区別するクラス
+    // ============================================================
+    class BusinessError extends Error {
+      constructor(message){ super(message); this.name = 'BusinessError'; }
+    }
+
+    // ============================================================
+    // ★修正②: 冪等キー発行関数
+    // ============================================================
+    function generateIdempotencyKey(){
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return 'idk_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    }
+
+    // 状態を変更するアクション一覧（二重実行が危険なもの）
+    const MUTATING_ACTIONS = [
+      'approveWithdrawalRequest',
+      'approveDepositRequest',
+      'rejectWithdrawalRequest',
+      'rejectDepositRequest',
+      'manualDeposit',
+      'manualWithdrawal',
+      'updateAllowances'
+    ];
+
     function showLoading(msg='通信中...'){
       const el = document.getElementById('loadingOverlay');
       document.getElementById('loadingMsg').innerText = msg;
@@ -158,36 +186,48 @@
       document.getElementById('loadingOverlay').style.display = 'none';
     }
 
+    // ============================================================
+    // ★修正①+②: callGas全体を書き直し
+    // ============================================================
     async function callGas(action, data={}, maxRetries=3){
+      const payloadBase = Object.assign({
+        action: action,
+        parentPassword: currentPassword
+      }, data);
+
+      if (MUTATING_ACTIONS.includes(action) && !payloadBase.idempotencyKey) {
+        payloadBase.idempotencyKey = generateIdempotencyKey();
+      }
+
       let attempt = 0;
-      while(attempt < maxRetries){
+      while (attempt < maxRetries) {
         attempt++;
-        try{
+        try {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-          const payload = Object.assign({
-            action: action,
-            parentPassword: currentPassword
-          }, data);
-
           const res = await fetch(GAS_URL, {
-            method:'POST',
-            headers:{'Content-Type':'text/plain'},
-            body:JSON.stringify(payload),
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(payloadBase),
             signal: controller.signal
           });
           clearTimeout(timeoutId);
 
           const d = await res.json();
-          if(d.status === 'error') throw new Error(d.message);
+
+          if (d.status === 'error') {
+            throw new BusinessError(d.message);
+          }
           return d;
-        }catch(e){
-          console.warn(`試行 ${attempt}/${maxRetries} 失敗:`, e);
-          if(e.message && (e.message.includes('暗証番号') || e.message.includes('パスワード'))){
+
+        } catch (e) {
+          // 暗証番号エラー・業務エラーはリトライしない
+          if (e instanceof BusinessError) {
             throw e;
           }
-          if(attempt >= maxRetries){
+          console.warn(`試行 ${attempt}/${maxRetries} 失敗:`, e);
+          if (attempt >= maxRetries) {
             throw e;
           }
           await new Promise(r => setTimeout(r, 1000));
@@ -273,8 +313,8 @@
                 <div style="font-size:10px;color:var(--sub);margin-top:2px;">${r.date}</div>
               </div>
               <div style="display:flex;gap:6px;">
-                <button class="btn-action" style="background:var(--up);" onclick="approveReq('${r.requestId}','${r.type}')">承認</button>
-                <button class="btn-action" style="background:#ef4444;" onclick="rejectReq('${r.requestId}','${r.type}')">却下</button>
+                <button class="btn-action" style="background:var(--up);" onclick="approveReq('${r.requestId}','${r.type}', this)">承認</button>
+                <button class="btn-action" style="background:#ef4444;" onclick="rejectReq('${r.requestId}','${r.type}', this)">却下</button>
               </div>
             </div>`;
         }).join('');
@@ -308,8 +348,14 @@
       `).join('');
     }
 
-    async function approveReq(requestId, type){
+    // ============================================================
+    // ★修正③: 承認・却下ボタンを押した瞬間に無効化し、
+    // 二度押し・二重送信を物理的に防止する
+    // ============================================================
+    async function approveReq(requestId, type, btnEl){
       if(!confirm(`${type}を承認しますか？`)) return;
+      const row = btnEl.closest('.list-item');
+      row.querySelectorAll('button').forEach(b => b.disabled = true);
       const act = (type === '出金申請') ? 'approveWithdrawalRequest' : 'approveDepositRequest';
       showLoading('承認処理中...');
       try{
@@ -318,13 +364,16 @@
         await loadParentData();
       }catch(e){
         alert('エラー: ' + e.message);
+        row.querySelectorAll('button').forEach(b => b.disabled = false);
       }finally{
         hideLoading();
       }
     }
 
-    async function rejectReq(requestId, type){
+    async function rejectReq(requestId, type, btnEl){
       if(!confirm(`${type}を却下しますか？`)) return;
+      const row = btnEl.closest('.list-item');
+      row.querySelectorAll('button').forEach(b => b.disabled = true);
       const act = (type === '出金申請') ? 'rejectWithdrawalRequest' : 'rejectDepositRequest';
       showLoading('却下処理中...');
       try{
@@ -333,6 +382,7 @@
         await loadParentData();
       }catch(e){
         alert('エラー: ' + e.message);
+        row.querySelectorAll('button').forEach(b => b.disabled = false);
       }finally{
         hideLoading();
       }
@@ -354,21 +404,28 @@
       document.getElementById('btnAdjWd').className = (t === 'withdrawal') ? 'btn-main' : 'btn-sub';
     }
 
+    // ============================================================
+    // ★修正②: 残高調整も冪等キーを発行し、二重処理を防止
+    // ============================================================
     async function submitAdjust(){
       const amt = parseInt(document.getElementById('mdlAdjustAmt').value, 10);
       const memo = document.getElementById('mdlAdjustMemo').value.trim();
       if(isNaN(amt) || amt <= 0){ alert('正しい金額を入力してください'); return; }
       if(!memo){ alert('理由・メモを入力してください'); return; }
 
+      const btn = document.getElementById('btnAdjustSubmit');
+      btn.disabled = true;
       closeModal('modalAdjust');
       showLoading('残高調整中...');
       const act = (currentAdjType === 'deposit') ? 'manualDeposit' : 'manualWithdrawal';
+      const idempotencyKey = generateIdempotencyKey();
 
       try{
         const r = await callGas(act, {
           userName: selectedUser,
           amount: amt,
-          memo: memo
+          memo: memo,
+          idempotencyKey
         });
         alert(r.message);
         await loadParentData();
@@ -376,10 +433,13 @@
         alert('調整失敗: ' + e.message);
       }finally{
         hideLoading();
+        btn.disabled = false;
       }
     }
 
     async function saveAllowances(){
+      const btn = document.getElementById('btnSaveAllowances');
+      btn.disabled = true;
       const settings = {};
       ['咲織','優花','あきひろ','けいこ','にしお'].forEach(n=>{
         settings[n] = parseInt(document.getElementById('alw_' + n).value, 10) || 0;
@@ -393,6 +453,7 @@
         alert('保存失敗: ' + e.message);
       }finally{
         hideLoading();
+        btn.disabled = false;
       }
     }
 
